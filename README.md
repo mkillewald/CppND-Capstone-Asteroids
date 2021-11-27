@@ -13,6 +13,11 @@ This is my work in progress repo for the Capstone project in the [Udacity C++ Na
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
+* SDL2 >= 2.0.0
+  * Linux: `sudo apt install libsdl2-dev libsdl2-2.0-0 -y`
+  * Mac, Windows and Other:
+      * [Obtaining SDL's source code](https://www.libsdl.org/download-2.0.php)
+      * [Installing SDL](https://wiki.libsdl.org/Installation)
 
 ## Basic Build Instructions
 
