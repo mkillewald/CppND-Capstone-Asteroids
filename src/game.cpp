@@ -1,9 +1,9 @@
 #include <SDL.h>
 
-#include "asteroids.h"
+#include "game.h"
 
 // Contructor which initialize the parameters.
-Asteroids::Asteroids(int height_, int width_) : height(height_), width(width_) {
+Game::Game(int height_, int width_) : height(height_), width(width_) {
   SDL_Init(SDL_INIT_VIDEO); // Initializing SDL as Video
   SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // setting draw color
@@ -13,14 +13,13 @@ Asteroids::Asteroids(int height_, int width_) : height(height_), width(width_) {
 }
 
 // Destructor
-Asteroids::~Asteroids() {
+Game::~Game() {
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();
 }
 
-void Asteroids::draw_circle(int center_x, int center_y, int radius_,
-                            int border_) {
+void Game::draw_circle(int center_x, int center_y, int radius_, int border_) {
   // Setting the color to be RED with 100% opaque (0% trasparent).
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
@@ -44,7 +43,7 @@ void Asteroids::draw_circle(int center_x, int center_y, int radius_,
   SDL_RenderPresent(renderer);
 }
 
-void Asteroids::move_circle() {
+void Game::move_circle() {
   // Setting the color to be RED with 100% opaque (0% trasparent).
 
   SDL_Event event; // Event variable

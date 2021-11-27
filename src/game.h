@@ -1,11 +1,14 @@
+#ifndef Game_H
+#define Game_H
+
 #include <SDL.h>
 
-class Asteroids {
+class Game {
 public:
   // Contructor
-  Asteroids(int height_, int width_);
+  Game(int height_, int width_);
   // Destructor
-  ~Asteroids();
+  ~Game();
 
   void draw_circle(int center_x, int center_y, int radius_, int border_ = 0);
   void move_circle();
@@ -16,3 +19,5 @@ private:
   SDL_Renderer *renderer = NULL; // Pointer for the renderer
   SDL_Window *window = NULL;     // Pointer for the window
 };
+
+#endif
