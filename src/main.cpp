@@ -1,6 +1,14 @@
-#include <iostream>
+#include "asteroids.h"
 
-int main() {
-    std::cout << "Hello World!" << "\n";
-    return 0;
+#include <SDL.h>
+
+int main(int argc, char *argv[]) {
+
+  // Creating the game object by passing Height and Width value.
+  Asteroids game(200, 400);
+
+  // Starting the animation
+  game.move_circle();
+
+  return 1;
 }
