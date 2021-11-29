@@ -22,13 +22,19 @@ void Controller::handleInput(bool &running, PlayerShip &player) const {
         player.rotateRight();
         break;
       case SDLK_k:
-        player.thrust();
+        player.thrustOn();
         break;
       case SDLK_l:
         player.fire();
         break;
       case SDLK_SPACE:
         player.hyperspace();
+        break;
+      }
+    } else if (e.type == SDL_KEYUP) {
+      switch (e.key.keysym.sym) {
+      case SDLK_k:
+        player.thrustOff();
         break;
       }
     }

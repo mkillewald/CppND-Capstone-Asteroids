@@ -5,6 +5,9 @@
 
 #include <cstddef>
 
+// forward declaration to avoid include cycle
+class Renderer;
+
 class PlayerShip : public GameObject {
 public:
   // constructor / destructor
@@ -17,16 +20,18 @@ public:
   // typical behaviour methods
   void init(std::size_t grid_width, std::size_t grid_height);
   // void update();
-  // void draw();
+  void draw(Renderer *const renderer) const;
 
   void rotateLeft();
   void rotateRight();
-  void thrust();
+  void thrustOn();
+  void thrustOff();
   void fire();
   void hyperspace();
 
 private:
-  bool alive_ = false;
+  bool alive_ = true;
+  bool thrust_ = false;
 };
 
 #endif

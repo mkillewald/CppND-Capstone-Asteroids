@@ -8,14 +8,14 @@
 // forward declaration to avoid include cycle
 class Renderer;
 
-struct line {
+struct sLine {
   int x1;
   int y1;
   int x2;
   int y2;
 };
 
-struct color {
+struct sColor {
   int r;
   int g;
   int b;
@@ -37,11 +37,11 @@ public:
   void draw(Renderer *const renderer) const;
 
 protected:
-  std::vector<line> lines_;
+  std::vector<sLine> lines_;
   SDL_Point pos_;
   SDL_Point vel_;
   float angle_;
-  color color_;
+  sColor color_;
 
 private:
   unsigned int id_;

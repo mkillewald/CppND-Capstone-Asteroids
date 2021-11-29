@@ -67,8 +67,8 @@ void Game::update() {
   }
 
   player_.update();
-  for (auto &asteroid : asteroids_) {
-    asteroid.update();
-  }
-  ufo_.update();
+  // for (auto &asteroid : asteroids_) {
+  //   asteroid.update();
+  // }
+  // ufo_.update();
 }
