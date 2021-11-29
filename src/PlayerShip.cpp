@@ -1,5 +1,6 @@
 #include "PlayerShip.h"
 PlayerShip::PlayerShip(std::size_t grid_width, std::size_t grid_height) {
+  setColor(0x00, 0x00, 0xFF, 0xFF);
   init(grid_width, grid_height);
 }
 PlayerShip::~PlayerShip() {}

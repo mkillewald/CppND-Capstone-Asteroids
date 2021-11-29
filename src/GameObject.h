@@ -30,16 +30,18 @@ public:
 
   // getters / setters
   unsigned int ID() const;
+  void setColor(int r, int g, int b, int a);
 
   // typical behaviour methods
   void update();
-  void draw(Renderer *const renderer, color &color) const;
+  void draw(Renderer *const renderer) const;
 
 protected:
   std::vector<line> lines_;
   SDL_Point pos_;
   SDL_Point vel_;
   float angle_;
+  color color_;
 
 private:
   unsigned int id_;

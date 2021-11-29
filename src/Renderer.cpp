@@ -54,8 +54,7 @@ void Renderer::render(PlayerShip const &player,
   SDL_RenderClear(sdl_renderer_);
 
   // Render game objects
-  color shipColor{0x00, 0x00, 0xFF, 0xFF};
-  player.draw(this, shipColor);
+  player.draw(this);
 
   // Update screen
   SDL_RenderPresent(sdl_renderer_);
