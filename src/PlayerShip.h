@@ -15,7 +15,7 @@ public:
   bool alive() const;
 
   // typical behaviour methods
-  void init();
+  void init(std::size_t grid_width, std::size_t grid_height);
   // void update();
   // void draw();
 

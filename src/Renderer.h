@@ -24,7 +24,7 @@ public:
   void render(PlayerShip const &player, std::vector<Asteroid> &asteroids,
               UFO const &ufo);
   void updateWindowTitle(int score, int fps);
-  void drawLine(line const &line, color const &color);
+  void drawLine(line const &line, SDL_Point const &pos, color const &color);
 
 private:
   SDL_Window *sdl_window_ = nullptr;     // Pointer for the SDL window

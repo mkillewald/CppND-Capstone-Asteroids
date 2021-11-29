@@ -1,6 +1,8 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include <SDL.h>
+
 #include <vector>
 
 // forward declaration to avoid include cycle
@@ -20,13 +22,6 @@ struct color {
   int a;
 };
 
-struct position {
-  int x;
-  int y;
-  int dx;
-  int dy;
-};
-
 class GameObject {
 public:
   // constructor / destructor
@@ -37,18 +32,18 @@ public:
   unsigned int ID() const;
 
   // typical behaviour methods
-  void init();
   void update();
   void draw(Renderer *const renderer, color &color) const;
 
 protected:
   std::vector<line> lines_;
+  SDL_Point pos_;
+  SDL_Point vel_;
+  float angle_;
 
 private:
   unsigned int id_;
   unsigned int score_;
-  float angle_;
-  position pos_;
 };
 
 #endif

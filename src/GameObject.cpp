@@ -16,6 +16,6 @@ void GameObject::update() {}
 
 void GameObject::draw(Renderer *const renderer, color &color) const {
   for (auto &line : lines_) {
-    renderer->drawLine(line, color);
+    renderer->drawLine(line, pos_, color);
   }
 }
