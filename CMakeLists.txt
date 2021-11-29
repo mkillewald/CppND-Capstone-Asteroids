@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.7)
 add_definitions(-std=c++17)
 
 set(CXX_FLAGS "-Wall")
-set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS, "${CXX_FLAGS} -pthread")
 
 project(Asteroids)
 
@@ -24,3 +24,4 @@ INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})
 
 # Linking SDL2 library with our project.
 target_link_libraries(Asteroids ${SDL2_LIBRARIES})
+
