@@ -26,6 +26,17 @@ void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
   lines_.emplace_back(sLine{-18, 0, -11, 4});
 }
 
+void PlayerShip::update() {
+  switch (rot_) {
+  case left_:
+    angle_ -= 0.12;
+    break;
+  case right_:
+    angle_ += 0.12;
+    break;
+  }
+}
+
 void PlayerShip::draw(Renderer *const renderer) const {
   for (int i = 0; i < lines_.size(); i++) {
     if (i > 2 && !thrust_) {
@@ -36,8 +47,9 @@ void PlayerShip::draw(Renderer *const renderer) const {
   }
 }
 
-void PlayerShip::rotateLeft() { angle_ -= 0.16; }
-void PlayerShip::rotateRight() { angle_ += 0.16; }
+void PlayerShip::rotateLeft() { rot_ = left_; }
+void PlayerShip::rotateRight() { rot_ = right_; }
+void PlayerShip::rotateOff() { rot_ = none_; }
 void PlayerShip::thrustOn() { thrust_ = true; }
 void PlayerShip::thrustOff() { thrust_ = false; }
 void PlayerShip::fire() {}

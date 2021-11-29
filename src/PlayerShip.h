@@ -19,11 +19,11 @@ public:
 
   // typical behaviour methods
   void init(std::size_t grid_width, std::size_t grid_height);
-  // void update();
+  void update();
   void draw(Renderer *const renderer) const;
-
   void rotateLeft();
   void rotateRight();
+  void rotateOff();
   void thrustOn();
   void thrustOff();
   void fire();

@@ -10,17 +10,15 @@
 
 void Controller::handleInput(bool &running, PlayerShip &player) const {
   SDL_Event e;
+
+  // single hit keys, and other SDL events
   while (SDL_PollEvent(&e)) {
-    if (e.type == SDL_QUIT) {
+    switch (e.type) {
+    case SDL_QUIT:
       running = false;
-    } else if (e.type == SDL_KEYDOWN) {
+      break;
+    case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
-      case SDLK_a:
-        player.rotateLeft();
-        break;
-      case SDLK_s:
-        player.rotateRight();
-        break;
       case SDLK_SEMICOLON:
         player.thrustOn();
         break;
@@ -31,12 +29,30 @@ void Controller::handleInput(bool &running, PlayerShip &player) const {
         player.hyperspace();
         break;
       }
-    } else if (e.type == SDL_KEYUP) {
+      break;
+    case SDL_KEYUP:
       switch (e.key.keysym.sym) {
+      case SDLK_a:
+        player.rotateOff();
+        break;
+      case SDLK_s:
+        player.rotateOff();
+        break;
       case SDLK_SEMICOLON:
         player.thrustOff();
         break;
       }
+      break;
     }
+  }
+
+  const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+
+  // contiuously held keys (this avoids keyboard repeat delay)
+  if (keystates[SDL_SCANCODE_A]) {
+    player.rotateLeft();
+  }
+  if (keystates[SDL_SCANCODE_S]) {
+    player.rotateRight();
   }
 }

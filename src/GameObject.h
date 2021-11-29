@@ -22,6 +22,8 @@ struct sColor {
   int a;
 };
 
+enum eRotate { left_, right_, none_ };
+
 class GameObject {
 public:
   // constructor / destructor
@@ -41,6 +43,7 @@ protected:
   SDL_Point pos_;
   SDL_Point vel_;
   float angle_;
+  eRotate rot_ = none_;
   sColor color_;
 
 private:
