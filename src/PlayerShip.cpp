@@ -14,7 +14,7 @@ void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
   pos_.y = grid_height / 2;
   vel_.x = 0;
   vel_.y = 0;
-  angle_ = 0.0;
+  angle_ = -1.6;
 
   lines_.emplace_back(sLine{-14, -8, 10, 0});
   lines_.emplace_back(sLine{-14, 8, 10, 0});

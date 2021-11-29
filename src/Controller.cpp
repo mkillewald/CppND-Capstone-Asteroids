@@ -21,10 +21,10 @@ void Controller::handleInput(bool &running, PlayerShip &player) const {
       case SDLK_s:
         player.rotateRight();
         break;
-      case SDLK_k:
+      case SDLK_SEMICOLON:
         player.thrustOn();
         break;
-      case SDLK_l:
+      case SDLK_QUOTE:
         player.fire();
         break;
       case SDLK_SPACE:
@@ -33,7 +33,7 @@ void Controller::handleInput(bool &running, PlayerShip &player) const {
       }
     } else if (e.type == SDL_KEYUP) {
       switch (e.key.keysym.sym) {
-      case SDLK_k:
+      case SDLK_SEMICOLON:
         player.thrustOff();
         break;
       }
