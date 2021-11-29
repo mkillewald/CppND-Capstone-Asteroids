@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Asteroid.h"
+#include "GameObject.h"
 #include "PlayerShip.h"
 #include "UFO.h"
 
@@ -46,13 +47,15 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::render(PlayerShip const player, std::vector<Asteroid> &asteroids,
-                      UFO const &ufo) {
+void Renderer::render(PlayerShip const &player,
+                      std::vector<Asteroid> &asteroids, UFO const &ufo) {
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(sdl_renderer_);
 
   // Render game objects
+  color shipColor{0x00, 0x00, 0xFF, 0xFF};
+  player.draw(this, shipColor);
 
   // Update screen
   SDL_RenderPresent(sdl_renderer_);
@@ -64,8 +67,8 @@ void Renderer::updateWindowTitle(int score, int fps) {
   SDL_SetWindowTitle(sdl_window_, title.c_str());
 }
 
-void Renderer::drawLine(line &line, color &color) {
-  SDL_SetRenderDrawColor(sdl_renderer_, color.r, color.g, color.b, color.a);
+void Renderer::drawLine(line const &line, color const &c) {
+  SDL_SetRenderDrawColor(sdl_renderer_, c.r, c.g, c.b, c.a);
   SDL_RenderSetScale(sdl_renderer_, 1.0, 1.0);
   SDL_RenderDrawLine(sdl_renderer_, line.x1, line.y1, line.x2, line.y2);
 }

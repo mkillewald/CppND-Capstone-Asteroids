@@ -7,8 +7,8 @@ class UFO : public GameObject {
 public:
   enum UFOSize { large, small };
   // constructor / destructor
-  UFO();
-  ~UFO();
+  // UFO();
+  // ~UFO();
 
   // getters / setters
 

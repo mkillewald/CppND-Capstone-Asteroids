@@ -8,8 +8,8 @@ public:
   enum AsteroidSize { kLarge, kMedium, kSmall };
 
   // constructor / destructor
-  Asteroid();
-  ~Asteroid();
+  // Asteroid();
+  // ~Asteroid();
 
   // getters / setters
 

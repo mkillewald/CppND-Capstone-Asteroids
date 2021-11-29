@@ -1,8 +1,8 @@
 #include <SDL.h>
-#include <SDL2_gfxPrimitives.h>
 
 #include "Controller.h"
 #include "Game.h"
+#include "Renderer.h"
 
 // based off Snake Game example code:
 // https://github.com/udacity/CppND-Capstone-Snake-Game

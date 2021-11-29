@@ -15,9 +15,10 @@ public:
   bool alive() const;
 
   // typical behaviour methods
-  // void init();
+  void init();
   // void update();
   // void draw();
+
   void rotateLeft();
   void rotateRight();
   void thrust();

@@ -16,8 +16,6 @@ int main(int argc, char *argv[]) {
   Controller controller;
   Game game(kGridWidth, kGridHeight);
 
-  // instantiate game objects
-
   game.run(controller, renderer, kMsPerFrame);
   return 0;
 }

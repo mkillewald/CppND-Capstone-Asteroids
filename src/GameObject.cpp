@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "Game.h"
+#include "Renderer.h"
 
 #include <SDL.h>
 
@@ -13,8 +14,8 @@ unsigned int GameObject::ID() const { return id_; }
 // typical behaviour methods
 void GameObject::update() {}
 
-void GameObject::draw(color &color) {
+void GameObject::draw(Renderer *const renderer, color &color) const {
   for (auto &line : lines_) {
-    renderer_->drawLine(line, color);
+    renderer->drawLine(line, color);
   }
 }

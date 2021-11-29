@@ -1,6 +1,8 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "GameObject.h"
+
 #include <SDL.h>
 
 #include <vector>
@@ -9,20 +11,6 @@
 class Asteroid;
 class PlayerShip;
 class UFO;
-
-struct line {
-  int x1;
-  int y1;
-  int x2;
-  int y2;
-};
-
-struct color {
-  int r;
-  int g;
-  int b;
-  int a;
-};
 
 // class based off Snake Game example code:
 // https://github.com/udacity/CppND-Capstone-Snake-Game
@@ -33,10 +21,10 @@ public:
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void render(PlayerShip const player, std::vector<Asteroid> &asteroids,
+  void render(PlayerShip const &player, std::vector<Asteroid> &asteroids,
               UFO const &ufo);
   void updateWindowTitle(int score, int fps);
-  void drawLine(line &line, color &color);
+  void drawLine(line const &line, color const &color);
 
 private:
   SDL_Window *sdl_window_ = nullptr;     // Pointer for the SDL window
