@@ -14,11 +14,14 @@ void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
   pos_.y = grid_height / 2;
   vel_.x = 0;
   vel_.y = 0;
-  angle_ = -1.6;
+  angle_ = -1.6; // ship faces top of window
 
+  // player's ship
   lines_.emplace_back(sLine{-14, -8, 10, 0});
   lines_.emplace_back(sLine{-14, 8, 10, 0});
   lines_.emplace_back(sLine{-10, -6, -10, 6});
+
+  // thruster
   lines_.emplace_back(sLine{-18, 0, -11, -4});
   lines_.emplace_back(sLine{-18, 0, -11, 4});
 }
@@ -26,6 +29,7 @@ void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
 void PlayerShip::draw(Renderer *const renderer) const {
   for (int i = 0; i < lines_.size(); i++) {
     if (i > 2 && !thrust_) {
+      // no thrust, cool our jets!
       continue;
     }
     renderer->drawLine(lines_[i], pos_, angle_, color_);
