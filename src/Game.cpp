@@ -4,6 +4,9 @@
 #include "Controller.h"
 #include "Game.h"
 
+// based off Snake Game example code:
+// https://github.com/udacity/CppND-Capstone-Snake-Game
+
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : player_(grid_width, grid_height), engine_(dev_()),
       random_w_(0, static_cast<int>(grid_width)),

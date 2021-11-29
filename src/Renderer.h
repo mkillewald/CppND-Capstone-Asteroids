@@ -24,6 +24,9 @@ struct color {
   int a;
 };
 
+// class based off Snake Game example code:
+// https://github.com/udacity/CppND-Capstone-Snake-Game
+
 class Renderer {
 public:
   Renderer(const std::size_t screen_width, const std::size_t screen_height,

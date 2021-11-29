@@ -8,6 +8,9 @@
 #include <iostream>
 #include <string>
 
+// based off Snake Game example code:
+// https://github.com/udacity/CppND-Capstone-Snake-Game
+
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
                    const std::size_t grid_width, std::size_t grid_height)

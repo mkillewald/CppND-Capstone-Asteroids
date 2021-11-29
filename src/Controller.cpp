@@ -5,6 +5,9 @@
 
 #include <iostream>
 
+// based off Snake Game example code:
+// https://github.com/udacity/CppND-Capstone-Snake-Game
+
 void Controller::handleInput(bool &running, PlayerShip &player) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {

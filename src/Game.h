@@ -14,6 +14,9 @@
 class Controller;
 class Renderer;
 
+// class based off Snake Game example code:
+// https://github.com/udacity/CppND-Capstone-Snake-Game
+
 class Game {
 public:
   // Contructor
