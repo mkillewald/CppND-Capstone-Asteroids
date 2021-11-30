@@ -66,19 +66,9 @@ void Renderer::updateWindowTitle(int score, int fps) {
   SDL_SetWindowTitle(sdl_window_, title.c_str());
 }
 
-void Renderer::drawLine(sLine const &line, SDL_Point const &pos,
-                        float const &angle, sColor const &c) {
+void Renderer::drawLine(sLine const &line, sColorRGBA const &color) const {
 
-  float cosRot = cos(angle);
-  float sinRot = sin(angle);
-  sLine rotLine;
-  rotLine.x1 = (line.x1 * cosRot - line.y1 * sinRot) + 0.4;
-  rotLine.y1 = (line.x1 * sinRot + line.y1 * cosRot) + 0.4;
-  rotLine.x2 = (line.x2 * cosRot - line.y2 * sinRot) + 0.4;
-  rotLine.y2 = (line.x2 * sinRot + line.y2 * cosRot) + 0.4;
-
-  SDL_SetRenderDrawColor(sdl_renderer_, c.r, c.g, c.b, c.a);
+  SDL_SetRenderDrawColor(sdl_renderer_, color.r, color.g, color.b, color.a);
   // SDL_RenderSetScale(sdl_renderer_, 1.0, 1.0);
-  SDL_RenderDrawLine(sdl_renderer_, rotLine.x1 + pos.x, rotLine.y1 + pos.y,
-                     rotLine.x2 + pos.x, rotLine.y2 + pos.y);
+  SDL_RenderDrawLine(sdl_renderer_, line.p1.x, line.p1.y, line.p2.x, line.p2.y);
 }

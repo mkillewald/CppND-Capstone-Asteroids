@@ -5,21 +5,26 @@
 
 #include <vector>
 
+#define PI 3.14159265
+
 // forward declaration to avoid include cycle
 class Renderer;
 
 struct sLine {
-  int x1;
-  int y1;
-  int x2;
-  int y2;
+  SDL_Point &p1;
+  SDL_Point &p2;
 };
 
-struct sColor {
+struct sColorRGBA {
   int r;
   int g;
   int b;
   int a;
+};
+
+struct sVector2f {
+  float x;
+  float y;
 };
 
 enum eRotate { left_, right_, none_ };
@@ -32,21 +37,28 @@ public:
 
   // getters / setters
   unsigned int ID() const;
-  void setColor(int r, int g, int b, int a);
+  void setColorRGBA(int r, int g, int b, int a);
 
   // typical behaviour methods
+  void updatePosition();
+  void rotateAndMovePoints();
   void update();
   void draw(Renderer *const renderer) const;
 
 protected:
+  std::vector<SDL_Point> points_;
   std::vector<sLine> lines_;
-  SDL_Point pos_;
-  SDL_Point vel_;
+  sVector2f position_;
+  sVector2f velocity_;
+  sVector2f acceleration_;
   float angle_;
   eRotate rot_ = none_;
-  sColor color_;
+  sColorRGBA color_;
+
+  void setAtOrigin(std::vector<SDL_Point> atOrigin);
 
 private:
+  std::vector<SDL_Point> atOrigin_;
   unsigned int id_;
   unsigned int score_;
 };
