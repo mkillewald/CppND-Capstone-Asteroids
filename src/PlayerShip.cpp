@@ -12,7 +12,7 @@ bool PlayerShip::alive() const { return alive_; }
 void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
   position_.x = grid_width / 2;
   position_.y = grid_height / 2;
-  velocity_ = {0.1, 0.1};
+  velocity_ = {0.0, 0.0};
   acceleration_ = {0.0, 0.0};
   angle_ = -90; // ship faces top of window
 
@@ -34,7 +34,7 @@ void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
 
   // move atOrigin into private member atOrigin_ of parent class GameObject so
   // that its contents cannot be directly accessed or modified by the derived
-  // classes.
+  // class.
   setAtOrigin(std::move(atOrigin));
 
   // connect the dots: player's ship
@@ -48,6 +48,16 @@ void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
 
   // apply our starting angle and position
   rotateAndMovePoints();
+}
+
+void PlayerShip::updatePosition() {
+  if (thrust_) {
+    velocity_.x = cos(angle_ * PI / 180.0);
+    velocity_.y = sin(angle_ * PI / 180.0);
+  }
+
+  position_.x += velocity_.x;
+  position_.y += velocity_.y;
 }
 
 void PlayerShip::update() {

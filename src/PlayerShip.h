@@ -21,6 +21,7 @@ public:
   void init(std::size_t grid_width, std::size_t grid_height);
   void update();
   void draw(Renderer *const renderer) const;
+  void updatePosition();
   void rotateLeft();
   void rotateRight();
   void rotateOff();
