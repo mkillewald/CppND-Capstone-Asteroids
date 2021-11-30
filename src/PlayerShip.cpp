@@ -14,6 +14,7 @@ void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
   position_.y = grid_height / 2;
   velocity_ = {0.0, 0.0};
   acceleration_ = {0.0, 0.0};
+  maxVelocity_ = 36;
   angle_ = -90; // ship faces top of window
 
   // player's ship at origin
@@ -52,8 +53,27 @@ void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
 
 void PlayerShip::updatePosition() {
   if (thrust_) {
-    velocity_.x = cos(angle_ * PI / 180.0);
-    velocity_.y = sin(angle_ * PI / 180.0);
+    acceleration_.x = cos(angle_ * PI / 180.0);
+    acceleration_.y = sin(angle_ * PI / 180.0);
+  } else {
+    acceleration_.x = 0.0;
+    acceleration_.y = 0.0;
+  }
+
+  velocity_.x += acceleration_.x * 0.1; // accelleration was ramping up too
+  velocity_.y += acceleration_.y * 0.1; // quickly, so we reduce magnitude here.
+
+  if (velocity_.x > maxVelocity_) {
+    velocity_.x = maxVelocity_;
+  } else if (velocity_.x < -maxVelocity_) {
+    velocity_.x = -maxVelocity_;
+  }
+
+  if (velocity_.y > maxVelocity_) {
+    velocity_.y = maxVelocity_;
+  }
+  if (velocity_.y < -maxVelocity_) {
+    velocity_.y = -maxVelocity_;
   }
 
   position_.x += velocity_.x;

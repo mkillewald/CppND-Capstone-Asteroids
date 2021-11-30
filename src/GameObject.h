@@ -49,8 +49,9 @@ protected:
   std::vector<SDL_Point> points_;
   std::vector<sLine> lines_;
   sVector2f position_;
-  sVector2f velocity_;
   sVector2f acceleration_;
+  sVector2f velocity_;
+  float maxVelocity_;
   float angle_;
   eRotate rot_ = none_;
   sColorRGBA color_;

@@ -60,6 +60,7 @@ void Renderer::render(PlayerShip const &player,
   SDL_RenderPresent(sdl_renderer_);
 }
 
+// TODO: remove score from window title once we have in game fonts working
 void Renderer::updateWindowTitle(int score, int fps) {
   std::string title{"Asteroids Score: " + std::to_string(score) +
                     " FPS: " + std::to_string(fps)};
