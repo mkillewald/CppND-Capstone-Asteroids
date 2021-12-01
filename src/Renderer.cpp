@@ -68,7 +68,6 @@ void Renderer::updateWindowTitle(int score, int fps) {
 }
 
 void Renderer::drawLine(sLine const &line, sColorRGBA const &color) const {
-
   SDL_SetRenderDrawColor(sdl_renderer_, color.r, color.g, color.b, color.a);
   // SDL_RenderSetScale(sdl_renderer_, 1.0, 1.0);
   SDL_RenderDrawLine(sdl_renderer_, line.p1.x, line.p1.y, line.p2.x, line.p2.y);

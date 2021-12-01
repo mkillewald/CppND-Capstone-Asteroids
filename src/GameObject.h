@@ -32,7 +32,7 @@ enum eRotate { left_, right_, none_ };
 class GameObject {
 public:
   // constructor / destructor
-  GameObject();
+  GameObject(const std::size_t grid_width, const std::size_t grid_height);
   ~GameObject();
 
   // getters / setters
@@ -40,12 +40,13 @@ public:
   void setColorRGBA(int r, int g, int b, int a);
 
   // typical behaviour methods
-  void updatePosition();
-  void rotateAndMovePoints();
   void update();
   void draw(Renderer *const renderer) const;
+  void drawGhost(Renderer *const renderer) const;
 
 protected:
+  const std::size_t grid_width_;
+  const std::size_t grid_height_;
   std::vector<SDL_Point> points_;
   std::vector<sLine> lines_;
   sVector2f position_;
@@ -57,6 +58,9 @@ protected:
   sColorRGBA color_;
 
   void setAtOrigin(std::vector<SDL_Point> atOrigin);
+  void updatePosition();
+  void rotateAndMovePoints();
+  void wrapCoordinates(sVector2f &point);
 
 private:
   std::vector<SDL_Point> atOrigin_;

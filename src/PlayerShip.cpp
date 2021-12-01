@@ -1,20 +1,24 @@
 #include "PlayerShip.h"
 #include "Renderer.h"
 
-PlayerShip::PlayerShip(std::size_t grid_width, std::size_t grid_height) {
+PlayerShip::PlayerShip(const std::size_t grid_width,
+                       const std::size_t grid_height)
+    : GameObject(grid_width, grid_height) {
+  //   grid_width_ = grid_width;
+  //   grid_height_ = grid_height;
   setColorRGBA(0x00, 0x00, 0xFF, 0xFF);
-  init(grid_width, grid_height);
+  init();
 }
 PlayerShip::~PlayerShip() {}
 
 bool PlayerShip::alive() const { return alive_; }
 
-void PlayerShip::init(std::size_t grid_width, std::size_t grid_height) {
-  position_.x = grid_width / 2;
-  position_.y = grid_height / 2;
+void PlayerShip::init() {
+  position_.x = grid_width_ / 2;
+  position_.y = grid_height_ / 2;
   velocity_ = {0.0, 0.0};
   acceleration_ = {0.0, 0.0};
-  maxVelocity_ = 36;
+  maxVelocity_ = 15;
   angle_ = -90; // ship faces top of window
 
   // player's ship at origin
@@ -78,6 +82,7 @@ void PlayerShip::updatePosition() {
 
   position_.x += velocity_.x;
   position_.y += velocity_.y;
+  wrapCoordinates(position_);
 }
 
 void PlayerShip::update() {
@@ -94,7 +99,89 @@ void PlayerShip::update() {
   rotateAndMovePoints();
 }
 
+// TODO: refactor this, too much code duplication!
+void PlayerShip::drawGhost(Renderer *const renderer) const {
+  bool left = false;
+  bool right = false;
+  bool top = false;
+  bool bottom = false;
+  for (auto &point : points_) {
+    if (point.x < 0) {
+      left = true;
+    } else if (point.x > (int)grid_width_) {
+      right = true;
+    }
+
+    if (point.y < 0) {
+      top = true;
+    } else if (point.y > (int)grid_height_) {
+      bottom = true;
+    }
+  }
+
+  SDL_Point p1{0, 0};
+  SDL_Point p2{0, 0};
+  sLine ghostLine{p1, p2};
+  if (left) {
+    // draw ghost at right edge
+    for (int i = 0; i < lines_.size(); i++) {
+      if (i > 2 && !thrust_) {
+        // no thrust, cool our jets!
+        continue;
+      }
+      p1.x = lines_[i].p1.x + (int)grid_width_;
+      p1.y = lines_[i].p1.y;
+      p2.x = lines_[i].p2.x + (int)grid_width_;
+      p2.y = lines_[i].p2.y;
+      renderer->drawLine(ghostLine, color_);
+    }
+
+  } else if (right) {
+    // draw ghost at left edge
+    for (int i = 0; i < lines_.size(); i++) {
+      if (i > 2 && !thrust_) {
+        // no thrust, cool our jets!
+        continue;
+      }
+      p1.x = lines_[i].p1.x - (int)grid_width_;
+      p1.y = lines_[i].p1.y;
+      p2.x = lines_[i].p2.x - (int)grid_width_;
+      p2.y = lines_[i].p2.y;
+      renderer->drawLine(ghostLine, color_);
+    }
+  }
+
+  if (top) {
+    // draw ghost at bottom edge
+    for (int i = 0; i < lines_.size(); i++) {
+      if (i > 2 && !thrust_) {
+        // no thrust, cool our jets!
+        continue;
+      }
+      p1.x = lines_[i].p1.x;
+      p1.y = lines_[i].p1.y + (int)grid_height_;
+      p2.x = lines_[i].p2.x;
+      p2.y = lines_[i].p2.y + (int)grid_height_;
+      renderer->drawLine(ghostLine, color_);
+    }
+  } else if (bottom) {
+    // draw ghost at top edge
+    for (int i = 0; i < lines_.size(); i++) {
+      if (i > 2 && !thrust_) {
+        // no thrust, cool our jets!
+        continue;
+      }
+      p1.x = lines_[i].p1.x;
+      p1.y = lines_[i].p1.y - (int)grid_height_;
+      p2.x = lines_[i].p2.x;
+      p2.y = lines_[i].p2.y - (int)grid_height_;
+      renderer->drawLine(ghostLine, color_);
+    }
+  }
+}
+
 void PlayerShip::draw(Renderer *const renderer) const {
+  // draw Ship
   for (int i = 0; i < lines_.size(); i++) {
     if (i > 2 && !thrust_) {
       // no thrust, cool our jets!
@@ -102,6 +189,10 @@ void PlayerShip::draw(Renderer *const renderer) const {
     }
     renderer->drawLine(lines_[i], color_);
   }
+
+  // if any point in object has crossed a window edge, aslo draw its ghost
+  // also draw its "ghost"
+  drawGhost(renderer);
 }
 
 void PlayerShip::rotateLeft() { rot_ = left_; }
