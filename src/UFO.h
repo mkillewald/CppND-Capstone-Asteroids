@@ -7,8 +7,8 @@ class UFO : public GameObject {
 public:
   enum UFOSize { large, small };
   // constructor / destructor
-  // UFO();
-  // ~UFO();
+  UFO(const std::size_t grid_width, const std::size_t grid_height);
+  ~UFO();
 
   // getters / setters
 
