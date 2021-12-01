@@ -3,7 +3,8 @@
 #include "Renderer.h"
 
 #include <SDL.h>
-#include <iostream>
+
+#include <bitset>
 
 // constructor / destructor
 GameObject::GameObject(const std::size_t grid_width,
@@ -18,6 +19,20 @@ void GameObject::setColorRGBA(int r, int g, int b, int a) {
   color_.g = g;
   color_.b = b;
   color_.a = a;
+}
+
+void GameObject::update() {
+  updatePosition();
+  rotateAndMovePoints();
+  checkPointsAtEdges(0, (int)grid_width_, 0, (int)grid_height_);
+}
+
+void GameObject::draw(Renderer *const renderer) const {
+  // draw object at position
+  drawObject(renderer, lines_);
+
+  // if any edgeFlags_ are set, draw object's "ghost"
+  drawGhost(renderer, lines_);
 }
 
 void GameObject::setAtOrigin(std::vector<SDL_Point> atOrigin) {
@@ -60,79 +75,75 @@ void GameObject::wrapCoordinates(sVector2f &point) {
   }
 }
 
-void GameObject::update() {
-  updatePosition();
-  rotateAndMovePoints();
-}
-
-void GameObject::drawGhost(Renderer *const renderer) const {
-  bool left = false;
-  bool right = false;
-  bool top = false;
-  bool bottom = false;
+void GameObject::checkPointsAtEdges(int left, int right, int top, int bottom) {
+  edgeFlags_.reset();
   for (auto &point : points_) {
-    if (point.x < 0) {
-      left = true;
-    } else if (point.x > (int)grid_width_) {
-      right = true;
+    if (point.x < left) {
+      edgeFlags_.set(kLeftEdge_);
+    } else if (point.x > right) {
+      edgeFlags_.set(kRightEdge_);
     }
 
-    if (point.y < 0) {
-      top = true;
-    } else if (point.y > (int)grid_height_) {
-      bottom = true;
+    if (point.y < top) {
+      edgeFlags_.set(kTopEdge_);
+    } else if (point.y > bottom) {
+      edgeFlags_.set(kBottomEdge_);
     }
   }
+}
 
+void GameObject::drawObject(Renderer *const renderer,
+                            std::vector<sLine> const &lines) const {
+  for (auto &line : lines) {
+    renderer->drawLine(line, color_);
+  }
+}
+
+void GameObject::drawGhostLines(Renderer *const renderer,
+                                std::vector<sLine> const &lines,
+                                const sFlags flags) const {
   SDL_Point p1{0, 0};
   SDL_Point p2{0, 0};
   sLine ghostLine{p1, p2};
-  if (left) {
-    // draw ghost at right edge
-    for (auto &line : lines_) {
-      p1.x = line.p1.x + (int)grid_width_;
-      p1.y = line.p1.y;
-      p2.x = line.p2.x + (int)grid_width_;
-      p2.y = line.p2.y;
-      renderer->drawLine(ghostLine, color_);
-    }
-
-  } else if (right) {
-    // draw ghost at left edge
-    for (auto &line : lines_) {
-      p1.x = line.p1.x - (int)grid_width_;
-      p1.y = line.p1.y;
-      p2.x = line.p2.x - (int)grid_width_;
-      p2.y = line.p2.y;
-      renderer->drawLine(ghostLine, color_);
-    }
-  }
-
-  if (top) {
-    for (auto &line : lines_) {
-      p1.x = line.p1.x;
-      p1.y = line.p1.y + (int)grid_height_;
-      p2.x = line.p2.x;
-      p2.y = line.p2.y + (int)grid_height_;
-      renderer->drawLine(ghostLine, color_);
-    }
-  } else if (bottom) {
-    for (auto &line : lines_) {
-      p1.x = line.p1.x;
-      p1.y = line.p1.y - (int)grid_height_;
-      p2.x = line.p2.x;
-      p2.y = line.p2.y - (int)grid_height_;
-      renderer->drawLine(ghostLine, color_);
-    }
+  for (auto &line : lines) {
+    p1.x = line.p1.x + flags.s1x * (int)grid_width_;
+    p1.y = line.p1.y + flags.s1y * (int)grid_height_;
+    p2.x = line.p2.x + flags.s2x * (int)grid_width_;
+    p2.y = line.p2.y + flags.s2y * (int)grid_height_;
+    renderer->drawLine(ghostLine, color_);
   }
 }
 
-void GameObject::draw(Renderer *const renderer) const {
-  for (auto &line : lines_) {
-    renderer->drawLine(line, color_);
+void GameObject::drawGhost(Renderer *const renderer,
+                           std::vector<sLine> const &lines) const {
+  // handle corners
+  if (edgeFlags_.test(kLeftEdge_) && edgeFlags_.test(kTopEdge_)) {
+    // draw ghost at bottom, right corner
+    drawGhostLines(renderer, lines, {1, 1, 1, 1});
+  } else if (edgeFlags_.test(kTopEdge_) && edgeFlags_.test(kRightEdge_)) {
+    // draw ghost at bottom, left corner
+    drawGhostLines(renderer, lines, {-1, 1, -1, 1});
+  } else if (edgeFlags_.test(kRightEdge_) && edgeFlags_.test(kBottomEdge_)) {
+    // draw ghost at top, left corner
+    drawGhostLines(renderer, lines, {-1, -1, -1, -1});
+  } else if (edgeFlags_.test(kBottomEdge_) && edgeFlags_.test(kLeftEdge_)) {
+    // draw ghost at top, right corner
+    drawGhostLines(renderer, lines, {1, -1, 1, -1});
   }
 
-  // if any point in object has crossed a window edge, aslo draw its ghost
-  // also draw its "ghost"
-  drawGhost(renderer);
+  // handle edges
+  if (edgeFlags_.test(kLeftEdge_)) {
+    // draw ghost at right edge
+    drawGhostLines(renderer, lines, {1, 0, 1, 0});
+  } else if (edgeFlags_.test(kRightEdge_)) {
+    // draw ghost at left edge
+    drawGhostLines(renderer, lines, {-1, 0, -1, 0});
+  }
+  if (edgeFlags_.test(kTopEdge_)) {
+    // draw ghost at bottom edge
+    drawGhostLines(renderer, lines, {0, 1, 0, 1});
+  } else if (edgeFlags_.test(kBottomEdge_)) {
+    // draw ghost at top edge
+    drawGhostLines(renderer, lines, {0, -1, 0, -1});
+  }
 }

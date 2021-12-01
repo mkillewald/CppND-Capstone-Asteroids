@@ -20,9 +20,7 @@ public:
   // typical behaviour methods
   void init();
   void update();
-  void drawGhost(Renderer *const renderer) const;
   void draw(Renderer *const renderer) const;
-  void updatePosition();
   void rotateLeft();
   void rotateRight();
   void rotateOff();
@@ -32,8 +30,12 @@ public:
   void hyperspace();
 
 private:
+  void updatePosition();
+  void drawThrust(Renderer *const renderer) const;
+
   bool alive_ = true;
   bool thrust_ = false;
+  std::vector<sLine> thrustLines_;
 };
 
 #endif
