@@ -7,11 +7,10 @@
 // based off Snake Game example code:
 // https://github.com/udacity/CppND-Capstone-Snake-Game
 
-Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : player_(grid_width, grid_height), engine_(dev_()),
-      random_w_(0, static_cast<int>(grid_width)),
+Game::Game(const std::size_t grid_width, const std::size_t grid_height)
+    : player_(grid_width, grid_height), ufo_(grid_width, grid_height),
+      engine_(dev_()), random_w_(0, static_cast<int>(grid_width)),
       random_h_(0, static_cast<int>(grid_height)) {
-  initPlayer();
   initAsteroids();
   initUFO();
 }
@@ -57,7 +56,6 @@ void Game::run(Controller const &controller, Renderer &renderer,
   }
 }
 
-void Game::initPlayer() {}
 void Game::initAsteroids() {}
 void Game::initUFO() {}
 

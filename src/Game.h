@@ -39,7 +39,6 @@ private:
   std::uniform_int_distribution<int> random_w_;
   std::uniform_int_distribution<int> random_h_;
 
-  void initPlayer();
   void initAsteroids();
   void initUFO();
   void update();
