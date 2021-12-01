@@ -24,7 +24,8 @@ void GameObject::setColorRGBA(int r, int g, int b, int a) {
 void GameObject::update() {
   updatePosition();
   rotateAndMovePoints();
-  checkPointsAtEdges(0, (int)grid_width_, 0, (int)grid_height_);
+  checkPointsAtEdges(0, static_cast<int>(grid_width_), 0,
+                     static_cast<int>(grid_height_));
 }
 
 void GameObject::draw(Renderer *const renderer) const {
@@ -101,15 +102,15 @@ void GameObject::drawObject(Renderer *const renderer,
 
 void GameObject::drawGhostLines(Renderer *const renderer,
                                 std::vector<sLine> const &lines,
-                                const sFlags flags) const {
+                                sGFlags const &gflags) const {
   SDL_Point p1{0, 0};
   SDL_Point p2{0, 0};
   sLine ghostLine{p1, p2};
   for (auto &line : lines) {
-    p1.x = line.p1.x + flags.s1x * (int)grid_width_;
-    p1.y = line.p1.y + flags.s1y * (int)grid_height_;
-    p2.x = line.p2.x + flags.s2x * (int)grid_width_;
-    p2.y = line.p2.y + flags.s2y * (int)grid_height_;
+    p1.x = line.p1.x + gflags.s1x * static_cast<int>(grid_width_);
+    p1.y = line.p1.y + gflags.s1y * static_cast<int>(grid_height_);
+    p2.x = line.p2.x + gflags.s2x * static_cast<int>(grid_width_);
+    p2.y = line.p2.y + gflags.s2y * static_cast<int>(grid_height_);
     renderer->drawLine(ghostLine, color_);
   }
 }

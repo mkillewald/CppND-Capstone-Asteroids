@@ -18,7 +18,6 @@ public:
   bool alive() const;
 
   // typical behaviour methods
-  void init();
   void update();
   void draw(Renderer *const renderer) const;
   void rotateLeft();
@@ -30,6 +29,7 @@ public:
   void hyperspace();
 
 private:
+  void init();
   void updatePosition();
   void drawThrust(Renderer *const renderer) const;
 

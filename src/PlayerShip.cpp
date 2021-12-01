@@ -65,11 +65,12 @@ void PlayerShip::update() {
 
   updatePosition();
   rotateAndMovePoints();
-  checkPointsAtEdges(0, (int)grid_width_, 0, (int)grid_height_);
+  checkPointsAtEdges(0, static_cast<int>(grid_width_), 0,
+                     static_cast<int>(grid_height_));
 }
 
 void PlayerShip::draw(Renderer *const renderer) const {
-  // draw ship
+  // draw ship using draw() from base class
   GameObject::draw(renderer);
   // draw thruster
   if (thrust_) {

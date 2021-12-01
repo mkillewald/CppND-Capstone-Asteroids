@@ -16,7 +16,7 @@ struct sLine {
   SDL_Point &p2;
 };
 
-struct sFlags {
+struct sGFlags {
   int s1x;
   int s1y;
   int s2x;
@@ -83,7 +83,7 @@ private:
   unsigned int score_;
 
   void drawGhostLines(Renderer *const renderer, std::vector<sLine> const &lines,
-                      const sFlags flags) const;
+                      sGFlags const &gflags) const;
 };
 
 #endif
