@@ -23,7 +23,7 @@ void GameObject::setColorRGBA(int r, int g, int b, int a) {
 
 void GameObject::update() {
   updatePosition();
-  rotateAndMovePoints();
+  rotateMoveAndScalePoints();
   checkPointsAtEdges(0, static_cast<int>(grid_width_), 0,
                      static_cast<int>(grid_height_));
 }
@@ -47,13 +47,15 @@ void GameObject::updatePosition() {
   wrapCoordinates(position_);
 }
 
-void GameObject::rotateAndMovePoints() {
+void GameObject::rotateMoveAndScalePoints() {
   float cosRot = cos(angle_ * PI / 180.0);
   float sinRot = sin(angle_ * PI / 180.0);
   for (int i = 0; i < atOrigin_.size(); i++) {
     // apply rotatation to points atOrigin_ and save result in points_
-    points_[i].x = (atOrigin_[i].x * cosRot - atOrigin_[i].y * sinRot) + 0.5;
-    points_[i].y = (atOrigin_[i].x * sinRot + atOrigin_[i].y * cosRot) + 0.5;
+    points_[i].x =
+        scale_ * (atOrigin_[i].x * cosRot - atOrigin_[i].y * sinRot) + 0.5;
+    points_[i].y =
+        scale_ * (atOrigin_[i].x * sinRot + atOrigin_[i].y * cosRot) + 0.5;
 
     // move points to objects position
     points_[i].x += position_.x;

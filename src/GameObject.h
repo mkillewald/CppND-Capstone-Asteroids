@@ -64,12 +64,13 @@ protected:
   sVector2f velocity_;
   float maxVelocity_;
   float angle_;
+  float scale_;
   eRotate rot_ = kRotNone_;
   sColorRGBA color_;
 
   void setAtOrigin(std::vector<SDL_Point> atOrigin);
   void updatePosition();
-  void rotateAndMovePoints();
+  void rotateMoveAndScalePoints();
   void wrapCoordinates(sVector2f &point);
   void checkPointsAtEdges(int left, int right, int top, int bottom);
   void drawObject(Renderer *const renderer,
