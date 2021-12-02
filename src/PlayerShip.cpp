@@ -18,19 +18,23 @@ void PlayerShip::init() {
   acceleration_ = {0.0, 0.0};
   maxVelocity_ = 15;
   angle_ = -90; // ship faces top of window
+  scale_ = 0.3;
+
+  // points used from Ed Logg's Asteroids design document
+  // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids
 
   // player's ship at origin
   std::vector<SDL_Point> atOrigin;
-  atOrigin.emplace_back(SDL_Point{-14, -8}); // 0
-  atOrigin.emplace_back(SDL_Point{10, 0});   // 1
-  atOrigin.emplace_back(SDL_Point{-14, 8});  // 2
-  atOrigin.emplace_back(SDL_Point{-10, -6}); // 3
-  atOrigin.emplace_back(SDL_Point{-10, 6});  // 4
+  atOrigin.emplace_back(SDL_Point{-40, 32});  // 0
+  atOrigin.emplace_back(SDL_Point{56, 0});    // 1
+  atOrigin.emplace_back(SDL_Point{-40, -32}); // 2
+  atOrigin.emplace_back(SDL_Point{-24, -16}); // 3
+  atOrigin.emplace_back(SDL_Point{-24, 16});  // 4
 
   // thruster at origin
-  atOrigin.emplace_back(SDL_Point{-11, -4}); // 5
-  atOrigin.emplace_back(SDL_Point{-18, 0});  // 6
-  atOrigin.emplace_back(SDL_Point{-11, 4});  // 7
+  atOrigin.emplace_back(SDL_Point{-24, -16}); // 5
+  atOrigin.emplace_back(SDL_Point{-56, 0});   // 6
+  atOrigin.emplace_back(SDL_Point{-24, 16});  // 7
 
   // copy atOrigin into points_
   points_ = atOrigin;
@@ -43,14 +47,16 @@ void PlayerShip::init() {
   // connect the dots: player's ship
   lines_.emplace_back(sLine{points_[0], points_[1]});
   lines_.emplace_back(sLine{points_[1], points_[2]});
+  lines_.emplace_back(sLine{points_[2], points_[3]});
   lines_.emplace_back(sLine{points_[3], points_[4]});
+  lines_.emplace_back(sLine{points_[4], points_[0]});
 
   // connect the dots: thruster
   thrustLines_.emplace_back(sLine{points_[5], points_[6]});
   thrustLines_.emplace_back(sLine{points_[6], points_[7]});
 
   // apply our starting angle and position
-  rotateAndMovePoints();
+  rotateMoveAndScalePoints();
 }
 
 void PlayerShip::update() {
@@ -64,7 +70,7 @@ void PlayerShip::update() {
   }
 
   updatePosition();
-  rotateAndMovePoints();
+  rotateMoveAndScalePoints();
   checkPointsAtEdges(0, static_cast<int>(grid_width_), 0,
                      static_cast<int>(grid_height_));
 }
