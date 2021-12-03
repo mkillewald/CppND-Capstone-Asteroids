@@ -20,7 +20,7 @@ class Renderer;
 class Game {
 public:
   // Contructor
-  Game(std::size_t grid_width, std::size_t grid_height);
+  Game(std::size_t grid_width, std::size_t grid_height, float game_scale);
 
   unsigned long score() const;
 
@@ -38,8 +38,9 @@ private:
   std::mt19937 engine_;
   std::uniform_int_distribution<int> random_w_;
   std::uniform_int_distribution<int> random_h_;
+  std::uniform_int_distribution<int> random_type_;
 
-  void initAsteroids();
+  void initAsteroids(size_t grid_width, size_t grid_height, float game_scale);
   void initUFO();
   void update();
 };

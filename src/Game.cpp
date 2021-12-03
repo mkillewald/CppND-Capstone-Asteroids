@@ -1,18 +1,19 @@
-#include <SDL.h>
-
-#include "Controller.h"
 #include "Game.h"
+#include "Controller.h"
 #include "Renderer.h"
+
+#include <SDL.h>
 
 // based off Snake Game example code:
 // https://github.com/udacity/CppND-Capstone-Snake-Game
 
-Game::Game(const std::size_t grid_width, const std::size_t grid_height)
-    : player_(grid_width, grid_height), ufo_(grid_width, grid_height),
-      engine_(dev_()), random_w_(0, static_cast<int>(grid_width)),
-      random_h_(0, static_cast<int>(grid_height)) {
-  initAsteroids();
-  initUFO();
+Game::Game(const std::size_t grid_width, const std::size_t grid_height,
+           float game_scale)
+    : player_(grid_width, grid_height, game_scale),
+      ufo_(grid_width, grid_height, game_scale), engine_(dev_()),
+      random_w_(0, static_cast<int>(grid_width)),
+      random_h_(0, static_cast<int>(grid_height)), random_type_(0, 3) {
+  initAsteroids(grid_width, grid_height, game_scale);
 }
 
 unsigned long Game::score() const { return score_; }
@@ -56,7 +57,22 @@ void Game::run(Controller const &controller, Renderer &renderer,
   }
 }
 
-void Game::initAsteroids() {}
+void Game::initAsteroids(size_t grid_width, size_t grid_height,
+                         float game_scale) {
+  // set up first wave
+
+  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 0));
+  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 1));
+  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 2));
+  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 3));
+  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 4));
+  // for (int i = 0; i < 4; i++) {
+  //   asteroids_.emplace_back(
+  //       Asteroid(grid_width, grid_height, game_scale,
+  //       random_type_(engine_)));
+  // }
+}
+
 void Game::initUFO() {}
 
 void Game::update() {
@@ -65,8 +81,9 @@ void Game::update() {
   }
 
   player_.update();
-  // for (auto &asteroid : asteroids_) {
-  //   asteroid.update();
-  // }
+  for (auto &asteroid : asteroids_) {
+    asteroid.update();
+  }
+
   // ufo_.update();
 }
