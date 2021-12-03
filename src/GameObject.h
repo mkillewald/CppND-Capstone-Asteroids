@@ -71,16 +71,16 @@ protected:
   void updatePosition();
   void rotateMoveAndScalePoints();
   void wrapCoordinates(sVector2f &point);
-  void checkPointsAtEdges(int left, int right, int top, int bottom);
+  void checkPointsAtEdges(int const &left, int const &right, int const &top,
+                          int const &bottom);
   void drawObject(Renderer *const renderer) const;
+  void drawGhostLines(Renderer *const renderer, sGFlags const &gflags) const;
   void drawGhost(Renderer *const renderer) const;
 
 private:
   std::vector<SDL_Point> atOrigin_;
   // const unsigned int id_;
   // cosnt unsigned int score_;
-
-  void drawGhostLines(Renderer *const renderer, sGFlags const &gflags) const;
 };
 
 #endif

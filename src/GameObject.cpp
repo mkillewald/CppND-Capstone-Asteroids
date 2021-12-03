@@ -79,7 +79,8 @@ void GameObject::wrapCoordinates(sVector2f &point) {
   }
 }
 
-void GameObject::checkPointsAtEdges(int left, int right, int top, int bottom) {
+void GameObject::checkPointsAtEdges(int const &left, int const &right,
+                                    int const &top, int const &bottom) {
   edgeFlags_.reset();
   for (auto &point : points_) {
     if (point.x < left) {
