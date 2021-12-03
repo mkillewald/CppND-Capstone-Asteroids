@@ -39,14 +39,6 @@ void Asteroid::init() {
     velocity_ = {0.9, -0.4};
     initType4();
     break;
-  // TODO: placed this here just to test points.. move to UFO class
-  case kTypeUFO_:
-    position_.x = grid_width_ - 101;
-    position_.y = 200;
-    velocity_ = {-2.0, 0.0};
-    scale_ = 1.0 * game_scale_;
-    initUFO();
-    break;
   }
 
   rotateMoveAndScalePoints();
@@ -159,33 +151,6 @@ void Asteroid::initType4() {
   atOrigin.emplace_back(SDL_Point{-80, 20});  // 9
   atOrigin.emplace_back(SDL_Point{-80, -40}); // 10
   atOrigin.emplace_back(SDL_Point{-20, -40}); // 11
-
-  // copy atOrigin into points_
-  points_ = atOrigin;
-
-  // move atOrigin into private member atOrigin_ of parent class GameObject so
-  // that its contents cannot be directly accessed or modified by the derived
-  // class.
-  setAtOrigin(std::move(atOrigin));
-}
-
-// TODO: placed this here just to test points.. move to UFO class
-void Asteroid::initUFO() {
-  std::vector<SDL_Point> atOrigin;
-
-  // points inferred from Ed Logg's Asteroids design sketches
-  // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids
-
-  // asteroid type 3 at origin 160 X 160 (medium)
-  // use scale 0.5 for small and 2.0 for large
-  atOrigin.emplace_back(SDL_Point{-20, -60}); // 0
-  atOrigin.emplace_back(SDL_Point{20, -60});  // 1
-  atOrigin.emplace_back(SDL_Point{40, -20});  // 2
-  atOrigin.emplace_back(SDL_Point{100, 20});  // 3
-  atOrigin.emplace_back(SDL_Point{40, 60});   // 4
-  atOrigin.emplace_back(SDL_Point{-40, 60});  // 5
-  atOrigin.emplace_back(SDL_Point{-100, 20}); // 6
-  atOrigin.emplace_back(SDL_Point{-40, -20}); // 7
 
   // copy atOrigin into points_
   points_ = atOrigin;

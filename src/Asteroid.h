@@ -26,7 +26,6 @@ private:
   void initType2();
   void initType3();
   void initType4();
-  void initUFO();
 };
 
 #endif
