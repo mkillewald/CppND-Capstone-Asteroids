@@ -21,10 +21,11 @@ public:
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void render(PlayerShip const &player, std::vector<Asteroid> &asteroids,
+  void render(PlayerShip const &player, std::vector<Asteroid> const &asteroid,
               UFO const &ufo);
   void updateWindowTitle(int score, int fps);
-  void drawLine(sLine const &line, sColorRGBA const &color) const;
+  void drawLine(SDL_Point const &p1, SDL_Point const &p2,
+                sColorRGBA const &color) const;
 
 private:
   SDL_Window *sdl_window_ = nullptr;     // Pointer for the SDL window

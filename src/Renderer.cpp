@@ -48,13 +48,16 @@ Renderer::~Renderer() {
 }
 
 void Renderer::render(PlayerShip const &player,
-                      std::vector<Asteroid> &asteroids, UFO const &ufo) {
+                      std::vector<Asteroid> const &asteroids, UFO const &ufo) {
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(sdl_renderer_);
 
   // Render game objects
   player.draw(this);
+  for (auto &asteroid : asteroids) {
+    asteroid.draw(this);
+  }
 
   // Update screen
   SDL_RenderPresent(sdl_renderer_);
@@ -67,8 +70,9 @@ void Renderer::updateWindowTitle(int score, int fps) {
   SDL_SetWindowTitle(sdl_window_, title.c_str());
 }
 
-void Renderer::drawLine(sLine const &line, sColorRGBA const &color) const {
+void Renderer::drawLine(SDL_Point const &p1, SDL_Point const &p2,
+                        sColorRGBA const &color) const {
   SDL_SetRenderDrawColor(sdl_renderer_, color.r, color.g, color.b, color.a);
   // SDL_RenderSetScale(sdl_renderer_, 1.0, 1.0);
-  SDL_RenderDrawLine(sdl_renderer_, line.p1.x, line.p1.y, line.p2.x, line.p2.y);
+  SDL_RenderDrawLine(sdl_renderer_, p1.x, p1.y, p2.x, p2.y);
 }
