@@ -112,18 +112,17 @@ void GameObject::drawGhostLines(Renderer *const renderer,
                                 sGFlags const &gflags) const {
   SDL_Point p1{0, 0};
   SDL_Point p2{0, 0};
+  int next;
   for (int i = 0; i < points_.size(); i++) {
     if (i == points_.size() - 1) {
-      p1.x = points_[i].x + gflags.s1x * static_cast<int>(grid_width_);
-      p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
-      p2.x = points_[0].x + gflags.s2x * static_cast<int>(grid_width_);
-      p2.y = points_[0].y + gflags.s2y * static_cast<int>(grid_height_);
+      next = 0;
     } else {
-      p1.x = points_[i].x + gflags.s1x * static_cast<int>(grid_width_);
-      p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
-      p2.x = points_[i + 1].x + gflags.s2x * static_cast<int>(grid_width_);
-      p2.y = points_[i + 1].y + gflags.s2y * static_cast<int>(grid_height_);
+      next = i + 1;
     }
+    p1.x = points_[i].x + gflags.s1x * static_cast<int>(grid_width_);
+    p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
+    p2.x = points_[next].x + gflags.s2x * static_cast<int>(grid_width_);
+    p2.y = points_[next].y + gflags.s2y * static_cast<int>(grid_height_);
     renderer->drawLine(p1, p2, color_);
   }
 }

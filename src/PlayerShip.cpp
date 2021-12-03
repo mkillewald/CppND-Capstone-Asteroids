@@ -109,10 +109,15 @@ void PlayerShip::updatePosition() {
 
 void PlayerShip::drawObject(Renderer *const renderer) const {
   // draw ship
-  for (int i = 0; i < 4; i++) {
-    renderer->drawLine(points_[i], points_[i + 1], color_);
+  int next;
+  for (int i = 0; i < 5; i++) {
+    if (i == 4) {
+      next = 0;
+    } else {
+      next = i + 1;
+    }
+    renderer->drawLine(points_[i], points_[next], color_);
   }
-  renderer->drawLine(points_[4], points_[0], color_);
 
   // draw thruster
   if (thrust_) {
@@ -125,18 +130,19 @@ void PlayerShip::drawGhostLines(Renderer *const renderer,
                                 sGFlags const &gflags) const {
   SDL_Point p1{0, 0};
   SDL_Point p2{0, 0};
-  for (int i = 0; i < 4; i++) {
+  int next;
+  for (int i = 0; i < 5; i++) {
+    if (i == 4) {
+      next = 0;
+    } else {
+      next = i + 1;
+    }
     p1.x = points_[i].x + gflags.s1x * static_cast<int>(grid_width_);
     p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
-    p2.x = points_[i + 1].x + gflags.s2x * static_cast<int>(grid_width_);
-    p2.y = points_[i + 1].y + gflags.s2y * static_cast<int>(grid_height_);
+    p2.x = points_[next].x + gflags.s2x * static_cast<int>(grid_width_);
+    p2.y = points_[next].y + gflags.s2y * static_cast<int>(grid_height_);
     renderer->drawLine(p1, p2, color_);
   }
-  p1.x = points_[4].x + gflags.s1x * static_cast<int>(grid_width_);
-  p1.y = points_[4].y + gflags.s1y * static_cast<int>(grid_height_);
-  p2.x = points_[0].x + gflags.s2x * static_cast<int>(grid_width_);
-  p2.y = points_[0].y + gflags.s2y * static_cast<int>(grid_height_);
-  renderer->drawLine(p1, p2, color_);
 
   if (thrust_) {
     for (int i = 5; i < 7; i++) {

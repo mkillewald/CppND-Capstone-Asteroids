@@ -77,8 +77,8 @@ protected:
 
 private:
   std::vector<SDL_Point> atOrigin_;
-  unsigned int id_;
-  unsigned int score_;
+  // const unsigned int id_;
+  // cosnt unsigned int score_;
 
   void drawGhostLines(Renderer *const renderer, sGFlags const &gflags) const;
 };
