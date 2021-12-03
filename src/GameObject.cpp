@@ -14,7 +14,7 @@ GameObject::GameObject(const std::size_t grid_width,
 GameObject::~GameObject() {}
 
 // getters / setters
-unsigned int GameObject::ID() const { return id_; }
+// unsigned int GameObject::ID() const { return id_; }
 void GameObject::setColorRGBA(int r, int g, int b, int a) {
   color_.r = r;
   color_.g = g;
