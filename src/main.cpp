@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
-  Game game(kGridWidth, kGridHeight);
+  Game game(kGridWidth, kGridHeight, 0.3);
 
   game.run(controller, renderer, kMsPerFrame);
   return 0;
