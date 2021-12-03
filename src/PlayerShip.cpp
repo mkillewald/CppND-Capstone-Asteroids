@@ -2,8 +2,8 @@
 #include "Renderer.h"
 
 PlayerShip::PlayerShip(const std::size_t grid_width,
-                       const std::size_t grid_height)
-    : GameObject(grid_width, grid_height) {
+                       const std::size_t grid_height, float game_scale)
+    : GameObject(grid_width, grid_height, game_scale) {
   setColorRGBA(0x00, 0x00, 0xFF, 0xFF);
   init();
 }
@@ -18,7 +18,7 @@ void PlayerShip::init() {
   acceleration_ = {0.0, 0.0};
   maxVelocity_ = 15;
   angle_ = -90; // ship faces top of window
-  scale_ = 0.3;
+  scale_ = 1.0 * game_scale_;
 
   // points used from Ed Logg's Asteroids design document
   // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids
@@ -44,17 +44,6 @@ void PlayerShip::init() {
   // class.
   setAtOrigin(std::move(atOrigin));
 
-  // connect the dots: player's ship
-  lines_.emplace_back(sLine{points_[0], points_[1]});
-  lines_.emplace_back(sLine{points_[1], points_[2]});
-  lines_.emplace_back(sLine{points_[2], points_[3]});
-  lines_.emplace_back(sLine{points_[3], points_[4]});
-  lines_.emplace_back(sLine{points_[4], points_[0]});
-
-  // connect the dots: thruster
-  thrustLines_.emplace_back(sLine{points_[5], points_[6]});
-  thrustLines_.emplace_back(sLine{points_[6], points_[7]});
-
   // apply our starting angle and position
   rotateMoveAndScalePoints();
 }
@@ -76,12 +65,8 @@ void PlayerShip::update() {
 }
 
 void PlayerShip::draw(Renderer *const renderer) const {
-  // draw ship using draw() from base class
-  GameObject::draw(renderer);
-  // draw thruster
-  if (thrust_) {
-    drawThrust(renderer);
-  }
+  drawObject(renderer);
+  drawGhost(renderer);
 }
 
 void PlayerShip::rotateLeft() { rot_ = kRotLeft_; }
@@ -122,7 +107,77 @@ void PlayerShip::updatePosition() {
   wrapCoordinates(position_);
 }
 
-void PlayerShip::drawThrust(Renderer *const renderer) const {
-  drawObject(renderer, thrustLines_);
-  drawGhost(renderer, thrustLines_);
+void PlayerShip::drawObject(Renderer *const renderer) const {
+  // draw ship
+  for (int i = 0; i < 4; i++) {
+    renderer->drawLine(points_[i], points_[i + 1], color_);
+  }
+  renderer->drawLine(points_[4], points_[0], color_);
+
+  // draw thruster
+  if (thrust_) {
+    renderer->drawLine(points_[5], points_[6], color_);
+    renderer->drawLine(points_[6], points_[7], color_);
+  }
+}
+
+void PlayerShip::drawGhostLines(Renderer *const renderer,
+                                sGFlags const &gflags) const {
+  SDL_Point p1{0, 0};
+  SDL_Point p2{0, 0};
+  for (int i = 0; i < 4; i++) {
+    p1.x = points_[i].x + gflags.s1x * static_cast<int>(grid_width_);
+    p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
+    p2.x = points_[i + 1].x + gflags.s2x * static_cast<int>(grid_width_);
+    p2.y = points_[i + 1].y + gflags.s2y * static_cast<int>(grid_height_);
+    renderer->drawLine(p1, p2, color_);
+  }
+  p1.x = points_[4].x + gflags.s1x * static_cast<int>(grid_width_);
+  p1.y = points_[4].y + gflags.s1y * static_cast<int>(grid_height_);
+  p2.x = points_[0].x + gflags.s2x * static_cast<int>(grid_width_);
+  p2.y = points_[0].y + gflags.s2y * static_cast<int>(grid_height_);
+  renderer->drawLine(p1, p2, color_);
+
+  if (thrust_) {
+    for (int i = 5; i < 7; i++) {
+      p1.x = points_[i].x + gflags.s1x * static_cast<int>(grid_width_);
+      p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
+      p2.x = points_[i + 1].x + gflags.s2x * static_cast<int>(grid_width_);
+      p2.y = points_[i + 1].y + gflags.s2y * static_cast<int>(grid_height_);
+      renderer->drawLine(p1, p2, color_);
+    }
+  }
+}
+
+void PlayerShip::drawGhost(Renderer *const renderer) const {
+  // handle corners
+  if (edgeFlags_.test(kLeftEdge_) && edgeFlags_.test(kTopEdge_)) {
+    // draw ghost at bottom, right corner
+    drawGhostLines(renderer, {1, 1, 1, 1});
+  } else if (edgeFlags_.test(kTopEdge_) && edgeFlags_.test(kRightEdge_)) {
+    // draw ghost at bottom, left corner
+    drawGhostLines(renderer, {-1, 1, -1, 1});
+  } else if (edgeFlags_.test(kRightEdge_) && edgeFlags_.test(kBottomEdge_)) {
+    // draw ghost at top, left corner
+    drawGhostLines(renderer, {-1, -1, -1, -1});
+  } else if (edgeFlags_.test(kBottomEdge_) && edgeFlags_.test(kLeftEdge_)) {
+    // draw ghost at top, right corner
+    drawGhostLines(renderer, {1, -1, 1, -1});
+  }
+
+  // handle edges
+  if (edgeFlags_.test(kLeftEdge_)) {
+    // draw ghost at right edge
+    drawGhostLines(renderer, {1, 0, 1, 0});
+  } else if (edgeFlags_.test(kRightEdge_)) {
+    // draw ghost at left edge
+    drawGhostLines(renderer, {-1, 0, -1, 0});
+  }
+  if (edgeFlags_.test(kTopEdge_)) {
+    // draw ghost at bottom edge
+    drawGhostLines(renderer, {0, 1, 0, 1});
+  } else if (edgeFlags_.test(kBottomEdge_)) {
+    // draw ghost at top edge
+    drawGhostLines(renderer, {0, -1, 0, -1});
+  }
 }

@@ -11,7 +11,8 @@ class Renderer;
 class PlayerShip : public GameObject {
 public:
   // constructor / destructor
-  PlayerShip(const std::size_t grid_width, const std::size_t grid_height);
+  PlayerShip(const std::size_t grid_width, const std::size_t grid_height,
+             float game_scale);
   ~PlayerShip();
 
   // getters / setters
@@ -31,11 +32,13 @@ public:
 private:
   void init();
   void updatePosition();
-  void drawThrust(Renderer *const renderer) const;
+  void drawObject(Renderer *const renderer) const;
+  void drawGhostLines(Renderer *const renderer, sGFlags const &gFlags) const;
+  void drawGhost(Renderer *const renderer) const;
 
   bool alive_ = true;
   bool thrust_ = false;
-  std::vector<sLine> thrustLines_;
+  std::vector<SDL_Point *> thrustLines_;
 };
 
 #endif
