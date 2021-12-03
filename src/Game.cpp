@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Controller.h"
 #include "Renderer.h"
+#include "UFO.h"
 
 #include <SDL.h>
 
@@ -10,8 +11,8 @@
 Game::Game(const std::size_t grid_width, const std::size_t grid_height,
            float game_scale)
     : player_(grid_width, grid_height, game_scale),
-      ufo_(grid_width, grid_height, game_scale), engine_(dev_()),
-      random_w_(0, static_cast<int>(grid_width)),
+      ufo_(grid_width, grid_height, game_scale, static_cast<UFO::eUFOSize>(0)),
+      engine_(dev_()), random_w_(0, static_cast<int>(grid_width)),
       random_h_(0, static_cast<int>(grid_height)), random_type_(0, 3) {
   initAsteroids(grid_width, grid_height, game_scale);
 }
@@ -65,7 +66,6 @@ void Game::initAsteroids(size_t grid_width, size_t grid_height,
   asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 1));
   asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 2));
   asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 3));
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 4));
   // for (int i = 0; i < 4; i++) {
   //   asteroids_.emplace_back(
   //       Asteroid(grid_width, grid_height, game_scale,
@@ -84,6 +84,5 @@ void Game::update() {
   for (auto &asteroid : asteroids_) {
     asteroid.update();
   }
-
-  // ufo_.update();
+  ufo_.update();
 }

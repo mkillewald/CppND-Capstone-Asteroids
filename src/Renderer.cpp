@@ -58,6 +58,7 @@ void Renderer::render(PlayerShip const &player,
   for (auto &asteroid : asteroids) {
     asteroid.draw(this);
   }
+  ufo.draw(this);
 
   // Update screen
   SDL_RenderPresent(sdl_renderer_);
