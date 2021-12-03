@@ -8,8 +8,9 @@
 
 // constructor / destructor
 GameObject::GameObject(const std::size_t grid_width,
-                       const std::size_t grid_height)
-    : grid_width_(grid_width), grid_height_(grid_height) {}
+                       const std::size_t grid_height, float game_scale)
+    : grid_width_(grid_width), grid_height_(grid_height),
+      game_scale_(game_scale) {}
 GameObject::~GameObject() {}
 
 // getters / setters
@@ -30,10 +31,10 @@ void GameObject::update() {
 
 void GameObject::draw(Renderer *const renderer) const {
   // draw object at position
-  drawObject(renderer, lines_);
+  drawObject(renderer);
 
   // if any edgeFlags_ are set, draw object's "ghost"
-  drawGhost(renderer, lines_);
+  drawGhost(renderer);
 }
 
 void GameObject::setAtOrigin(std::vector<SDL_Point> atOrigin) {
@@ -95,58 +96,68 @@ void GameObject::checkPointsAtEdges(int left, int right, int top, int bottom) {
   }
 }
 
-void GameObject::drawObject(Renderer *const renderer,
-                            std::vector<sLine> const &lines) const {
-  for (auto &line : lines) {
-    renderer->drawLine(line, color_);
+// assumes object is a simple closed polygon
+void GameObject::drawObject(Renderer *const renderer) const {
+  for (int i = 0; i < points_.size(); i++) {
+    if (i == points_.size() - 1) {
+      renderer->drawLine(points_[i], points_[0], color_);
+    } else {
+      renderer->drawLine(points_[i], points_[i + 1], color_);
+    }
   }
 }
 
+// assumes object is a simple closed polygon
 void GameObject::drawGhostLines(Renderer *const renderer,
-                                std::vector<sLine> const &lines,
                                 sGFlags const &gflags) const {
   SDL_Point p1{0, 0};
   SDL_Point p2{0, 0};
-  sLine ghostLine{p1, p2};
-  for (auto &line : lines) {
-    p1.x = line.p1.x + gflags.s1x * static_cast<int>(grid_width_);
-    p1.y = line.p1.y + gflags.s1y * static_cast<int>(grid_height_);
-    p2.x = line.p2.x + gflags.s2x * static_cast<int>(grid_width_);
-    p2.y = line.p2.y + gflags.s2y * static_cast<int>(grid_height_);
-    renderer->drawLine(ghostLine, color_);
+  for (int i = 0; i < points_.size(); i++) {
+    if (i == points_.size() - 1) {
+      p1.x = points_[i].x + gflags.s1x * static_cast<int>(grid_width_);
+      p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
+      p2.x = points_[0].x + gflags.s2x * static_cast<int>(grid_width_);
+      p2.y = points_[0].y + gflags.s2y * static_cast<int>(grid_height_);
+    } else {
+      p1.x = points_[i].x + gflags.s1x * static_cast<int>(grid_width_);
+      p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
+      p2.x = points_[i + 1].x + gflags.s2x * static_cast<int>(grid_width_);
+      p2.y = points_[i + 1].y + gflags.s2y * static_cast<int>(grid_height_);
+    }
+    renderer->drawLine(p1, p2, color_);
   }
 }
 
-void GameObject::drawGhost(Renderer *const renderer,
-                           std::vector<sLine> const &lines) const {
+// assumes object is a simple closed polygon
+void GameObject::drawGhost(Renderer *const renderer) const {
   // handle corners
   if (edgeFlags_.test(kLeftEdge_) && edgeFlags_.test(kTopEdge_)) {
     // draw ghost at bottom, right corner
-    drawGhostLines(renderer, lines, {1, 1, 1, 1});
+    drawGhostLines(renderer, {1, 1, 1, 1});
   } else if (edgeFlags_.test(kTopEdge_) && edgeFlags_.test(kRightEdge_)) {
     // draw ghost at bottom, left corner
-    drawGhostLines(renderer, lines, {-1, 1, -1, 1});
+    drawGhostLines(renderer, {-1, 1, -1, 1});
   } else if (edgeFlags_.test(kRightEdge_) && edgeFlags_.test(kBottomEdge_)) {
     // draw ghost at top, left corner
-    drawGhostLines(renderer, lines, {-1, -1, -1, -1});
+    drawGhostLines(renderer, {-1, -1, -1, -1});
   } else if (edgeFlags_.test(kBottomEdge_) && edgeFlags_.test(kLeftEdge_)) {
     // draw ghost at top, right corner
-    drawGhostLines(renderer, lines, {1, -1, 1, -1});
+    drawGhostLines(renderer, {1, -1, 1, -1});
   }
 
   // handle edges
   if (edgeFlags_.test(kLeftEdge_)) {
     // draw ghost at right edge
-    drawGhostLines(renderer, lines, {1, 0, 1, 0});
+    drawGhostLines(renderer, {1, 0, 1, 0});
   } else if (edgeFlags_.test(kRightEdge_)) {
     // draw ghost at left edge
-    drawGhostLines(renderer, lines, {-1, 0, -1, 0});
+    drawGhostLines(renderer, {-1, 0, -1, 0});
   }
   if (edgeFlags_.test(kTopEdge_)) {
     // draw ghost at bottom edge
-    drawGhostLines(renderer, lines, {0, 1, 0, 1});
+    drawGhostLines(renderer, {0, 1, 0, 1});
   } else if (edgeFlags_.test(kBottomEdge_)) {
     // draw ghost at top edge
-    drawGhostLines(renderer, lines, {0, -1, 0, -1});
+    drawGhostLines(renderer, {0, -1, 0, -1});
   }
 }

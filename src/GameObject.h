@@ -11,11 +11,6 @@
 // forward declaration to avoid include cycle
 class Renderer;
 
-struct sLine {
-  SDL_Point &p1;
-  SDL_Point &p2;
-};
-
 struct sGFlags {
   int s1x;
   int s1y;
@@ -42,7 +37,8 @@ enum eEdge { kLeftEdge_, kRightEdge_, kTopEdge_, kBottomEdge_ };
 class GameObject {
 public:
   // constructor / destructor
-  GameObject(const std::size_t grid_width, const std::size_t grid_height);
+  GameObject(const std::size_t grid_width, const std::size_t grid_height,
+             float game_scale);
   ~GameObject();
 
   // getters / setters
@@ -56,8 +52,8 @@ public:
 protected:
   const std::size_t grid_width_;
   const std::size_t grid_height_;
+  float game_scale_;
   std::vector<SDL_Point> points_;
-  std::vector<sLine> lines_;
   std::bitset<4> edgeFlags_{0x0000};
   sVector2f position_;
   sVector2f acceleration_;
@@ -68,23 +64,23 @@ protected:
   eRotate rot_ = kRotNone_;
   sColorRGBA color_;
 
+  // getters / setters
   void setAtOrigin(std::vector<SDL_Point> atOrigin);
+
+  // typical behaviour methods
   void updatePosition();
   void rotateMoveAndScalePoints();
   void wrapCoordinates(sVector2f &point);
   void checkPointsAtEdges(int left, int right, int top, int bottom);
-  void drawObject(Renderer *const renderer,
-                  std::vector<sLine> const &lines) const;
-  void drawGhost(Renderer *const renderer,
-                 std::vector<sLine> const &lines) const;
+  void drawObject(Renderer *const renderer) const;
+  void drawGhost(Renderer *const renderer) const;
 
 private:
   std::vector<SDL_Point> atOrigin_;
   unsigned int id_;
   unsigned int score_;
 
-  void drawGhostLines(Renderer *const renderer, std::vector<sLine> const &lines,
-                      sGFlags const &gflags) const;
+  void drawGhostLines(Renderer *const renderer, sGFlags const &gflags) const;
 };
 
 #endif
