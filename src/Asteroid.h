@@ -3,6 +3,8 @@
 
 #include "GameObject.h"
 
+#include <random>
+
 class Asteroid : public GameObject {
 public:
   enum eAsteroidType { kType1_, kType2_, kType3_, kType4_, kTypeUFO_ };
@@ -20,6 +22,7 @@ public:
 private:
   const int type_;
   eAsteroidSize size_ = kLarge_;
+  std::uniform_int_distribution<int> random_type_;
 
   void init();
   void initType1();
