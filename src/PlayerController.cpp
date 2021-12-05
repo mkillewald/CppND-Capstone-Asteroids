@@ -29,6 +29,10 @@ PlayerController::~PlayerController() {}
 
 unsigned long PlayerController::score() const { return score_; }
 bool PlayerController::alive() const { return alive_; }
+bool PlayerController::switchPlayer() const { return switchPlayer_; }
+void PlayerController::setSwitchPlayer(bool switchPlayer) {
+  switchPlayer_ = switchPlayer;
+}
 
 void PlayerController::update() {
   ship_->update();

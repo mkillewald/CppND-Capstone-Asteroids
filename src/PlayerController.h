@@ -18,6 +18,8 @@ public:
   // getters / setters
   unsigned long score() const;
   bool alive() const;
+  bool switchPlayer() const;
+  void setSwitchPlayer(bool b);
 
   // behavior methods
   void update();
@@ -36,6 +38,7 @@ private:
   std::unique_ptr<UFO> ufo_;
   unsigned long score_{0};
   bool alive_ = true;
+  bool switchPlayer_ = false;
 };
 
 #endif

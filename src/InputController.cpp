@@ -29,6 +29,9 @@ void InputController::handleInput(bool &running,
       case SDLK_SPACE:
         player->hyperspace();
         break;
+      case SDLK_1:
+        player->setSwitchPlayer(true);
+        break;
       }
       break;
     case SDL_KEYUP:

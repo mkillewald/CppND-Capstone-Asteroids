@@ -74,6 +74,13 @@ void Game::update() {
   if (!currentPlayer_->alive()) {
     return;
   }
-
+  if (currentPlayer_->switchPlayer()) {
+    currentPlayer_->setSwitchPlayer(false);
+    if (currentPlayer_ == player1_.get()) {
+      currentPlayer_ = player2_.get();
+    } else {
+      currentPlayer_ = player1_.get();
+    }
+  }
   currentPlayer_->update();
 }
