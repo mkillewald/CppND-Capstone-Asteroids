@@ -3,6 +3,7 @@
 
 #include "Asteroid.h"
 #include "PlayerShip.h"
+#include "PlayerShot.h"
 #include "UFO.h"
 
 #include <SDL.h>
@@ -13,7 +14,6 @@ class PlayerController {
 public:
   // constructor / destructor
   PlayerController(size_t grid_width, size_t grid_height, float game_scale);
-  ~PlayerController();
 
   // getters / setters
   unsigned long score() const;
@@ -33,9 +33,10 @@ public:
   void hyperspace();
 
 private:
-  std::unique_ptr<PlayerShip> ship_;
-  std::unique_ptr<std::vector<Asteroid>> asteroids_;
-  std::unique_ptr<UFO> ufo_;
+  PlayerShip ship_;
+  std::vector<PlayerShot> shots_;
+  std::vector<Asteroid> asteroids_;
+  UFO ufo_;
   unsigned long score_{0};
   bool alive_ = true;
   bool switchPlayer_ = false;
