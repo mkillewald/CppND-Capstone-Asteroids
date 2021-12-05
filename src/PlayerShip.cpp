@@ -7,7 +7,6 @@ PlayerShip::PlayerShip(const std::size_t grid_width,
   setColorRGBA(0x00, 0x00, 0xFF, 0xFF);
   init();
 }
-PlayerShip::~PlayerShip() {}
 
 void PlayerShip::init() {
   position_.x = grid_width_ / 2;
@@ -46,6 +45,7 @@ void PlayerShip::init() {
   rotateMoveAndScalePoints();
 }
 
+int PlayerShip::maxShots() const { return maxShots_; }
 void PlayerShip::setThrust(bool thrust) { thrust_ = thrust; }
 
 void PlayerShip::update() {

@@ -13,9 +13,9 @@ public:
   // constructor / destructor
   PlayerShip(const std::size_t grid_width, const std::size_t grid_height,
              float game_scale);
-  ~PlayerShip();
 
   // getters / setters
+  int maxShots() const;
   void setThrust(bool thrust);
 
   // typical behaviour methods
@@ -29,8 +29,9 @@ private:
   void drawGhostLines(Renderer *const renderer, sGFlags const &gFlags) const;
   void drawGhost(Renderer *const renderer) const;
 
-  bool thrust_ = false;
   std::vector<SDL_Point *> thrustLines_;
+  bool thrust_{false};
+  int maxShots_{4};
 };
 
 #endif
