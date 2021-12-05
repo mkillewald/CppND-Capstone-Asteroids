@@ -11,7 +11,6 @@ GameObject::GameObject(const std::size_t grid_width,
                        const std::size_t grid_height, float game_scale)
     : grid_width_(grid_width), grid_height_(grid_height),
       game_scale_(game_scale) {}
-GameObject::~GameObject() {}
 
 // getters / setters
 // unsigned int GameObject::ID() const { return id_; }

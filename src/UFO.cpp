@@ -7,7 +7,6 @@ UFO::UFO(const std::size_t grid_width, const std::size_t grid_height,
   setColorRGBA(0x00, 0x00, 0xFF, 0xFF);
   init();
 }
-UFO::~UFO() {}
 
 void UFO::draw(Renderer *const renderer) const {
   drawObject(renderer);

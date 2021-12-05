@@ -7,7 +7,6 @@ Asteroid::Asteroid(const std::size_t grid_width, const std::size_t grid_height,
   setColorRGBA(0x00, 0x00, 0xFF, 0xFF);
   init();
 }
-Asteroid::~Asteroid() {}
 
 void Asteroid::init() {
   acceleration_ = {0.0, 0.0};

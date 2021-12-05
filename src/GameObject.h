@@ -38,7 +38,6 @@ public:
   // constructor / destructor
   GameObject(const std::size_t grid_width, const std::size_t grid_height,
              float game_scale);
-  ~GameObject();
 
   // getters / setters
   unsigned int ID() const;
@@ -50,6 +49,7 @@ public:
   void update();
   void draw(Renderer *const renderer) const;
 
+  // TODO: should move this to private with public getters/setters ??
 protected:
   const std::size_t grid_width_;
   const std::size_t grid_height_;

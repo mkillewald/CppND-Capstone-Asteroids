@@ -13,7 +13,6 @@ public:
   // constructor / destructor
   Asteroid(std::size_t grid_width, std::size_t grid_height, float game_scale,
            int type);
-  ~Asteroid();
 
   // getters / setters
 
