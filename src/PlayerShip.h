@@ -16,18 +16,11 @@ public:
   ~PlayerShip();
 
   // getters / setters
-  bool alive() const;
+  void setThrust(bool thrust);
 
   // typical behaviour methods
   void update();
   void draw(Renderer *const renderer) const;
-  void rotateLeft();
-  void rotateRight();
-  void rotateOff();
-  void thrustOn();
-  void thrustOff();
-  void fire();
-  void hyperspace();
 
 private:
   void init();
@@ -36,7 +29,6 @@ private:
   void drawGhostLines(Renderer *const renderer, sGFlags const &gFlags) const;
   void drawGhost(Renderer *const renderer) const;
 
-  bool alive_ = true;
   bool thrust_ = false;
   std::vector<SDL_Point *> thrustLines_;
 };

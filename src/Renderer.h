@@ -8,9 +8,7 @@
 #include <vector>
 
 // forward declaration to avoid include cycle
-class Asteroid;
-class PlayerShip;
-class UFO;
+class PlayerController;
 
 // class based off Snake Game example code:
 // https://github.com/udacity/CppND-Capstone-Snake-Game
@@ -21,8 +19,7 @@ public:
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void render(PlayerShip const &player, std::vector<Asteroid> const &asteroid,
-              UFO const &ufo);
+  void render(PlayerController *const player);
   void updateWindowTitle(int score, int fps);
   void drawLine(SDL_Point const &p1, SDL_Point const &p2,
                 sColorRGBA const &color) const;

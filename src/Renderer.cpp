@@ -1,8 +1,5 @@
 #include "Renderer.h"
-#include "Asteroid.h"
-#include "GameObject.h"
-#include "PlayerShip.h"
-#include "UFO.h"
+#include "PlayerController.h"
 
 #include <SDL.h>
 
@@ -47,18 +44,13 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::render(PlayerShip const &player,
-                      std::vector<Asteroid> const &asteroids, UFO const &ufo) {
+void Renderer::render(PlayerController *const player) {
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(sdl_renderer_);
 
   // Render game objects
-  player.draw(this);
-  for (auto &asteroid : asteroids) {
-    asteroid.draw(this);
-  }
-  ufo.draw(this);
+  player->draw(this);
 
   // Update screen
   SDL_RenderPresent(sdl_renderer_);

@@ -30,12 +30,11 @@ struct sVector2f {
   float y;
 };
 
-enum eRotate { kRotLeft_, kRotRight_, kRotNone_ };
-
-enum eEdge { kLeftEdge_, kRightEdge_, kTopEdge_, kBottomEdge_ };
-
 class GameObject {
 public:
+  enum eRotate { kRotLeft_, kRotRight_, kRotNone_ };
+  enum eEdge { kLeftEdge_, kRightEdge_, kTopEdge_, kBottomEdge_ };
+
   // constructor / destructor
   GameObject(const std::size_t grid_width, const std::size_t grid_height,
              float game_scale);
@@ -43,6 +42,8 @@ public:
 
   // getters / setters
   unsigned int ID() const;
+  eRotate getRot() const;
+  void setRot(eRotate rot);
   void setColorRGBA(int r, int g, int b, int a);
 
   // typical behaviour methods
@@ -61,7 +62,6 @@ protected:
   float maxVelocity_;
   float angle_;
   float scale_;
-  eRotate rot_ = kRotNone_;
   sColorRGBA color_;
 
   // getters / setters
@@ -79,6 +79,7 @@ protected:
 
 private:
   std::vector<SDL_Point> atOrigin_;
+  eRotate rot_ = kRotNone_;
   // const unsigned int id_;
   // cosnt unsigned int score_;
 };

@@ -9,8 +9,6 @@ PlayerShip::PlayerShip(const std::size_t grid_width,
 }
 PlayerShip::~PlayerShip() {}
 
-bool PlayerShip::alive() const { return alive_; }
-
 void PlayerShip::init() {
   position_.x = grid_width_ / 2;
   position_.y = grid_height_ / 2;
@@ -48,8 +46,10 @@ void PlayerShip::init() {
   rotateMoveAndScalePoints();
 }
 
+void PlayerShip::setThrust(bool thrust) { thrust_ = thrust; }
+
 void PlayerShip::update() {
-  switch (rot_) {
+  switch (getRot()) {
   case kRotLeft_:
     angle_ -= 5;
     break;
@@ -68,14 +68,6 @@ void PlayerShip::draw(Renderer *const renderer) const {
   drawObject(renderer);
   drawGhost(renderer);
 }
-
-void PlayerShip::rotateLeft() { rot_ = kRotLeft_; }
-void PlayerShip::rotateRight() { rot_ = kRotRight_; }
-void PlayerShip::rotateOff() { rot_ = kRotNone_; }
-void PlayerShip::thrustOn() { thrust_ = true; }
-void PlayerShip::thrustOff() { thrust_ = false; }
-void PlayerShip::fire() {}
-void PlayerShip::hyperspace() {}
 
 void PlayerShip::updatePosition() {
   if (thrust_) {

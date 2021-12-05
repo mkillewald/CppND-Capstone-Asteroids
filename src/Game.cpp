@@ -1,25 +1,37 @@
 #include "Game.h"
-#include "Controller.h"
+#include "Asteroid.h"
+#include "InputController.h"
 #include "Renderer.h"
 #include "UFO.h"
 
 #include <SDL.h>
 
+#include <memory>
+
 // based off Snake Game example code:
 // https://github.com/udacity/CppND-Capstone-Snake-Game
 
+// std::uniform_int_distribution<int> random_type(0, 3);
 Game::Game(const std::size_t grid_width, const std::size_t grid_height,
-           float game_scale)
-    : player_(grid_width, grid_height, game_scale),
-      ufo_(grid_width, grid_height, game_scale, static_cast<UFO::eUFOSize>(0)),
-      engine_(dev_()), random_w_(0, static_cast<int>(grid_width)),
-      random_h_(0, static_cast<int>(grid_height)), random_type_(0, 3) {
-  initAsteroids(grid_width, grid_height, game_scale);
+           float game_scale) {
+  player1_ =
+      std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
+  player2_ =
+      std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
+  currentPlayer_ = player1_.get();
+
+  std::mt19937 engine_(dev_());
+  std::uniform_int_distribution<int> random_w_(0, static_cast<int>(grid_width));
+  std::uniform_int_distribution<int> random_h_(0,
+                                               static_cast<int>(grid_height));
+  std::uniform_int_distribution<int> random_type_(0, 3);
 }
 
-unsigned long Game::score() const { return score_; }
+int Game::random_w() { return random_w_(engine_); }
+int Game::random_h() { return random_w_(engine_); }
+int Game::random_type() { return random_type_(engine_); }
 
-void Game::run(Controller const &controller, Renderer &renderer,
+void Game::run(InputController *const input, Renderer *const renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -31,9 +43,9 @@ void Game::run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.handleInput(running_, player_);
+    input->handleInput(running_, currentPlayer_);
     update();
-    renderer.render(player_, asteroids_, ufo_);
+    renderer->render(currentPlayer_);
 
     frame_end = SDL_GetTicks();
 
@@ -44,7 +56,7 @@ void Game::run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.updateWindowTitle(score_, frame_count);
+      renderer->updateWindowTitle(currentPlayer_->score(), frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
     }
@@ -58,31 +70,10 @@ void Game::run(Controller const &controller, Renderer &renderer,
   }
 }
 
-void Game::initAsteroids(size_t grid_width, size_t grid_height,
-                         float game_scale) {
-  // set up first wave
-
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 0));
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 1));
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 2));
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 3));
-  // for (int i = 0; i < 4; i++) {
-  //   asteroids_.emplace_back(
-  //       Asteroid(grid_width, grid_height, game_scale,
-  //       random_type_(engine_)));
-  // }
-}
-
-void Game::initUFO() {}
-
 void Game::update() {
-  if (!player_.alive()) {
+  if (!currentPlayer_->alive()) {
     return;
   }
 
-  player_.update();
-  for (auto &asteroid : asteroids_) {
-    asteroid.update();
-  }
-  ufo_.update();
+  currentPlayer_->update();
 }

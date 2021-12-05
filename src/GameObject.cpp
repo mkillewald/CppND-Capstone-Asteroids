@@ -15,6 +15,8 @@ GameObject::~GameObject() {}
 
 // getters / setters
 // unsigned int GameObject::ID() const { return id_; }
+GameObject::eRotate GameObject::getRot() const { return rot_; }
+void GameObject::setRot(eRotate rot) { rot_ = rot; }
 void GameObject::setColorRGBA(int r, int g, int b, int a) {
   color_.r = r;
   color_.g = g;
