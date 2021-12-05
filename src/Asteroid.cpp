@@ -1,4 +1,5 @@
 #include "Asteroid.h"
+#include "Game.h"
 
 Asteroid::Asteroid(const std::size_t grid_width, const std::size_t grid_height,
                    float game_scale, int type)
