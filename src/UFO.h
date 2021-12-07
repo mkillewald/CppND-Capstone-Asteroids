@@ -24,7 +24,6 @@ public:
   // getters / setters
 
   // typical behaviour methods
-  void draw(Renderer *const renderer) const;
 
 private:
   eUFOSize size_ = kSluggo_;
@@ -32,7 +31,6 @@ private:
   void init();
   void drawObject(Renderer *const renderer) const;
   void drawGhostLines(Renderer *const renderer, sGFlags const &gFlags) const;
-  void drawGhost(Renderer *const renderer) const;
 };
 
 #endif
