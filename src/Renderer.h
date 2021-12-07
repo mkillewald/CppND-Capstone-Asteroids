@@ -23,6 +23,7 @@ public:
   void updateWindowTitle(int score, int fps);
   void drawLine(SDL_Point const &p1, SDL_Point const &p2,
                 sColorRGBA const &color) const;
+  int drawFilledCircle(int x, int y, int radius);
 
 private:
   SDL_Window *sdl_window_ = nullptr;     // Pointer for the SDL window

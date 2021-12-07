@@ -69,3 +69,46 @@ void Renderer::drawLine(SDL_Point const &p1, SDL_Point const &p2,
   // SDL_RenderSetScale(sdl_renderer_, 1.0, 1.0);
   SDL_RenderDrawLine(sdl_renderer_, p1.x, p1.y, p2.x, p2.y);
 }
+
+// function used from
+// https://gist.github.com/Gumichan01/332c26f6197a432db91cc4327fcabb1c
+int Renderer::drawFilledCircle(int x, int y, int radius) {
+  int offsetx, offsety, d;
+  int status;
+
+  offsetx = 0;
+  offsety = radius;
+  d = radius - 1;
+  status = 0;
+
+  while (offsety >= offsetx) {
+
+    status += SDL_RenderDrawLine(sdl_renderer_, x - offsety, y + offsetx,
+                                 x + offsety, y + offsetx);
+    status += SDL_RenderDrawLine(sdl_renderer_, x - offsetx, y + offsety,
+                                 x + offsetx, y + offsety);
+    status += SDL_RenderDrawLine(sdl_renderer_, x - offsetx, y - offsety,
+                                 x + offsetx, y - offsety);
+    status += SDL_RenderDrawLine(sdl_renderer_, x - offsety, y - offsetx,
+                                 x + offsety, y - offsetx);
+
+    if (status < 0) {
+      status = -1;
+      break;
+    }
+
+    if (d >= 2 * offsetx) {
+      d -= 2 * offsetx + 1;
+      offsetx += 1;
+    } else if (d < 2 * (radius - offsety)) {
+      d += 2 * offsety - 1;
+      offsety -= 1;
+    } else {
+      d += 2 * (offsety - offsetx - 1);
+      offsety -= 1;
+      offsetx += 1;
+    }
+  }
+
+  return status;
+}
