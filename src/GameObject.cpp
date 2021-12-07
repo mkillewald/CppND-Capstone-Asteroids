@@ -6,6 +6,18 @@
 
 #include <bitset>
 
+sVector2f sVector2f::operator+(sVector2f const &a) {
+  x += a.x;
+  y += a.y;
+  return {x, y};
+}
+
+sVector2f sVector2f::operator+(float const &a) {
+  x += a;
+  y += a;
+  return {x, y};
+}
+
 // constructor / destructor
 GameObject::GameObject(const std::size_t grid_width,
                        const std::size_t grid_height, float game_scale)
@@ -13,16 +25,51 @@ GameObject::GameObject(const std::size_t grid_width,
       game_scale_(game_scale) {}
 
 // getters / setters
-// unsigned int GameObject::ID() const { return id_; }
-GameObject::eRotate GameObject::getRot() const { return rot_; }
-void GameObject::setRot(eRotate rot) { rot_ = rot; }
-void GameObject::setColorRGBA(int r, int g, int b, int a) {
-  color_.r = r;
-  color_.g = g;
-  color_.b = b;
-  color_.a = a;
+void GameObject::setAtOrigin(std::vector<SDL_Point> atOrigin) {
+  atOrigin_ = std::move(atOrigin);
 }
 
+const std::size_t GameObject::gridWidth() const { return grid_width_; }
+const std::size_t GameObject::gridHeight() const { return grid_height_; }
+
+sColorRGBA GameObject::colorRGBA() const { return colorRGBA_; }
+void GameObject::setColorRGBA(int r, int g, int b, int a) {
+  colorRGBA_.r = r;
+  colorRGBA_.g = g;
+  colorRGBA_.b = b;
+  colorRGBA_.a = a;
+}
+
+// unsigned int GameObject::ID() const { return id_; }
+GameObject::eRotDir GameObject::rotDir() const { return rotDir_; }
+void GameObject::setRotDir(eRotDir rotDir) { rotDir_ = rotDir; }
+
+sVector2f &GameObject::position() { return position_; }
+void GameObject::setPosition(sVector2f position) { position_ = position; }
+
+sVector2f &GameObject::velocity() { return velocity_; }
+sVector2f GameObject::getVelocity() const { return velocity_; }
+void GameObject::setVelocity(sVector2f velocity) { velocity_ = velocity; }
+
+sVector2f &GameObject::acceleration() { return acceleration_; }
+void GameObject::setAcceleration(sVector2f acceleration) {
+  acceleration_ = acceleration;
+}
+
+float GameObject::maxVelocity() const { return maxVelocity_; }
+void GameObject::setMaxVelocity(float maxVelocity) {
+  maxVelocity_ = maxVelocity;
+}
+
+float GameObject::gameScale() const { return game_scale_; };
+
+float GameObject::scale() const { return scale_; }
+void GameObject::setScale(float scale) { scale_ = scale; }
+
+float GameObject::angle() const { return angle_; }
+void GameObject::setAngle(float angle) { angle_ = angle; }
+
+// typical behaviour methods
 void GameObject::update() {
   updatePosition();
   rotateMoveAndScalePoints();
@@ -38,11 +85,6 @@ void GameObject::draw(Renderer *const renderer) const {
   drawGhost(renderer);
 }
 
-void GameObject::setAtOrigin(std::vector<SDL_Point> atOrigin) {
-  atOrigin_ = std::move(atOrigin);
-}
-
-// typical behaviour methods
 void GameObject::updatePosition() {
   position_.x += velocity_.x;
   position_.y += velocity_.y;
@@ -102,9 +144,9 @@ void GameObject::checkPointsAtEdges(int const &left, int const &right,
 void GameObject::drawObject(Renderer *const renderer) const {
   for (int i = 0; i < points_.size(); i++) {
     if (i == points_.size() - 1) {
-      renderer->drawLine(points_[i], points_[0], color_);
+      renderer->drawLine(points_[i], points_[0], colorRGBA());
     } else {
-      renderer->drawLine(points_[i], points_[i + 1], color_);
+      renderer->drawLine(points_[i], points_[i + 1], colorRGBA());
     }
   }
 }
@@ -125,7 +167,7 @@ void GameObject::drawGhostLines(Renderer *const renderer,
     p1.y = points_[i].y + gflags.s1y * static_cast<int>(grid_height_);
     p2.x = points_[next].x + gflags.s2x * static_cast<int>(grid_width_);
     p2.y = points_[next].y + gflags.s2y * static_cast<int>(grid_height_);
-    renderer->drawLine(p1, p2, color_);
+    renderer->drawLine(p1, p2, colorRGBA());
   }
 }
 
