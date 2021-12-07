@@ -20,14 +20,13 @@ public:
 
   // typical behaviour methods
   void update();
-  void draw(Renderer *const renderer) const;
+  SDL_Point nose();
 
 private:
   void init();
   void updatePosition();
   void drawObject(Renderer *const renderer) const;
   void drawGhostLines(Renderer *const renderer, sGFlags const &gFlags) const;
-  void drawGhost(Renderer *const renderer) const;
 
   std::vector<SDL_Point *> thrustLines_;
   bool thrust_{false};
