@@ -9,7 +9,7 @@ PlayerController::PlayerController(size_t grid_width, size_t grid_height,
     : ship_(grid_width, grid_height, game_scale),
       ufo_(grid_width, grid_height, game_scale, static_cast<UFO::eUFOSize>(0)) {
 
-  // load shots into ships main cannon
+  // load maximum shots allowed into ships main cannon
   for (int i = 0; i < ship_.maxShots(); i++) {
     shots_.emplace_back(PlayerShot(grid_width, grid_height, game_scale));
   }
@@ -35,24 +35,51 @@ void PlayerController::setSwitchPlayer(bool switchPlayer) {
 
 void PlayerController::update() {
   ship_.update();
+
+  for (auto &shot : shots_) {
+    if (shot.isFired()) {
+      shot.update();
+    }
+  }
+
   for (auto &asteroid : asteroids_) {
     asteroid.update();
   }
+
   ufo_.update();
 }
 
 void PlayerController::draw(Renderer *const renderer) const {
   ship_.draw(renderer);
+
+  for (auto &shot : shots_) {
+    if (shot.isFired()) {
+      shot.draw(renderer);
+    }
+  }
+
   for (auto &asteroid : asteroids_) {
     asteroid.draw(renderer);
   }
+
   ufo_.draw(renderer);
 }
 
-void PlayerController::rotateLeft() { ship_.setRot(GameObject::kRotLeft_); }
-void PlayerController::rotateRight() { ship_.setRot(GameObject::kRotRight_); }
-void PlayerController::rotateOff() { ship_.setRot(GameObject::kRotNone_); }
+void PlayerController::rotateLeft() { ship_.setRotDir(GameObject::kRotLeft_); }
+void PlayerController::rotateRight() {
+  ship_.setRotDir(GameObject::kRotRight_);
+}
+void PlayerController::rotateOff() { ship_.setRotDir(GameObject::kRotNone_); }
 void PlayerController::thrustOn() { ship_.setThrust(true); }
 void PlayerController::thrustOff() { ship_.setThrust(false); }
-void PlayerController::fire() {}
+
+void PlayerController::fire() {
+  for (auto &shot : shots_) {
+    if (!shot.isFired()) {
+      shot.fire(ship_.nose(), ship_.getVelocity(), ship_.angle());
+      break;
+    }
+  }
+}
+
 void PlayerController::hyperspace() {}
