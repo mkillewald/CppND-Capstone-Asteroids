@@ -9,34 +9,30 @@ Asteroid::Asteroid(const std::size_t grid_width, const std::size_t grid_height,
 }
 
 void Asteroid::init() {
-  acceleration_ = {0.0, 0.0};
-  maxVelocity_ = 15;
-  angle_ = 0;
-  scale_ = 2.0 * game_scale_;
+  setAcceleration({0.0f, 0.0f});
+  setMaxVelocity(15.0f);
+  setAngle(0.0f);
+  setScale(2.0f * gameScale());
 
   switch (type_) {
   case kType1_:
-    position_.x = 100;
-    position_.y = 100;
-    velocity_ = {0.4, 0.7};
+    setPosition({100.0f, 100.0f});
+    setVelocity({0.4f, 0.7f});
     initType1();
     break;
   case kType2_:
-    position_.x = grid_width_ - 100;
-    position_.y = 100;
-    velocity_ = {-0.8, 0.6};
+    setPosition({gridWidth() - 100.0f, 100.0f});
+    setVelocity({-0.8f, 0.6f});
     initType2();
     break;
   case kType3_:
-    position_.x = grid_width_ - 100;
-    position_.y = grid_height_ - 100;
-    velocity_ = {-0.2, -0.9};
+    setPosition({gridWidth() - 100.0f, gridHeight() - 100.0f});
+    setVelocity({-0.2f, -0.9f});
     initType3();
     break;
   case kType4_:
-    position_.x = 100;
-    position_.y = grid_height_ - 100;
-    velocity_ = {0.9, -0.4};
+    setPosition({100.0f, gridHeight() - 100.0f});
+    setVelocity({0.9, -0.4});
     initType4();
     break;
   }
@@ -66,7 +62,7 @@ void Asteroid::initType1() {
   // copy atOrigin into points_
   points_ = atOrigin;
 
-  // move atOrigin into private member atOrigin_ of parent class GameObject so
+  // move atOrigin into private member atOrigin_ of base class GameObject so
   // that its contents cannot be directly accessed or modified by the derived
   // class.
   setAtOrigin(std::move(atOrigin));
