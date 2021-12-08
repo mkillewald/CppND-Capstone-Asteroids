@@ -40,6 +40,8 @@ private:
   unsigned long score_{0};
   bool alive_ = true;
   bool switchPlayer_ = false;
+  int reloadTicks_;
+  int reloadTickLimit_{60};
 };
 
 #endif

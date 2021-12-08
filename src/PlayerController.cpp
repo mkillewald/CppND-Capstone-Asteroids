@@ -4,6 +4,8 @@
 #include "PlayerShip.h"
 #include "UFO.h"
 
+#include <SDL.h>
+
 PlayerController::PlayerController(size_t grid_width, size_t grid_height,
                                    float game_scale)
     : ship_(grid_width, grid_height, game_scale),
@@ -74,10 +76,15 @@ void PlayerController::thrustOn() { ship_.setThrust(true); }
 void PlayerController::thrustOff() { ship_.setThrust(false); }
 
 void PlayerController::fire() {
+  if (SDL_GetTicks() - reloadTicks_ < reloadTickLimit_) {
+    return;
+  }
+
   for (auto &shot : shots_) {
     if (!shot.isFired()) {
       shot.fire(ship_.nose(), ship_.getVelocity(), ship_.angle());
-      break;
+      reloadTicks_ = SDL_GetTicks();
+      return;
     }
   }
 }
