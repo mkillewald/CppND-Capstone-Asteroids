@@ -41,6 +41,7 @@ void Asteroid::init() {
 }
 
 void Asteroid::initType1() {
+  setRadius(80.0f * scale());
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches
@@ -69,6 +70,7 @@ void Asteroid::initType1() {
 }
 
 void Asteroid::initType2() {
+  setRadius(80.0f * scale());
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches
@@ -99,6 +101,7 @@ void Asteroid::initType2() {
 }
 
 void Asteroid::initType3() {
+  setRadius(80.0f * scale());
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches
@@ -128,6 +131,7 @@ void Asteroid::initType3() {
 }
 
 void Asteroid::initType4() {
+  setRadius(80.0f * scale());
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches

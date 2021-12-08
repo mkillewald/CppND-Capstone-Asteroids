@@ -44,7 +44,8 @@ void GameObject::setColorRGBA(int r, int g, int b, int a) {
 GameObject::eRotDir GameObject::rotDir() const { return rotDir_; }
 void GameObject::setRotDir(eRotDir rotDir) { rotDir_ = rotDir; }
 
-sVector2f &GameObject::position() { return position_; }
+sVector2f const &GameObject::position() const { return position_; } // public
+sVector2f &GameObject::position() { return position_; }             // protected
 void GameObject::setPosition(sVector2f position) { position_ = position; }
 
 sVector2f &GameObject::velocity() { return velocity_; }
@@ -70,7 +71,10 @@ float GameObject::angle() const { return angle_; }
 void GameObject::setAngle(float angle) { angle_ = angle; }
 
 int GameObject::radius() const { return radius_; }
-void GameObject::setRadius(int radius) { radius_ = radius; }
+void GameObject::setRadius(float radius) { radius_ = radius; }
+
+bool GameObject::destroyed() const { return destroyed_; }
+void GameObject::setDestroyed(bool destroyed) { destroyed_ = destroyed; }
 
 // typical behaviour methods
 void GameObject::update() {
@@ -78,6 +82,10 @@ void GameObject::update() {
   rotateMoveAndScalePoints();
   checkPointsAtEdges(0, static_cast<int>(grid_width_), 0,
                      static_cast<int>(grid_height_));
+}
+
+bool GameObject::collide(GameObject const &b) const {
+  return collideObject(b) || collideGhost(b);
 }
 
 void GameObject::draw(Renderer *const renderer) const {
@@ -206,4 +214,74 @@ void GameObject::drawGhost(Renderer *const renderer) const {
     // draw ghost at top edge
     drawGhostLines(renderer, {0, -1, 0, -1});
   }
+}
+int GameObject::distance(sVector2f const &p1, sVector2f const &p2) const {
+  return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+}
+
+bool GameObject::collideObject(GameObject const &b) const {
+  if (distance(position(), b.position()) <= radius() + b.radius()) {
+    return true;
+  }
+  return false;
+}
+
+bool GameObject::collideGhostSection(GameObject const &b,
+                                     sGFlags const &gflags) const {
+  if (distance({position().x + gflags.s1x * static_cast<int>(grid_width_),
+                position().y + gflags.s1y * static_cast<int>(grid_height_)},
+               b.position()) <= radius() + b.radius()) {
+    return true;
+  }
+  return false;
+}
+
+bool GameObject::collideGhost(GameObject const &b) const {
+  // handle corners
+  if (edgeFlags_.test(kLeftEdge_) && edgeFlags_.test(kTopEdge_)) {
+    // ghost at bottom, right corner
+    if (collideGhostSection(b, {1, 1, 0, 0})) {
+      return true;
+    }
+  } else if (edgeFlags_.test(kTopEdge_) && edgeFlags_.test(kRightEdge_)) {
+    // ghost at bottom, left corner
+    if (collideGhostSection(b, {-1, 1, 0, 0})) {
+      return true;
+    }
+  } else if (edgeFlags_.test(kRightEdge_) && edgeFlags_.test(kBottomEdge_)) {
+    // ghost at top, left corner
+    if (collideGhostSection(b, {-1, -1, 0, 0})) {
+      return true;
+    }
+  } else if (edgeFlags_.test(kBottomEdge_) && edgeFlags_.test(kLeftEdge_)) {
+    // ghost at top, right corner
+    if (collideGhostSection(b, {1, -1, 0, 0})) {
+      return true;
+    }
+  }
+
+  // handle edges
+  if (edgeFlags_.test(kLeftEdge_)) {
+    // ghost at right edge
+    if (collideGhostSection(b, {1, 0, 0, 0})) {
+      return true;
+    }
+  } else if (edgeFlags_.test(kRightEdge_)) {
+    // ghost at left edge
+    if (collideGhostSection(b, {-1, 0, 0, 0})) {
+      return true;
+    }
+  }
+  if (edgeFlags_.test(kTopEdge_)) {
+    // ghost at bottom edge
+    if (collideGhostSection(b, {0, 1, 0, 0})) {
+      return true;
+    }
+  } else if (edgeFlags_.test(kBottomEdge_)) {
+    // ghost at top edge
+    if (collideGhostSection(b, {0, -1, 0, 0})) {
+      return true;
+    }
+  }
+  return false;
 }

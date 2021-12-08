@@ -15,6 +15,7 @@ void PlayerShip::init() {
   setMaxVelocity(15.0f);
   setAngle(-90.0f); // ship faces top of window
   setScale(1.0f * gameScale());
+  setRadius(28.8f * scale());
 
   // points used from Ed Logg's Asteroids design document
   // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids

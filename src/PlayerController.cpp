@@ -13,7 +13,7 @@ PlayerController::PlayerController(size_t grid_width, size_t grid_height,
 
   // load maximum shots allowed into ships main cannon
   for (int i = 0; i < ship_.maxShots(); i++) {
-    shots_.emplace_back(PlayerShot(grid_width, grid_height, game_scale));
+    playerShots_.emplace_back(PlayerShot(grid_width, grid_height, game_scale));
   }
 
   // init first wave of asteroids
@@ -36,35 +36,85 @@ void PlayerController::setSwitchPlayer(bool switchPlayer) {
 }
 
 void PlayerController::update() {
+  // update opbjects
   ship_.update();
 
-  for (auto &shot : shots_) {
+  for (auto &shot : playerShots_) {
     if (shot.isFired()) {
       shot.update();
     }
   }
 
   for (auto &asteroid : asteroids_) {
-    asteroid.update();
+    if (!asteroid.destroyed()) {
+      asteroid.update();
+    }
   }
 
-  ufo_.update();
+  if (!ufo_.destroyed()) {
+    ufo_.update();
+  }
+
+  // check collisions
+  for (auto &asteroid : asteroids_) {
+    if (!asteroid.destroyed()) {
+      // 1. check ship vs asteroid collisons
+      if (asteroid.collide(ship_)) {
+        asteroid.setDestroyed(true);
+        // ship_.setDestroyed(true);
+        // do stuff
+      } else {
+        for (auto &shot : playerShots_) {
+          // 2. check player shot vs asteroid collisions
+          if (shot.isFired() && asteroid.collide(shot)) {
+            shot.setIsFired(false);
+            asteroid.setDestroyed(true);
+            // do stuff
+          }
+        }
+      }
+    }
+  }
+
+  // 3. check ship vs ufo shot collisions
+
+  if (!ufo_.destroyed()) {
+    // 4. check ship vs ufo collisions
+    if (ufo_.collide(ship_)) {
+      ufo_.setDestroyed(true);
+      // ship_.setDestroyed(true);
+      //  do stuff
+    } else {
+      for (auto &shot : playerShots_) {
+        // 5. check player shot vs ufo collisions
+        if (shot.isFired() && ufo_.collide(shot)) {
+          shot.setIsFired(false);
+          ufo_.setDestroyed(true);
+          // do stuff
+        }
+      }
+    }
+  }
 }
 
 void PlayerController::draw(Renderer *const renderer) const {
   ship_.draw(renderer);
 
-  for (auto &shot : shots_) {
+  for (auto &shot : playerShots_) {
     if (shot.isFired()) {
       shot.draw(renderer);
     }
   }
 
   for (auto &asteroid : asteroids_) {
-    asteroid.draw(renderer);
+    if (!asteroid.destroyed()) {
+      asteroid.draw(renderer);
+    }
   }
 
-  ufo_.draw(renderer);
+  if (!ufo_.destroyed()) {
+    ufo_.draw(renderer);
+  }
 }
 
 void PlayerController::rotateLeft() { ship_.setRotDir(GameObject::kRotLeft_); }
@@ -80,7 +130,7 @@ void PlayerController::fire() {
     return;
   }
 
-  for (auto &shot : shots_) {
+  for (auto &shot : playerShots_) {
     if (!shot.isFired()) {
       shot.fire(ship_.nose(), ship_.getVelocity(), ship_.angle());
       reloadTicks_ = SDL_GetTicks();

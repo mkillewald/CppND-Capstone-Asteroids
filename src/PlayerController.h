@@ -10,6 +10,10 @@
 
 #include <memory>
 
+// forward declaration to avoid include cycle
+class Renderer;
+class GameObject;
+
 class PlayerController {
 public:
   // constructor / destructor
@@ -34,7 +38,7 @@ public:
 
 private:
   PlayerShip ship_;
-  std::vector<PlayerShot> shots_;
+  std::vector<PlayerShot> playerShots_;
   std::vector<Asteroid> asteroids_;
   UFO ufo_;
   unsigned long score_{0};

@@ -19,6 +19,7 @@ void UFO::init() {
   } else {
     setScale(0.7f * gameScale());
   }
+  setRadius(80.0f * scale());
 
   std::vector<SDL_Point> atOrigin;
 

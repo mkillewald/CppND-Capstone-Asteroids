@@ -45,11 +45,16 @@ public:
   // getters / setters
   unsigned int ID() const;
   void setRotDir(eRotDir rot);
+  sVector2f const &position() const;
   sVector2f getVelocity() const;
   float angle() const;
+  int radius() const;
+  bool destroyed() const;
+  void setDestroyed(bool destroyed);
 
   // typical behaviour methods
   void update();
+  bool collide(GameObject const &b) const;
   void draw(Renderer *const renderer) const;
 
   // TODO: should move this to private with public getters/setters ??
@@ -76,8 +81,7 @@ protected:
   float scale() const;
   void setScale(float scale);
   void setAngle(float angle);
-  int radius() const;
-  void setRadius(int radius);
+  void setRadius(float radius);
 
   // typical behaviour methods
   void updatePosition();
@@ -89,6 +93,10 @@ protected:
   virtual void drawGhostLines(Renderer *const renderer,
                               sGFlags const &gflags) const;
   virtual void drawGhost(Renderer *const renderer) const;
+  int distance(sVector2f const &p1, sVector2f const &p2) const;
+  bool collideObject(GameObject const &b) const;
+  bool collideGhostSection(GameObject const &b, sGFlags const &gflags) const;
+  bool collideGhost(GameObject const &b) const;
 
 private:
   // const unsigned int id_;
@@ -105,6 +113,7 @@ private:
   float scale_;
   float angle_;
   float radius_;
+  bool destroyed_{false};
   // cosnt unsigned int score_;
 };
 
