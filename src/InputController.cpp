@@ -23,9 +23,6 @@ void InputController::handleInput(bool &running,
       case SDLK_SEMICOLON:
         player->thrustOn();
         break;
-      case SDLK_QUOTE:
-        player->fire();
-        break;
       case SDLK_SPACE:
         player->hyperspace();
         break;
@@ -58,5 +55,8 @@ void InputController::handleInput(bool &running,
   }
   if (keystates[SDL_SCANCODE_S]) {
     player->rotateRight();
+  }
+  if (keystates[SDL_SCANCODE_APOSTROPHE]) {
+    player->fire();
   }
 }

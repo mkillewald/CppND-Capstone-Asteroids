@@ -41,7 +41,7 @@ private:
   bool alive_ = true;
   bool switchPlayer_ = false;
   int reloadTicks_;
-  int reloadTickLimit_{60};
+  int reloadTickLimit_{100};
 };
 
 #endif
