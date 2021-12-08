@@ -30,7 +30,10 @@ private:
 
   std::vector<SDL_Point *> thrustLines_;
   bool thrust_{false};
+  bool drawThrust_{false};
   int maxShots_{4};
+  int thrustTicks_;
+  int thrustTickLimit_{90};
 };
 
 #endif

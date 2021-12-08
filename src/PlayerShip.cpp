@@ -69,9 +69,17 @@ void PlayerShip::updatePosition() {
   if (thrust_) {
     acceleration().x = cos(angle() * PI / 180.0);
     acceleration().y = sin(angle() * PI / 180.0);
+
+    // toggle drawThrust_ flag which will blink thruster on and off
+    if (SDL_GetTicks() - thrustTicks_ >= thrustTickLimit_) {
+      drawThrust_ = !drawThrust_;
+      thrustTicks_ = SDL_GetTicks();
+    }
+
   } else {
     acceleration().x = 0.0;
     acceleration().y = 0.0;
+    drawThrust_ = false;
   }
   velocity().x += acceleration().x * 0.1; // accelleration was ramping up too
   velocity().y += acceleration().y * 0.1; // quickly, so we divide by 10
@@ -107,8 +115,7 @@ void PlayerShip::drawObject(Renderer *const renderer) const {
   }
 
   // draw thruster
-  if (thrust_) {
-    // TODO: make thruster blink
+  if (drawThrust_) {
     renderer->drawLine(points_[5], points_[6], colorRGBA());
     renderer->drawLine(points_[6], points_[7], colorRGBA());
   }
@@ -125,9 +132,8 @@ void PlayerShip::drawGhostLines(Renderer *const renderer,
     } else {
       next = i + 1;
     }
-    if (i > 4 && !thrust_) {
-      // TODO: make thruster blink
-      break;
+    if (i > 4 && !drawThrust_) {
+      return;
     }
     p1.x = points_[i].x + gflags.s1x * static_cast<int>(gridWidth());
     p1.y = points_[i].y + gflags.s1y * static_cast<int>(gridHeight());
