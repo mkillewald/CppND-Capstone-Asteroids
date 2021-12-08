@@ -76,6 +76,8 @@ void Game::update() {
   }
   if (currentPlayer_->switchPlayer()) {
     currentPlayer_->setSwitchPlayer(false);
+    currentPlayer_->rotateOff();
+    currentPlayer_->thrustOff();
     if (currentPlayer_ == player1_.get()) {
       currentPlayer_ = player2_.get();
     } else {
