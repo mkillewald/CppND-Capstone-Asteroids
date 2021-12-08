@@ -69,6 +69,9 @@ void GameObject::setScale(float scale) { scale_ = scale; }
 float GameObject::angle() const { return angle_; }
 void GameObject::setAngle(float angle) { angle_ = angle; }
 
+int GameObject::radius() const { return radius_; }
+void GameObject::setRadius(int radius) { radius_ = radius; }
+
 // typical behaviour methods
 void GameObject::update() {
   updatePosition();

@@ -29,8 +29,8 @@ struct sVector2f {
   float x;
   float y;
 
-  sVector2f operator+(sVector2f const &a);
-  sVector2f operator+(float const &a);
+  sVector2f operator+(sVector2f const &a); // not used
+  sVector2f operator+(float const &a);     // not used
 };
 
 class GameObject {
@@ -76,6 +76,8 @@ protected:
   float scale() const;
   void setScale(float scale);
   void setAngle(float angle);
+  int radius() const;
+  void setRadius(int radius);
 
   // typical behaviour methods
   void updatePosition();
@@ -102,6 +104,7 @@ private:
   float game_scale_;
   float scale_;
   float angle_;
+  float radius_;
   // cosnt unsigned int score_;
 };
 
