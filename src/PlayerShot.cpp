@@ -2,15 +2,18 @@
 #include "GameObject.h"
 #include "Renderer.h"
 
+#include <SDL.h>
+
 PlayerShot::PlayerShot(const std::size_t grid_width,
                        const std::size_t grid_height, float game_scale)
     : GameObject(grid_width, grid_height, game_scale) {
   // setPosition({0.0f, 0.0f});
   // setVelocity({0.0f, 0.0f});
   // setAcceleration({0.0f, 0.0f});
-  // setMaxVelocity(15.0f);
+  setMaxVelocity(15.0f);
   // setAngle(0.0f);
-  setScale(1.0f * gameScale());
+  setRadius(2);
+  // setScale(gameScale());
 
   std::vector<SDL_Point> atOrigin;
   atOrigin.emplace_back(SDL_Point{0, 0}); // 0
@@ -27,6 +30,14 @@ PlayerShot::PlayerShot(const std::size_t grid_width,
 bool PlayerShot::isFired() const { return isFired_; }
 void PlayerShot::setIsFired(bool isFired) { isFired_ = isFired; }
 
+void PlayerShot::update() {
+  if (SDL_GetTicks() - startTicks_ >= tickLimit_) {
+    setIsFired(false);
+    return;
+  }
+  GameObject::update();
+}
+
 void PlayerShot::fire(SDL_Point point_in, sVector2f velocity_in,
                       float angle_in) {
   setIsFired(true);
@@ -38,10 +49,12 @@ void PlayerShot::fire(SDL_Point point_in, sVector2f velocity_in,
   // move outward from ship at ships angle of rotation when fired
   velocity().x += 15.0f * cos(angle() * PI / 180.0);
   velocity().y += 15.0f * sin(angle() * PI / 180.0);
+
+  startTicks_ = SDL_GetTicks();
 }
 
 void PlayerShot::draw(Renderer *const renderer) const { drawObject(renderer); }
 
 void PlayerShot::drawObject(Renderer *const renderer) const {
-  renderer->drawFilledCircle(points_[0].x, points_[0].y, 2);
+  renderer->drawFilledCircle(points_[0].x, points_[0].y, radius());
 }

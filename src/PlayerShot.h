@@ -13,12 +13,16 @@ public:
   void setIsFired(bool isFired);
 
   // behavior methods
+  void update();
   void fire(SDL_Point point_in, sVector2f velocity_in, float angle_in);
   void draw(Renderer *const renderer) const;
 
 private:
   bool isFired_{false};
+  int startTicks_;
+  int tickLimit_{600};
 
+  void updatePosition();
   void drawObject(Renderer *const renderer) const;
 };
 
