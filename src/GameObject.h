@@ -18,6 +18,7 @@ struct sGFlags {
   int s2y;
 };
 
+// TODO: convert to using SDL_Color
 struct sColorRGBA {
   int r;
   int g;
