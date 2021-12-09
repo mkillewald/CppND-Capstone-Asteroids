@@ -4,7 +4,6 @@
 #include "GameObject.h"
 
 #include <SDL.h>
-#include <SDL_ttf.h>
 
 #include <vector>
 
@@ -36,11 +35,6 @@ public:
 private:
   SDL_Window *sdl_window_ = nullptr;
   SDL_Renderer *sdl_renderer_ = nullptr;
-
-  TTF_Font *font_ = nullptr;
-  SDL_Surface *fontSurface_ = nullptr;
-  SDL_Texture *fontTexture_ = nullptr;
-  SDL_Rect fontRect;
 
   const std::size_t screen_width_;
   const std::size_t screen_height_;
