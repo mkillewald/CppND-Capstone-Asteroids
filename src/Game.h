@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "HUD.h"
 #include "PlayerController.h"
 
 #include <SDL.h>
@@ -19,7 +20,7 @@ class Renderer;
 class Game {
 public:
   // Contructor
-  Game(std::size_t grid_width, std::size_t grid_height, float game_scale);
+  Game(Renderer *const renderer, float game_scale);
 
   // getters / setters
   int random_w();
@@ -27,13 +28,14 @@ public:
   int random_type();
 
   // behavior methods
-  void run(InputController *const input, Renderer *const renderer,
-           std::size_t target_frame_duration);
+  void run(InputController *const input, std::size_t target_frame_duration);
 
 private:
+  std::unique_ptr<HUD> hud;
   std::unique_ptr<PlayerController> player1_;
   std::unique_ptr<PlayerController> player2_;
   PlayerController *currentPlayer_ = nullptr;
+  Renderer *renderer_ = nullptr;
   bool running_ = true;
 
   std::random_device dev_;

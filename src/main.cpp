@@ -17,9 +17,8 @@ int main(int argc, char *argv[]) {
   std::unique_ptr<Renderer> renderer = std::make_unique<Renderer>(
       kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   std::unique_ptr<InputController> input = std::make_unique<InputController>();
-  std::unique_ptr<Game> game =
-      std::make_unique<Game>(kGridWidth, kGridHeight, 0.3);
+  std::unique_ptr<Game> game = std::make_unique<Game>(renderer.get(), 0.3);
 
-  game->run(input.get(), renderer.get(), kMsPerFrame);
+  game->run(input.get(), kMsPerFrame);
   return 0;
 }

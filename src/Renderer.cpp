@@ -1,13 +1,18 @@
 #include "Renderer.h"
+#include "HUD.h"
 #include "PlayerController.h"
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include <iostream>
 #include <string>
 
 // based off Snake Game example code:
 // https://github.com/udacity/CppND-Capstone-Snake-Game
+
+// atari_vector.ttf used from
+// http://vectorlib2.free.fr/Fonts/http://vectorlib2.free.fr/Fonts/
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
@@ -44,13 +49,20 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::render(PlayerController *const player) {
+std::size_t Renderer::getGridWidth() const { return grid_width_; }
+std::size_t Renderer::getGridHeight() const { return grid_height_; }
+SDL_Renderer *Renderer::getSDLRenderer() const { return sdl_renderer_; }
+
+void Renderer::render(HUD *const hud, PlayerController *const player) {
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(sdl_renderer_);
 
   // Render game objects
   player->draw(this);
+
+  // Render game text
+  hud->draw();
 
   // Update screen
   SDL_RenderPresent(sdl_renderer_);

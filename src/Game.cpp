@@ -12,13 +12,17 @@
 // https://github.com/udacity/CppND-Capstone-Snake-Game
 
 // std::uniform_int_distribution<int> random_type(0, 3);
-Game::Game(const std::size_t grid_width, const std::size_t grid_height,
-           float game_scale) {
+Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
+  size_t grid_width = renderer->getGridWidth();
+  size_t grid_height = renderer->getGridHeight();
   player1_ =
       std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
   player2_ =
       std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
   currentPlayer_ = player1_.get();
+
+  hud = std::make_unique<HUD>(renderer->getSDLRenderer(), player1_.get(),
+                              player2_.get());
 
   std::mt19937 engine_(dev_());
   std::uniform_int_distribution<int> random_w_(0, static_cast<int>(grid_width));
@@ -31,7 +35,7 @@ int Game::random_w() { return random_w_(engine_); }
 int Game::random_h() { return random_w_(engine_); }
 int Game::random_type() { return random_type_(engine_); }
 
-void Game::run(InputController *const input, Renderer *const renderer,
+void Game::run(InputController *const input,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -45,7 +49,7 @@ void Game::run(InputController *const input, Renderer *const renderer,
     // Input, Update, Render - the main game loop.
     input->handleInput(running_, currentPlayer_);
     update();
-    renderer->render(currentPlayer_);
+    renderer_->render(hud.get(), currentPlayer_);
 
     frame_end = SDL_GetTicks();
 
@@ -56,7 +60,7 @@ void Game::run(InputController *const input, Renderer *const renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer->updateWindowTitle(currentPlayer_->score(), frame_count);
+      renderer_->updateWindowTitle(currentPlayer_->score(), frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
     }
