@@ -228,8 +228,8 @@ bool GameObject::collideObject(GameObject const &b) const {
 
 bool GameObject::collideGhostSection(GameObject const &b,
                                      sGFlags const &gflags) const {
-  if (distance({position().x + gflags.s1x * static_cast<int>(grid_width_),
-                position().y + gflags.s1y * static_cast<int>(grid_height_)},
+  if (distance({position().x + gflags.s1x * static_cast<float>(grid_width_),
+                position().y + gflags.s1y * static_cast<float>(grid_height_)},
                b.position()) <= radius() + b.radius()) {
     return true;
   }
