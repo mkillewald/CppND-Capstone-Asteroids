@@ -12,7 +12,7 @@ PlayerShot::PlayerShot(const std::size_t grid_width,
   // setAcceleration({0.0f, 0.0f});
   setMaxVelocity(15.0f);
   // setAngle(0.0f);
-  setRadius(2);
+  setRadius(1);
   // setScale(gameScale());
 
   std::vector<SDL_Point> atOrigin;
