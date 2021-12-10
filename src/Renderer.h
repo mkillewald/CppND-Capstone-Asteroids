@@ -21,9 +21,9 @@ public:
   ~Renderer();
 
   // getters / setters
-  std::size_t getGridWidth() const;
-  std::size_t getGridHeight() const;
-  SDL_Renderer *getSDLRenderer() const;
+  std::size_t gridWidth() const;
+  std::size_t gridHeight() const;
+  SDL_Renderer *sdlRenderer() const;
 
   // behavior methods
   void render(HUD *const hud, PlayerController *const player);

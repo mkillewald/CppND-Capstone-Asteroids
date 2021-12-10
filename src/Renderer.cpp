@@ -49,9 +49,9 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-std::size_t Renderer::getGridWidth() const { return grid_width_; }
-std::size_t Renderer::getGridHeight() const { return grid_height_; }
-SDL_Renderer *Renderer::getSDLRenderer() const { return sdl_renderer_; }
+std::size_t Renderer::gridWidth() const { return grid_width_; }
+std::size_t Renderer::gridHeight() const { return grid_height_; }
+SDL_Renderer *Renderer::sdlRenderer() const { return sdl_renderer_; }
 
 void Renderer::render(HUD *const hud, PlayerController *const player) {
   // Clear screen
