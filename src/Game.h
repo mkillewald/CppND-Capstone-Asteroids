@@ -19,6 +19,8 @@ class Renderer;
 
 class Game {
 public:
+  enum eGameState { kAttract_, kReadyToPlay_, kPlay_, kHighScoreEntry_ };
+
   // Contructor
   Game(Renderer *const renderer, float game_scale);
 
@@ -26,6 +28,10 @@ public:
   int random_w();
   int random_h();
   int random_type();
+  eGameState state() const;
+  void setState(eGameState state);
+  PlayerController const *player1() const;
+  PlayerController const *player2() const;
 
   // behavior methods
   void run(InputController *const input, std::size_t target_frame_duration);
@@ -37,6 +43,8 @@ private:
   PlayerController *currentPlayer_ = nullptr;
   Renderer *renderer_ = nullptr;
   bool running_ = true;
+  eGameState state_ = kAttract_;
+  unsigned int numPlayers_;
 
   std::random_device dev_;
   std::mt19937 engine_;

@@ -13,16 +13,15 @@
 
 // std::uniform_int_distribution<int> random_type(0, 3);
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
-  size_t grid_width = renderer->getGridWidth();
-  size_t grid_height = renderer->getGridHeight();
+  size_t grid_width = renderer->gridWidth();
+  size_t grid_height = renderer->gridHeight();
   player1_ =
       std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
   player2_ =
       std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
   currentPlayer_ = player1_.get();
 
-  hud = std::make_unique<HUD>(renderer->getSDLRenderer(), player1_.get(),
-                              player2_.get());
+  hud = std::make_unique<HUD>(this, renderer);
 
   std::mt19937 engine_(dev_());
   std::uniform_int_distribution<int> random_w_(0, static_cast<int>(grid_width));
@@ -34,6 +33,10 @@ Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
 int Game::random_w() { return random_w_(engine_); }
 int Game::random_h() { return random_w_(engine_); }
 int Game::random_type() { return random_type_(engine_); }
+Game::eGameState Game::state() const { return state_; }
+void Game::setState(eGameState state) { state_ = state; }
+PlayerController const *Game::player1() const { return player1_.get(); }
+PlayerController const *Game::player2() const { return player2_.get(); }
 
 void Game::run(InputController *const input,
                std::size_t target_frame_duration) {
