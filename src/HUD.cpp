@@ -1,12 +1,14 @@
 #include "HUD.h"
+#include "Game.h"
+#include "Renderer.h"
 
 #include <SDL_ttf.h>
 
 #include <iostream>
 
-HUD::HUD(SDL_Renderer *sdl_renderer, PlayerController const *player1,
-         PlayerController const *player2)
-    : sdl_renderer_(sdl_renderer) {
+HUD::HUD(Game const *game, Renderer const *renderer)
+    : game_(game), player1_(game->player1()), player2_(game->player2()),
+      renderer_(renderer) {
   // Initialize SDL_ttf library
   TTF_Init();
 
@@ -29,43 +31,56 @@ HUD::HUD(SDL_Renderer *sdl_renderer, PlayerController const *player1,
   }
 
   // Create surface with font
-  fontSurface1_ = TTF_RenderText_Solid(small_, "Player 1", textColor);
-  fontSurface2_ = TTF_RenderText_Solid(medium_, "Player 1", textColor);
-  fontSurface3_ = TTF_RenderText_Solid(large_, "Player 1", textColor);
+  p1ScoreSfc_ = TTF_RenderText_Solid(medium_, "10374", textColor);
+  p2ScoreSfc_ = TTF_RenderText_Solid(medium_, "14322", textColor);
+  hiScoreSfc_ = TTF_RenderText_Solid(small_, "23645", textColor);
 
   // Create font textures from surfaces
-  fontTexture1_ = SDL_CreateTextureFromSurface(sdl_renderer_, fontSurface1_);
-  fontTexture2_ = SDL_CreateTextureFromSurface(sdl_renderer_, fontSurface2_);
-  fontTexture3_ = SDL_CreateTextureFromSurface(sdl_renderer_, fontSurface3_);
+  p1ScoreTxt_ =
+      SDL_CreateTextureFromSurface(renderer_->sdlRenderer(), p1ScoreSfc_);
+  p2ScoreTxt_ =
+      SDL_CreateTextureFromSurface(renderer_->sdlRenderer(), p2ScoreSfc_);
+  hiScoreTxt_ =
+      SDL_CreateTextureFromSurface(renderer_->sdlRenderer(), hiScoreSfc_);
 
   // Set position and size of font textures
   int texH = 0;
   int texW = 0;
-  SDL_QueryTexture(fontTexture1_, NULL, NULL, &texW, &texH);
-  fontRect1 = {10, 10, texW, texH};
+  SDL_QueryTexture(p1ScoreTxt_, NULL, NULL, &texW, &texH);
+  p1ScoreRct_ = {10, 10, texW, texH};
 
-  SDL_QueryTexture(fontTexture2_, NULL, NULL, &texW, &texH);
-  fontRect2 = {10, 60, texW, texH};
+  SDL_QueryTexture(p2ScoreTxt_, NULL, NULL, &texW, &texH);
+  p2ScoreRct_ = {(int)(renderer_->gridWidth() - texW - 10), 10, texW, texH};
 
-  SDL_QueryTexture(fontTexture3_, NULL, NULL, &texW, &texH);
-  fontRect3 = {10, 120, texW, texH};
+  SDL_QueryTexture(hiScoreTxt_, NULL, NULL, &texW, &texH);
+  hiScoreRct_ = {(int)(renderer_->gridWidth() - texW) / 2, 10, texW, texH};
 }
 
 HUD::~HUD() {
   TTF_CloseFont(small_);
   TTF_CloseFont(medium_);
   TTF_CloseFont(large_);
-  SDL_DestroyTexture(fontTexture1_);
-  SDL_DestroyTexture(fontTexture2_);
-  SDL_DestroyTexture(fontTexture3_);
-  SDL_FreeSurface(fontSurface1_);
-  SDL_FreeSurface(fontSurface2_);
-  SDL_FreeSurface(fontSurface3_);
+  SDL_DestroyTexture(p1ScoreTxt_);
+  SDL_DestroyTexture(p2ScoreTxt_);
+  SDL_DestroyTexture(hiScoreTxt_);
+  SDL_FreeSurface(p1ScoreSfc_);
+  SDL_FreeSurface(p2ScoreSfc_);
+  SDL_FreeSurface(hiScoreSfc_);
   TTF_Quit();
 }
 
 void HUD::draw() const {
-  SDL_RenderCopy(sdl_renderer_, fontTexture1_, NULL, &fontRect1);
-  SDL_RenderCopy(sdl_renderer_, fontTexture2_, NULL, &fontRect2);
-  SDL_RenderCopy(sdl_renderer_, fontTexture3_, NULL, &fontRect3);
+  switch (game_->state()) {
+  case Game::eGameState::kAttract_:
+    SDL_RenderCopy(renderer_->sdlRenderer(), p1ScoreTxt_, NULL, &p1ScoreRct_);
+    SDL_RenderCopy(renderer_->sdlRenderer(), p2ScoreTxt_, NULL, &p2ScoreRct_);
+    SDL_RenderCopy(renderer_->sdlRenderer(), hiScoreTxt_, NULL, &hiScoreRct_);
+    break;
+  case Game::eGameState::kReadyToPlay_:
+    break;
+  case Game::eGameState::kPlay_:
+    break;
+  case Game::eGameState::kHighScoreEntry_:
+    break;
+  }
 }

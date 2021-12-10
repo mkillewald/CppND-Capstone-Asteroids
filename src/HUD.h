@@ -1,15 +1,16 @@
 #ifndef HUD_H
 #define HUD_H
 
-#include "PlayerController.h"
-
-#include <SDL.h>
 #include <SDL_ttf.h>
+
+// forward declaration to avoid include cycle
+class Game;
+class Renderer;
+class PlayerController;
 
 class HUD {
 public:
-  HUD(SDL_Renderer *sdl_renderer, PlayerController const *player1,
-      PlayerController const *player2);
+  HUD(Game const *game, Renderer const *renderer);
   ~HUD();
 
   // getters / setters
@@ -18,25 +19,29 @@ public:
   void draw() const;
 
 private:
-  SDL_Renderer *sdl_renderer_ = nullptr;
-  PlayerController *player1_ = nullptr;
-  PlayerController *player2_ = nullptr;
+  Game const *game_ = nullptr;
+  Renderer const *renderer_ = nullptr;
+  PlayerController const *player1_ = nullptr;
+  PlayerController const *player2_ = nullptr;
 
   TTF_Font *small_ = nullptr;
   TTF_Font *medium_ = nullptr;
   TTF_Font *large_ = nullptr;
 
-  SDL_Surface *fontSurface1_ = nullptr;
-  SDL_Surface *fontSurface2_ = nullptr;
-  SDL_Surface *fontSurface3_ = nullptr;
+  SDL_Surface *p1ScoreSfc_ = nullptr;
+  SDL_Surface *p2ScoreSfc_ = nullptr;
+  SDL_Surface *hiScoreSfc_ = nullptr;
+  SDL_Surface *hiScoreTableSfc_ = nullptr;
 
-  SDL_Texture *fontTexture1_ = nullptr;
-  SDL_Texture *fontTexture2_ = nullptr;
-  SDL_Texture *fontTexture3_ = nullptr;
+  SDL_Texture *p1ScoreTxt_ = nullptr;
+  SDL_Texture *p2ScoreTxt_ = nullptr;
+  SDL_Texture *hiScoreTxt_ = nullptr;
+  SDL_Texture *hiScoreTableTxt_ = nullptr;
 
-  SDL_Rect fontRect1;
-  SDL_Rect fontRect2;
-  SDL_Rect fontRect3;
+  SDL_Rect p1ScoreRct_;
+  SDL_Rect p2ScoreRct_;
+  SDL_Rect hiScoreRct_;
+  SDL_Rect hiScoreTableRct_;
 };
 
 #endif
