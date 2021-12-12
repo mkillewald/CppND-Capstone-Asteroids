@@ -1,7 +1,7 @@
 #ifndef HUD_H
 #define HUD_H
 
-#include <SDL_ttf.h>
+#include "../lib/SDL_FontCache.h"
 
 // forward declaration to avoid include cycle
 class Game;
@@ -17,6 +17,7 @@ public:
 
   // behavior methods
   void draw() const;
+  void update();
 
 private:
   Game const *game_ = nullptr;
@@ -24,24 +25,9 @@ private:
   PlayerController const *player1_ = nullptr;
   PlayerController const *player2_ = nullptr;
 
-  TTF_Font *small_ = nullptr;
-  TTF_Font *medium_ = nullptr;
-  TTF_Font *large_ = nullptr;
-
-  SDL_Surface *p1ScoreSfc_ = nullptr;
-  SDL_Surface *p2ScoreSfc_ = nullptr;
-  SDL_Surface *hiScoreSfc_ = nullptr;
-  SDL_Surface *hiScoreTableSfc_ = nullptr;
-
-  SDL_Texture *p1ScoreTxt_ = nullptr;
-  SDL_Texture *p2ScoreTxt_ = nullptr;
-  SDL_Texture *hiScoreTxt_ = nullptr;
-  SDL_Texture *hiScoreTableTxt_ = nullptr;
-
-  SDL_Rect p1ScoreRct_;
-  SDL_Rect p2ScoreRct_;
-  SDL_Rect hiScoreRct_;
-  SDL_Rect hiScoreTableRct_;
+  FC_Font *small_ = nullptr;
+  FC_Font *medium_ = nullptr;
+  FC_Font *large_ = nullptr;
 };
 
 #endif
