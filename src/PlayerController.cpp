@@ -30,6 +30,7 @@ PlayerController::PlayerController(size_t grid_width, size_t grid_height,
 
 unsigned long PlayerController::score() const { return score_; }
 bool PlayerController::alive() const { return alive_; }
+void PlayerController::setAlive(bool alive) { alive_ = alive; }
 bool PlayerController::switchPlayer() const { return switchPlayer_; }
 void PlayerController::setSwitchPlayer(bool switchPlayer) {
   switchPlayer_ = switchPlayer;
@@ -37,7 +38,9 @@ void PlayerController::setSwitchPlayer(bool switchPlayer) {
 
 void PlayerController::update() {
   // update opbjects
-  ship_.update();
+  if (alive()) {
+    ship_.update();
+  }
 
   for (auto &shot : playerShots_) {
     if (shot.isFired()) {
@@ -58,7 +61,7 @@ void PlayerController::update() {
   // check collisions
   for (auto &asteroid : asteroids_) {
     if (!asteroid.destroyed()) {
-      if (asteroid.collide(ship_)) {
+      if (alive() && asteroid.collide(ship_)) {
         // 1. check ship vs asteroid collisons
         asteroid.setDestroyed(true);
         // ship_.setDestroyed(true);
@@ -85,7 +88,7 @@ void PlayerController::update() {
 
   if (!ufo_.destroyed()) {
     // 5. check ship vs ufo collisions
-    if (ufo_.collide(ship_)) {
+    if (alive() && ufo_.collide(ship_)) {
       ufo_.setDestroyed(true);
       // ship_.setDestroyed(true);
       //  do stuff
@@ -103,7 +106,9 @@ void PlayerController::update() {
 }
 
 void PlayerController::draw(Renderer *const renderer) const {
-  ship_.draw(renderer);
+  if (alive()) {
+    ship_.draw(renderer);
+  }
 
   for (auto &shot : playerShots_) {
     if (shot.isFired()) {
@@ -122,16 +127,33 @@ void PlayerController::draw(Renderer *const renderer) const {
   }
 }
 
-void PlayerController::rotateLeft() { ship_.setRotDir(GameObject::kRotLeft_); }
+void PlayerController::rotateLeft() {
+  if (!alive()) {
+    return;
+  }
+  ship_.setRotDir(GameObject::kRotLeft_);
+}
+
 void PlayerController::rotateRight() {
+  if (!alive()) {
+    return;
+  }
   ship_.setRotDir(GameObject::kRotRight_);
 }
+
 void PlayerController::rotateOff() { ship_.setRotDir(GameObject::kRotNone_); }
-void PlayerController::thrustOn() { ship_.setThrust(true); }
+
+void PlayerController::thrustOn() {
+  if (!alive()) {
+    return;
+  }
+  ship_.setThrust(true);
+}
+
 void PlayerController::thrustOff() { ship_.setThrust(false); }
 
 void PlayerController::fire() {
-  if (SDL_GetTicks() - reloadTicks_ < reloadTickLimit_) {
+  if (!alive() || SDL_GetTicks() - reloadTicks_ < reloadTickLimit_) {
     return;
   }
 

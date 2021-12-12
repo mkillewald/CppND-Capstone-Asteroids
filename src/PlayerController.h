@@ -22,6 +22,7 @@ public:
   // getters / setters
   unsigned long score() const;
   bool alive() const;
+  void setAlive(bool alive);
   bool switchPlayer() const;
   void setSwitchPlayer(bool b);
 
@@ -42,8 +43,9 @@ private:
   std::vector<Asteroid> asteroids_;
   UFO ufo_;
   unsigned long score_{0};
-  bool alive_ = true;
-  bool switchPlayer_ = false;
+  bool alive_{false};
+  bool switchPlayer_{false};
+  int lives_{4};
   int reloadTicks_;
   int reloadTickLimit_{100};
 };
