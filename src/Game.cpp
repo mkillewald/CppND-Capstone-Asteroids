@@ -20,8 +20,8 @@ Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
   player2_ =
       std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
   currentPlayer_ = player1_.get();
-
-  hud = std::make_unique<HUD>(this, renderer);
+  hud_ = std::make_unique<HUD>(this, renderer);
+  numPlayers_ = 0;
 
   std::mt19937 engine_(dev_());
   std::uniform_int_distribution<int> random_w_(0, static_cast<int>(grid_width));
@@ -37,6 +37,7 @@ Game::eGameState Game::state() const { return state_; }
 void Game::setState(eGameState state) { state_ = state; }
 PlayerController const *Game::player1() const { return player1_.get(); }
 PlayerController const *Game::player2() const { return player2_.get(); }
+unsigned int Game::numPlayers() const { return numPlayers_; }
 
 void Game::run(InputController *const input,
                std::size_t target_frame_duration) {
@@ -52,7 +53,7 @@ void Game::run(InputController *const input,
     // Input, Update, Render - the main game loop.
     input->handleInput(running_, currentPlayer_);
     update();
-    renderer_->render(hud.get(), currentPlayer_);
+    renderer_->render(hud_.get(), currentPlayer_);
 
     frame_end = SDL_GetTicks();
 
@@ -78,18 +79,30 @@ void Game::run(InputController *const input,
 }
 
 void Game::update() {
-  if (!currentPlayer_->alive()) {
-    return;
-  }
-  if (currentPlayer_->switchPlayer()) {
-    currentPlayer_->setSwitchPlayer(false);
-    currentPlayer_->rotateOff();
-    currentPlayer_->thrustOff();
-    if (currentPlayer_ == player1_.get()) {
-      currentPlayer_ = player2_.get();
-    } else {
-      currentPlayer_ = player1_.get();
+  switch (state()) {
+  case Game::eGameState::kAttract_:
+    break;
+  case Game::eGameState::kReadyToPlay_:
+    break;
+  case Game::eGameState::kPlay_:
+    if (!currentPlayer_->alive()) {
+      return;
     }
+    if (currentPlayer_->switchPlayer()) {
+      currentPlayer_->setSwitchPlayer(false);
+      currentPlayer_->rotateOff();
+      currentPlayer_->thrustOff();
+      if (currentPlayer_ == player1_.get()) {
+        currentPlayer_ = player2_.get();
+      } else {
+        currentPlayer_ = player1_.get();
+      }
+    }
+    break;
+  case Game::eGameState::kHighScoreEntry_:
+    break;
   }
+
   currentPlayer_->update();
+  hud_->update();
 }

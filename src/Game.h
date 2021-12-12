@@ -32,12 +32,13 @@ public:
   void setState(eGameState state);
   PlayerController const *player1() const;
   PlayerController const *player2() const;
+  unsigned int numPlayers() const;
 
   // behavior methods
   void run(InputController *const input, std::size_t target_frame_duration);
 
 private:
-  std::unique_ptr<HUD> hud;
+  std::unique_ptr<HUD> hud_;
   std::unique_ptr<PlayerController> player1_;
   std::unique_ptr<PlayerController> player2_;
   PlayerController *currentPlayer_ = nullptr;
