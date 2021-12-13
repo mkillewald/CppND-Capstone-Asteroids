@@ -66,7 +66,7 @@ void PlayerController::update() {
         asteroid.setDestroyed(true);
         // ship_.setDestroyed(true);
         // do stuff
-      } else if (asteroid.collide(ufo_)) {
+      } else if (!ufo_.destroyed() && asteroid.collide(ufo_)) {
         // 2. check ufo vs asteroid collision
         asteroid.setDestroyed(true);
         ufo_.setDestroyed(true);
@@ -88,14 +88,14 @@ void PlayerController::update() {
 
   if (!ufo_.destroyed()) {
     // 5. check ship vs ufo collisions
-    if (alive() && ufo_.collide(ship_)) {
+    if (alive() && !ufo_.destroyed() && ufo_.collide(ship_)) {
       ufo_.setDestroyed(true);
       // ship_.setDestroyed(true);
       //  do stuff
     } else {
       for (auto &shot : playerShots_) {
         // 6. check player shot vs ufo collisions
-        if (shot.isFired() && ufo_.collide(shot)) {
+        if (shot.isFired() && !ufo_.destroyed() && ufo_.collide(shot)) {
           shot.setIsFired(false);
           ufo_.setDestroyed(true);
           // do stuff
