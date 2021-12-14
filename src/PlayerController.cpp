@@ -28,13 +28,17 @@ PlayerController::PlayerController(size_t grid_width, size_t grid_height,
   // }
 }
 
-unsigned long PlayerController::score() const { return score_; }
 bool PlayerController::alive() const { return alive_; }
 void PlayerController::setAlive(bool alive) { alive_ = alive; }
 bool PlayerController::switchPlayer() const { return switchPlayer_; }
 void PlayerController::setSwitchPlayer(bool switchPlayer) {
   switchPlayer_ = switchPlayer;
 }
+Uint32 PlayerController::lives() const { return lives_; }
+void PlayerController::setLives(Uint32 lives) { lives_ = lives; }
+Uint32 PlayerController::score() const { return score_; }
+void PlayerController::setScore(Uint32 score) { score_ = score; }
+void PlayerController::addScore(Uint32 score) { score_ += score; }
 
 void PlayerController::update() {
   // update opbjects
@@ -125,6 +129,14 @@ void PlayerController::draw(Renderer *const renderer) const {
   if (!ufo_.destroyed()) {
     ufo_.draw(renderer);
   }
+}
+
+void PlayerController::init() {
+  setAlive(true);
+  setLives(4);
+  setScore(0);
+  // TODO: init asteroids (wave 1)
+  // TODO: init ufo
 }
 
 void PlayerController::rotateLeft() {

@@ -20,15 +20,17 @@ public:
   PlayerController(size_t grid_width, size_t grid_height, float game_scale);
 
   // getters / setters
-  unsigned long score() const;
   bool alive() const;
   void setAlive(bool alive);
   bool switchPlayer() const;
   void setSwitchPlayer(bool b);
+  Uint32 lives() const;
+  Uint32 score() const;
 
   // behavior methods
   void update();
   void draw(Renderer *const renderer) const;
+  void init();
   void rotateLeft();
   void rotateRight();
   void rotateOff();
@@ -45,9 +47,13 @@ private:
   unsigned long score_{0};
   bool alive_{false};
   bool switchPlayer_{false};
-  int lives_{4};
-  int reloadTicks_;
-  int reloadTickLimit_{100};
+  Uint32 lives_{0};
+  Uint32 reloadTicks_;
+  Uint32 reloadTickLimit_{100};
+
+  void setLives(Uint32 lives);
+  void setScore(Uint32 score);
+  void addScore(Uint32 score);
 };
 
 #endif
