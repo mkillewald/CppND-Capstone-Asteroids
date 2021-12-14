@@ -22,7 +22,7 @@ This is my work in progress repo for the Capstone project in the [Udacity C++ Na
    * Linux: `sudo apt install libsdl2-ttf-dev`
    * Mac, Windows and Other: [Download and Install](https://www.libsdl.org/projects/SDL_ttf/)
 
-## Third Party Libaries (included in this repository)
+## Third Party Libraries (included in this repository)
 * [SDL_FontCache](https://github.com/grimfang4/SDL_FontCache)
 
 ## Basic Build Instructions
