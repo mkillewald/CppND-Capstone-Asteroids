@@ -14,7 +14,7 @@ void PlayerShip::init() {
   setAcceleration({0.0f, 0.0f});
   setMaxVelocity(15.0f);
   setAngle(-90.0f); // ship faces top of window
-  setScale(1.0f * gameScale());
+  setScale(1.5f * gameScale());
   setRadius(28.8f * scale());
 
   // points used from Ed Logg's Asteroids design document
