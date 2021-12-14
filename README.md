@@ -8,7 +8,7 @@ This is my work in progress repo for the Capstone project in the [Udacity C++ Na
 * make >= 4.1 (Linux, Mac), 3.81 (Windows)
   * Linux: make is installed by default on most Linux distros
   * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
-  * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
+  * Windows: [click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
 * gcc/g++ >= 5.4
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
@@ -20,7 +20,7 @@ This is my work in progress repo for the Capstone project in the [Udacity C++ Na
       * [Installing SDL](https://wiki.libsdl.org/Installation)
 * SDL_ttf >= 2.0
    * Linux: `sudo apt install libsdl2-ttf-dev`
-   * Mac, Windows and Other: [Download and Install](https://www.libsdl.org/projects/SDL_ttf/)
+   * Mac, Windows and Other: [download and install](https://www.libsdl.org/projects/SDL_ttf/)
 
 ## Third Party Libraries (included in this repository)
 * [SDL_FontCache](https://github.com/grimfang4/SDL_FontCache)
