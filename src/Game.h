@@ -32,10 +32,14 @@ public:
   void setState(eGameState state);
   PlayerController const *player1() const;
   PlayerController const *player2() const;
-  unsigned int numPlayers() const;
+  Uint32 numPlayers() const;
 
   // behavior methods
-  void run(InputController *const input, std::size_t target_frame_duration);
+  void run(InputController *const inputController,
+           std::size_t target_frame_duration);
+  void insertCoin();
+  void onePlayerStart();
+  void twoPlayerStart();
 
 private:
   std::unique_ptr<HUD> hud_;
@@ -45,7 +49,8 @@ private:
   Renderer *renderer_ = nullptr;
   bool running_ = true;
   eGameState state_ = kAttract_;
-  unsigned int numPlayers_;
+  Uint32 numPlayers_{0};
+  Uint32 credits_{0};
 
   std::random_device dev_;
   std::mt19937 engine_;
@@ -53,6 +58,8 @@ private:
   std::uniform_int_distribution<int> random_h_;
   std::uniform_int_distribution<int> random_type_;
 
+  void setPlayers(Uint32 players);
+  void input(InputController const *inputController);
   void update();
 };
 

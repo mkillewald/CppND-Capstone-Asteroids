@@ -38,8 +38,9 @@ void Game::setState(eGameState state) { state_ = state; }
 PlayerController const *Game::player1() const { return player1_.get(); }
 PlayerController const *Game::player2() const { return player2_.get(); }
 unsigned int Game::numPlayers() const { return numPlayers_; }
+void Game::setPlayers(Uint32 players) { numPlayers_ = players; }
 
-void Game::run(InputController *const input,
+void Game::run(InputController *const inputController,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -51,7 +52,7 @@ void Game::run(InputController *const input,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    input->handleInput(running_, currentPlayer_);
+    input(inputController);
     update();
     renderer_->render(hud_.get(), currentPlayer_);
 
@@ -75,6 +76,54 @@ void Game::run(InputController *const input,
     if (frame_duration < target_frame_duration) {
       SDL_Delay(target_frame_duration - frame_duration);
     }
+  }
+}
+
+void Game::insertCoin() {
+  if (credits_ < 99) {
+    credits_++;
+  }
+
+  if (state() == kAttract_) {
+    setState(kReadyToPlay_);
+  }
+}
+
+void Game::onePlayerStart() {
+  if (credits_ > 0) {
+    credits_--;
+    player1_->init();
+    currentPlayer_ = player1_.get();
+    setPlayers(1);
+    setState(kPlay_);
+  }
+}
+
+void Game::twoPlayerStart() {
+  if (credits_ > 1) {
+    credits_ -= 2;
+    player1_->init();
+    player2_->init();
+    currentPlayer_ = player1_.get();
+    setPlayers(2);
+    setState(kPlay_);
+  }
+}
+
+void Game::input(InputController const *inputController) {
+  switch (state()) {
+  case kAttract_:
+    inputController->attract(running_, this);
+    break;
+  case kReadyToPlay_:
+    inputController->ready(running_, this);
+    break;
+  case kPlay_:
+    inputController->play(running_, currentPlayer_);
+    break;
+  case kHighScoreEntry_:
+    inputController->highScore(running_, currentPlayer_);
+    break;
   }
 }
 
