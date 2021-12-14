@@ -14,14 +14,21 @@ This is my work in progress repo for the Capstone project in the [Udacity C++ Na
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
 * SDL2 >= 2.0.0
-  * Linux: `sudo apt install libsdl2-dev libsdl2-2.0-0 -y`
+  * Linux: `sudo apt install libsdl2-dev libsdl2-2.0-0`
   * Mac, Windows and Other:
       * [Obtaining SDL's source code](https://www.libsdl.org/download-2.0.php)
       * [Installing SDL](https://wiki.libsdl.org/Installation)
+* SDL_ttf >= 2.0
+   * Linux: `sudo apt install libsdl2-ttf-dev`
+   * Mac, Windows and Other: [Download and Install](https://www.libsdl.org/projects/SDL_ttf/)
+
+## Third Party Libaries (included in this repository)
+* [SDL_FontCache](https://github.com/grimfang4/SDL_FontCache)
 
 ## Basic Build Instructions
 
-1. Clone this repo.
-2. Make a build directory in the top level directory: `mkdir build && cd build`
-3. Compile: `cmake .. && make`
-4. Run it: `./Asteroids`.
+1. Install dependencies, if not already installed. 
+2. Clone this repo.
+3. Make a build directory in the top level directory: `mkdir build && cd build`
+4. Compile: `cmake .. && make`
+5. Run it: `./Asteroids`.
