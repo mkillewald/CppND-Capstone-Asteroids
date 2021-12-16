@@ -32,7 +32,7 @@ void GameObject::setAtOrigin(std::vector<SDL_Point> atOrigin) {
 const std::size_t GameObject::gridWidth() const { return grid_width_; }
 const std::size_t GameObject::gridHeight() const { return grid_height_; }
 
-sColorRGBA GameObject::colorRGBA() const { return colorRGBA_; }
+SDL_Color GameObject::colorRGBA() const { return colorRGBA_; }
 void GameObject::setColorRGBA(int r, int g, int b, int a) {
   colorRGBA_.r = r;
   colorRGBA_.g = g;
