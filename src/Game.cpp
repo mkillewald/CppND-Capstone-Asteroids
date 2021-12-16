@@ -187,12 +187,13 @@ void Game::update() {
     }
     break;
   case kGameOver_:
-    // TODO: if high score, jump to kHighScoreEntry
+    // TODO: if high score for player1 or player2, jump to kHighScoreEntry
     if (SDL_GetTicks() - displayTicks_ >= kDisplayTickLimit_) {
       if (numPlayers() > 1 && currentPlayer_->switchPlayer()) {
         // 2 player game, switch player
         if (!switchPlayer()) {
           // player could not be switched
+          currentPlayer_->setSwitchPlayer(false);
           setState(kAttract_);
         }
       } else {
