@@ -62,48 +62,50 @@ void PlayerController::update() {
     ufo_.update();
   }
 
-  // TODO: check collisions
+  // check collisions
   for (auto &asteroid : asteroids_) {
     if (!asteroid.destroyed()) {
       if (!ship_.destroyed() && asteroid.collide(ship_)) {
         // 1. check ship vs asteroid collisons
         asteroid.setDestroyed(true);
+        // TODO: split asteroid
+        // TODO: add score for asteroid
         die();
-        // do stuff
       } else if (!ufo_.destroyed() && asteroid.collide(ufo_)) {
         // 2. check ufo vs asteroid collision
         asteroid.setDestroyed(true);
+        // TODO:  split asteroid
         ufo_.setDestroyed(true);
-        // do stuff
       } else {
         for (auto &shot : playerShots_) {
           // 3. check player shot vs asteroid collisions
           if (shot.isFired() && asteroid.collide(shot)) {
             shot.setIsFired(false);
             asteroid.setDestroyed(true);
-            addScore(10); // TODO: finish actual scoring
-            // do stuff
+            // TODO: split asteroid
+            // TODO: do actual scoring
+            addScore(10);
           }
         }
       }
     }
   }
 
-  // 4. check ship vs ufo shot collisions
+  // TODO: 4. check ship vs ufo shot collisions
 
   if (!ufo_.destroyed()) {
     // 5. check ship vs ufo collisions
     if (!ship_.destroyed() && !ufo_.destroyed() && ufo_.collide(ship_)) {
       ufo_.setDestroyed(true);
+      // TODO: add score for UFO
       die();
-      //  do stuff
     } else {
       for (auto &shot : playerShots_) {
         // 6. check player shot vs ufo collisions
         if (shot.isFired() && !ufo_.destroyed() && ufo_.collide(shot)) {
           shot.setIsFired(false);
           ufo_.setDestroyed(true);
-          // do stuff
+          // TODO: add score for UFO
         }
       }
     }
@@ -139,14 +141,14 @@ void PlayerController::drawLives(Renderer *const renderer, int const &x,
   }
 
   for (int i = 0; i < lives() - 1; i++) {
-    ship_.drawLife(renderer, x + 25 * i, y, color);
+    ship_.drawLife(renderer, x + 24 * i, y, color);
   }
 }
 
 void PlayerController::initPlayer() {
-
   setLives(4);
   setScore(0);
+  setSwitchPlayer(false);
   // TODO: init asteroids (wave 1)
   // TODO: init ufo
 }
