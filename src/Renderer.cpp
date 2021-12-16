@@ -87,9 +87,10 @@ void Renderer::drawLine(int const &x1, int const &y1, int const &x2,
   SDL_RenderDrawLine(sdl_renderer_, x1, y1, x2, y2);
 }
 
-// function used from
+// function is based on
 // https://gist.github.com/Gumichan01/332c26f6197a432db91cc4327fcabb1c
-int Renderer::drawFilledCircle(int x, int y, int radius) {
+int Renderer::drawFilledCircle(int const &x, int const &y, int const &radius,
+                               SDL_Color const &color) const {
   int offsetx, offsety, d;
   int status;
 
@@ -97,6 +98,8 @@ int Renderer::drawFilledCircle(int x, int y, int radius) {
   offsety = radius;
   d = radius - 1;
   status = 0;
+
+  SDL_SetRenderDrawColor(sdl_renderer_, color.r, color.g, color.b, color.a);
 
   while (offsety >= offsetx) {
 

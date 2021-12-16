@@ -27,7 +27,8 @@ public:
                 SDL_Color const &color) const;
   void drawLine(int const &x1, int const &y1, int const &x2, int const &y2,
                 SDL_Color const &color) const;
-  int drawFilledCircle(int x, int y, int radius);
+  int drawFilledCircle(int const &x, int const &y, int const &radius,
+                       SDL_Color const &color) const;
 
 private:
   SDL_Window *sdl_window_ = nullptr;
