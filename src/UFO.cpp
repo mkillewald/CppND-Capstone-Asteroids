@@ -4,7 +4,7 @@
 UFO::UFO(const std::size_t grid_width, const std::size_t grid_height,
          float game_scale, eUFOSize size)
     : GameObject(grid_width, grid_height, game_scale), size_(size) {
-  setColorRGBA(0x00, 0x00, 0xFF, 0xFF);
+  setColorRGBA(0xFF, 0xFF, 0xFF, 0x99);
   init();
 }
 
