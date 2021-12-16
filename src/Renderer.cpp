@@ -7,10 +7,7 @@
 #include <iostream>
 #include <string>
 
-// based off Snake Game example code:
-// https://github.com/udacity/CppND-Capstone-Snake-Game
-
-// atari_vector.ttf used from
+// atari_vector.ttf font used from
 // http://vectorlib2.free.fr/Fonts/http://vectorlib2.free.fr/Fonts/
 
 Renderer::Renderer(const std::size_t screen_width,
@@ -41,6 +38,9 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Renderer could not be created." << std::endl;
     std::cerr << "SDL_Error: " << SDL_GetError() << std::endl;
   }
+
+  // Enable alpha blending
+  SDL_SetRenderDrawBlendMode(sdl_renderer_, SDL_BLENDMODE_BLEND);
 }
 
 Renderer::~Renderer() {
@@ -76,10 +76,15 @@ void Renderer::updateWindowTitle(int score, int fps) {
 }
 
 void Renderer::drawLine(SDL_Point const &p1, SDL_Point const &p2,
-                        sColorRGBA const &color) const {
+                        SDL_Color const &color) const {
   SDL_SetRenderDrawColor(sdl_renderer_, color.r, color.g, color.b, color.a);
-  // SDL_RenderSetScale(sdl_renderer_, 1.0, 1.0);
   SDL_RenderDrawLine(sdl_renderer_, p1.x, p1.y, p2.x, p2.y);
+}
+
+void Renderer::drawLine(int const &x1, int const &y1, int const &x2,
+                        int const &y2, SDL_Color const &color) const {
+  SDL_SetRenderDrawColor(sdl_renderer_, color.r, color.g, color.b, color.a);
+  SDL_RenderDrawLine(sdl_renderer_, x1, y1, x2, y2);
 }
 
 // function used from

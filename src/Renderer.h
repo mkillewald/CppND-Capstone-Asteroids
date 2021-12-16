@@ -1,8 +1,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "GameObject.h"
-
 #include <SDL.h>
 
 #include <vector>
@@ -10,9 +8,6 @@
 // forward declaration to avoid include cycle
 class HUD;
 class PlayerController;
-
-// class based off Snake Game example code:
-// https://github.com/udacity/CppND-Capstone-Snake-Game
 
 class Renderer {
 public:
@@ -29,7 +24,9 @@ public:
   void render(HUD *const hud, PlayerController *const player);
   void updateWindowTitle(int score, int fps);
   void drawLine(SDL_Point const &p1, SDL_Point const &p2,
-                sColorRGBA const &color) const;
+                SDL_Color const &color) const;
+  void drawLine(int const &x1, int const &y1, int const &x2, int const &y2,
+                SDL_Color const &color) const;
   int drawFilledCircle(int x, int y, int radius);
 
 private:
