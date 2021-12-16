@@ -9,13 +9,10 @@ PlayerShip::PlayerShip(const std::size_t grid_width,
 }
 
 void PlayerShip::init() {
-  setPosition({gridWidth() / 2.0f, gridHeight() / 2.0f});
   setVelocity({0.0f, 0.0f});
   setAcceleration({0.0f, 0.0f});
   setMaxVelocity(15.0f);
-  setAngle(-90.0f); // ship faces top of window
-  setScale(1.5f * gameScale());
-  setRadius(28.8f * scale());
+  setDestroyed(true);
 
   // points used from Ed Logg's Asteroids design document
   // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids
@@ -28,7 +25,7 @@ void PlayerShip::init() {
   atOrigin.emplace_back(SDL_Point{-24, -16}); // 3
   atOrigin.emplace_back(SDL_Point{-24, 16});  // 4
 
-  // thruster at origin
+  // add thruster at origin
   atOrigin.emplace_back(SDL_Point{-24, -16}); // 5
   atOrigin.emplace_back(SDL_Point{-56, 0});   // 6
   atOrigin.emplace_back(SDL_Point{-24, 16});  // 7
@@ -41,7 +38,22 @@ void PlayerShip::init() {
   // class.
   setAtOrigin(std::move(atOrigin));
 
-  // apply our starting angle and position
+  // setup player "life" ship
+  // TODO: this is a HACK! rethink how we do this
+  setAngle(-90.0f); // ship faces top of window
+  setScale(1.5f * gameScale());
+  setPosition({0.00f, 0.0f});
+  rotateMoveAndScalePoints();
+  lifePoints_ = points_;
+  lifePoints_.pop_back();
+  lifePoints_.pop_back();
+  lifePoints_.pop_back();
+
+  // setup actual player ship
+  setAngle(-90.0f); // ship faces top of window
+  setScale(1.5f * gameScale());
+  setRadius(28.8f * scale());
+  setPosition({gridWidth() / 2.0f, gridHeight() / 2.0f});
   rotateMoveAndScalePoints();
 }
 
@@ -65,6 +77,13 @@ void PlayerShip::update() {
 }
 
 SDL_Point PlayerShip::nose() { return points_[1]; }
+
+void PlayerShip::reset() {
+  setVelocity({0.0f, 0.0f});
+  setAcceleration({0.0f, 0.0f});
+  setPosition({gridWidth() / 2.0f, gridHeight() / 2.0f});
+  setDestroyed(false);
+}
 
 void PlayerShip::updatePosition() {
   if (thrust_) {
@@ -101,6 +120,21 @@ void PlayerShip::updatePosition() {
   position().x += velocity().x;
   position().y += velocity().y;
   wrapCoordinates(position());
+}
+
+void PlayerShip::drawLife(Renderer *const renderer, int const &x, int const &y,
+                          SDL_Color const &color) const {
+  // TODO:
+  int next;
+  for (int i = 0; i < lifePoints_.size(); i++) {
+    if (i == lifePoints_.size() - 1) {
+      next = 0;
+    } else {
+      next = i + 1;
+    }
+    renderer->drawLine(lifePoints_[i].x + x, lifePoints_[i].y + y,
+                       lifePoints_[next].x + x, lifePoints_[next].y + y, color);
+  }
 }
 
 void PlayerShip::drawObject(Renderer *const renderer) const {

@@ -21,19 +21,22 @@ public:
   // typical behaviour methods
   void update();
   SDL_Point nose();
+  void reset();
+  void drawLife(Renderer *const renderer, int const &x, int const &y,
+                SDL_Color const &color) const;
 
 private:
-  void init();
-  void updatePosition();
-  void drawObject(Renderer *const renderer) const;
-  void drawGhostLines(Renderer *const renderer, sGFlags const &gFlags) const;
-
-  std::vector<SDL_Point *> thrustLines_;
+  std::vector<SDL_Point> lifePoints_;
   bool thrust_{false};
   bool drawThrust_{false};
   int maxShots_{4};
   int thrustTicks_;
   int thrustTickLimit_{90};
+
+  void init();
+  void updatePosition();
+  void drawObject(Renderer *const renderer) const;
+  void drawGhostLines(Renderer *const renderer, sGFlags const &gFlags) const;
 };
 
 #endif
