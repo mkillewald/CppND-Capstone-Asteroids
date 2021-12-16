@@ -42,7 +42,7 @@ void PlayerController::addScore(Uint32 score) { score_ += score; }
 
 void PlayerController::update() {
   // update opbjects
-  if (alive()) {
+  if (!ship_.destroyed()) {
     ship_.update();
   }
 
@@ -62,13 +62,13 @@ void PlayerController::update() {
     ufo_.update();
   }
 
-  // check collisions
+  // TODO: check collisions
   for (auto &asteroid : asteroids_) {
     if (!asteroid.destroyed()) {
-      if (alive() && asteroid.collide(ship_)) {
+      if (!ship_.destroyed() && asteroid.collide(ship_)) {
         // 1. check ship vs asteroid collisons
         asteroid.setDestroyed(true);
-        // ship_.setDestroyed(true);
+        die();
         // do stuff
       } else if (!ufo_.destroyed() && asteroid.collide(ufo_)) {
         // 2. check ufo vs asteroid collision
@@ -81,6 +81,7 @@ void PlayerController::update() {
           if (shot.isFired() && asteroid.collide(shot)) {
             shot.setIsFired(false);
             asteroid.setDestroyed(true);
+            addScore(10); // TODO: finish actual scoring
             // do stuff
           }
         }
@@ -92,9 +93,9 @@ void PlayerController::update() {
 
   if (!ufo_.destroyed()) {
     // 5. check ship vs ufo collisions
-    if (alive() && !ufo_.destroyed() && ufo_.collide(ship_)) {
+    if (!ship_.destroyed() && !ufo_.destroyed() && ufo_.collide(ship_)) {
       ufo_.setDestroyed(true);
-      // ship_.setDestroyed(true);
+      die();
       //  do stuff
     } else {
       for (auto &shot : playerShots_) {
@@ -110,7 +111,7 @@ void PlayerController::update() {
 }
 
 void PlayerController::draw(Renderer *const renderer) const {
-  if (alive()) {
+  if (!ship_.destroyed()) {
     ship_.draw(renderer);
   }
 
@@ -131,12 +132,47 @@ void PlayerController::draw(Renderer *const renderer) const {
   }
 }
 
-void PlayerController::init() {
-  setAlive(true);
+void PlayerController::drawLives(Renderer *const renderer, int const &x,
+                                 int const &y, SDL_Color const &color) const {
+  if (lives() == 0) {
+    return;
+  }
+
+  for (int i = 0; i < lives() - 1; i++) {
+    ship_.drawLife(renderer, x + 25 * i, y, color);
+  }
+}
+
+void PlayerController::initPlayer() {
+
   setLives(4);
   setScore(0);
   // TODO: init asteroids (wave 1)
   // TODO: init ufo
+}
+
+void PlayerController::start() {
+  setAlive(true);
+  // TODO: wait for clear asteroid field
+  ship_.reset();
+}
+
+void PlayerController::die() {
+  rotateOff();
+  thrustOff();
+  ship_.setDestroyed(true);
+  setAlive(false);
+  minusLife();
+  // TODO: explode ship
+  setSwitchPlayer(true);
+}
+
+void PlayerController::addLife() { lives_++; }
+void PlayerController::minusLife() {
+  if (lives() == 0) {
+    return;
+  }
+  lives_--;
 }
 
 void PlayerController::rotateLeft() {

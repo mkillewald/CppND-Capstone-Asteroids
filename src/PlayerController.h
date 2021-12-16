@@ -30,7 +30,13 @@ public:
   // behavior methods
   void update();
   void draw(Renderer *const renderer) const;
-  void init();
+  void drawLives(Renderer *const renderer, int const &x, int const &y,
+                 SDL_Color const &color) const;
+  void initPlayer();
+  void start();
+  void die();
+  void addLife();
+  void minusLife();
   void rotateLeft();
   void rotateRight();
   void rotateOff();
@@ -44,11 +50,11 @@ private:
   std::vector<PlayerShot> playerShots_;
   std::vector<Asteroid> asteroids_;
   UFO ufo_;
-  unsigned long score_{0};
+  Uint32 score_{0};
   bool alive_{false};
   bool switchPlayer_{false};
   Uint32 lives_{0};
-  Uint32 reloadTicks_;
+  Uint32 reloadTicks_{0};
   Uint32 reloadTickLimit_{100};
 
   void setLives(Uint32 lives);
