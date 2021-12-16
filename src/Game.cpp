@@ -8,10 +8,6 @@
 
 #include <memory>
 
-// based off Snake Game example code:
-// https://github.com/udacity/CppND-Capstone-Snake-Game
-
-// std::uniform_int_distribution<int> random_type(0, 3);
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
   size_t grid_width = renderer->gridWidth();
   size_t grid_height = renderer->gridHeight();
@@ -33,10 +29,15 @@ Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
 int Game::random_w() { return random_w_(engine_); }
 int Game::random_h() { return random_w_(engine_); }
 int Game::random_type() { return random_type_(engine_); }
+
 Game::eGameState Game::state() const { return state_; }
 void Game::setState(eGameState state) { state_ = state; }
-PlayerController const *Game::player1() const { return player1_.get(); }
-PlayerController const *Game::player2() const { return player2_.get(); }
+
+PlayerController *const Game::player1() const { return player1_.get(); }
+PlayerController *const Game::player2() const { return player2_.get(); }
+
+void Game::setRunning(bool running) { running_ = running; }
+
 unsigned int Game::numPlayers() const { return numPlayers_; }
 void Game::setPlayers(Uint32 players) { numPlayers_ = players; }
 
@@ -92,63 +93,115 @@ void Game::insertCoin() {
 void Game::onePlayerStart() {
   if (credits_ > 0) {
     credits_--;
-    player1_->init();
-    currentPlayer_ = player1_.get();
     setPlayers(1);
-    setState(kPlay_);
+    player1_->initPlayer();
+    currentPlayer_ = player1_.get();
+    setState(kReadyPlayer1_);
+    displayTicks_ = SDL_GetTicks();
   }
 }
 
 void Game::twoPlayerStart() {
   if (credits_ > 1) {
     credits_ -= 2;
-    player1_->init();
-    player2_->init();
-    currentPlayer_ = player1_.get();
     setPlayers(2);
-    setState(kPlay_);
+    player1_->initPlayer();
+    player2_->initPlayer();
+    currentPlayer_ = player1_.get();
+    setState(kReadyPlayer1_);
+    displayTicks_ = SDL_GetTicks();
   }
 }
 
-void Game::input(InputController const *inputController) {
+bool Game::switchPlayer() {
+  if (currentPlayer_ == player1_.get() && player2_->lives() > 0) {
+    // switch to player 2
+    currentPlayer_->setSwitchPlayer(false);
+    currentPlayer_ = player2_.get();
+    setState(kReadyPlayer2_);
+    displayTicks_ = SDL_GetTicks();
+    return true;
+  } else if (currentPlayer_ == player2_.get() && player1_->lives() > 0) {
+    // switch to player 1
+    currentPlayer_->setSwitchPlayer(false);
+    currentPlayer_ = player1_.get();
+    setState(kReadyPlayer1_);
+    displayTicks_ = SDL_GetTicks();
+    return true;
+  }
+  return false;
+}
+
+void Game::input(InputController *const inputController) {
   switch (state()) {
-  case kAttract_:
-    inputController->attract(running_, this);
-    break;
   case kReadyToPlay_:
-    inputController->ready(running_, this);
+    inputController->ready(this);
     break;
   case kPlay_:
-    inputController->play(running_, currentPlayer_);
+    inputController->play(this, currentPlayer_);
     break;
   case kHighScoreEntry_:
-    inputController->highScore(running_, currentPlayer_);
+    inputController->highScore(this, currentPlayer_);
+    break;
+  default:
+    inputController->attract(this);
     break;
   }
 }
 
 void Game::update() {
   switch (state()) {
-  case Game::eGameState::kAttract_:
+  case kAttract_:
     break;
-  case Game::eGameState::kReadyToPlay_:
+  case kReadyToPlay_:
     break;
-  case Game::eGameState::kPlay_:
-    if (!currentPlayer_->alive()) {
-      return;
+  case kReadyPlayer1_:
+  case kReadyPlayer2_:
+    if (SDL_GetTicks() - displayTicks_ >= kDisplayTickLimit_) {
+      currentPlayer_->start();
+      setState(kPlay_);
     }
-    if (currentPlayer_->switchPlayer()) {
-      currentPlayer_->setSwitchPlayer(false);
-      currentPlayer_->rotateOff();
-      currentPlayer_->thrustOff();
-      if (currentPlayer_ == player1_.get()) {
-        currentPlayer_ = player2_.get();
+    break;
+  case kPlay_:
+    if (numPlayers() > 1 && currentPlayer_->switchPlayer()) {
+      // 2 player game, switch player
+      if (currentPlayer_->lives() > 0) {
+        if (!switchPlayer()) {
+          // player could not be switched
+          currentPlayer_->setSwitchPlayer(false);
+          currentPlayer_->start();
+        }
       } else {
-        currentPlayer_ = player1_.get();
+        setState(kGameOver_);
+        displayTicks_ = SDL_GetTicks();
+      }
+    } else if (numPlayers() == 1 && currentPlayer_->switchPlayer()) {
+      // 1 player game
+      currentPlayer_->setSwitchPlayer(false);
+      if (currentPlayer_->lives() > 0) {
+        currentPlayer_->start();
+      } else {
+        setState(kGameOver_);
+        displayTicks_ = SDL_GetTicks();
       }
     }
     break;
-  case Game::eGameState::kHighScoreEntry_:
+  case kGameOver_:
+    // TODO: if high score, jump to kHighScoreEntry
+    if (SDL_GetTicks() - displayTicks_ >= kDisplayTickLimit_) {
+      if (numPlayers() > 1 && currentPlayer_->switchPlayer()) {
+        // 2 player game, switch player
+        if (!switchPlayer()) {
+          // player could not be switched
+          setState(kAttract_);
+        }
+      } else {
+        // 1 player game
+        setState(kAttract_);
+      }
+    }
+    break;
+  case kHighScoreEntry_:
     break;
   }
 

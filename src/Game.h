@@ -14,12 +14,17 @@
 class InputController;
 class Renderer;
 
-// class based off Snake Game example code:
-// https://github.com/udacity/CppND-Capstone-Snake-Game
-
 class Game {
 public:
-  enum eGameState { kAttract_, kReadyToPlay_, kPlay_, kHighScoreEntry_ };
+  enum eGameState {
+    kAttract_,
+    kReadyToPlay_,
+    kReadyPlayer1_,
+    kReadyPlayer2_,
+    kPlay_,
+    kGameOver_,
+    kHighScoreEntry_
+  };
 
   // Contructor
   Game(Renderer *const renderer, float game_scale);
@@ -29,9 +34,9 @@ public:
   int random_h();
   int random_type();
   eGameState state() const;
-  void setState(eGameState state);
-  PlayerController const *player1() const;
-  PlayerController const *player2() const;
+  PlayerController *const player1() const;
+  PlayerController *const player2() const;
+  void setRunning(bool running);
   Uint32 numPlayers() const;
 
   // behavior methods
@@ -40,8 +45,11 @@ public:
   void insertCoin();
   void onePlayerStart();
   void twoPlayerStart();
+  bool switchPlayer();
 
 private:
+  const Uint32 kDisplayTickLimit_{2000};
+
   std::unique_ptr<HUD> hud_;
   std::unique_ptr<PlayerController> player1_;
   std::unique_ptr<PlayerController> player2_;
@@ -51,6 +59,7 @@ private:
   eGameState state_ = kAttract_;
   Uint32 numPlayers_{0};
   Uint32 credits_{0};
+  Uint32 displayTicks_;
 
   std::random_device dev_;
   std::mt19937 engine_;
@@ -59,7 +68,9 @@ private:
   std::uniform_int_distribution<int> random_type_;
 
   void setPlayers(Uint32 players);
-  void input(InputController const *inputController);
+  void setState(eGameState state);
+
+  void input(InputController *const inputController);
   void update();
 };
 
