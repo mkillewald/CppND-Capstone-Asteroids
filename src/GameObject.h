@@ -18,14 +18,6 @@ struct sGFlags {
   int s2y;
 };
 
-// TODO: convert to using SDL_Color
-struct sColorRGBA {
-  int r;
-  int g;
-  int b;
-  int a;
-};
-
 struct sVector2f {
   float x;
   float y;
@@ -67,7 +59,7 @@ protected:
   void setAtOrigin(std::vector<SDL_Point> atOrigin);
   const std::size_t gridWidth() const;
   const std::size_t gridHeight() const;
-  sColorRGBA colorRGBA() const;
+  SDL_Color colorRGBA() const;
   void setColorRGBA(int r, int g, int b, int a);
   eRotDir rotDir() const;
   sVector2f &position();
@@ -101,10 +93,11 @@ protected:
 
 private:
   // const unsigned int id_;
-  std::vector<SDL_Point> atOrigin_;
   const std::size_t grid_width_;
   const std::size_t grid_height_;
-  sColorRGBA colorRGBA_;
+
+  std::vector<SDL_Point> atOrigin_;
+  SDL_Color colorRGBA_;
   eRotDir rotDir_ = kRotNone_;
   sVector2f position_;
   sVector2f velocity_;
