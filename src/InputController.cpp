@@ -6,19 +6,18 @@
 
 #include <iostream>
 
-void InputController::attract(bool &running, Game *game) const {
+void InputController::attract(Game *game) const {
   SDL_Event e;
 
   // single hit keys, and other SDL events
   while (SDL_PollEvent(&e)) {
     switch (e.type) {
     case SDL_QUIT:
-      running = false;
+      game->setRunning(false);
       break;
     case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
       case SDLK_i:
-        // insert coin
         game->insertCoin();
         break;
       }
@@ -27,27 +26,24 @@ void InputController::attract(bool &running, Game *game) const {
   }
 }
 
-void InputController::ready(bool &running, Game *game) const {
+void InputController::ready(Game *game) const {
   SDL_Event e;
 
   // single hit keys, and other SDL events
   while (SDL_PollEvent(&e)) {
     switch (e.type) {
     case SDL_QUIT:
-      running = false;
+      game->setRunning(false);
       break;
     case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
       case SDLK_1:
-        // 1 player start
         game->onePlayerStart();
         break;
       case SDLK_2:
-        // 2 player start
         game->twoPlayerStart();
         break;
       case SDLK_i:
-        // insert coin
         game->insertCoin();
         break;
       }
@@ -56,14 +52,14 @@ void InputController::ready(bool &running, Game *game) const {
   }
 }
 
-void InputController::play(bool &running, PlayerController *player) const {
+void InputController::play(Game *game, PlayerController *player) const {
   SDL_Event e;
 
   // single hit keys, and other SDL events
   while (SDL_PollEvent(&e)) {
     switch (e.type) {
     case SDL_QUIT:
-      running = false;
+      game->setRunning(false);
       break;
     case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
@@ -73,8 +69,8 @@ void InputController::play(bool &running, PlayerController *player) const {
       case SDLK_SPACE:
         player->hyperspace();
         break;
-      case SDLK_1:
-        player->setSwitchPlayer(true);
+      case SDLK_i:
+        game->insertCoin();
         break;
       }
       break;
@@ -109,14 +105,14 @@ void InputController::play(bool &running, PlayerController *player) const {
 }
 
 // TODO: finish this with correct keys/functions
-void InputController::highScore(bool &running, PlayerController *player) const {
+void InputController::highScore(Game *game, PlayerController *player) const {
   SDL_Event e;
 
   // single hit keys, and other SDL events
   while (SDL_PollEvent(&e)) {
     switch (e.type) {
     case SDL_QUIT:
-      running = false;
+      game->setRunning(false);
       break;
     case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
@@ -126,8 +122,9 @@ void InputController::highScore(bool &running, PlayerController *player) const {
       case SDLK_SPACE:
         player->hyperspace();
         break;
-      case SDLK_1:
-        player->setSwitchPlayer(true);
+      case SDLK_i:
+        // insert coin
+        game->insertCoin();
         break;
       }
       break;
