@@ -78,7 +78,9 @@ protected:
 
   // typical behaviour methods
   void updatePosition();
-  void rotateMoveAndScalePoints();
+  void rotateMoveAndScalePoints(std::vector<SDL_Point> &points,
+                                sVector2f const &position, float const &angle,
+                                float const &scale);
   void wrapCoordinates(sVector2f &point);
   void checkPointsAtEdges(int const &left, int const &right, int const &top,
                           int const &bottom);

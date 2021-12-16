@@ -79,7 +79,7 @@ void GameObject::setDestroyed(bool destroyed) { destroyed_ = destroyed; }
 // typical behaviour methods
 void GameObject::update() {
   updatePosition();
-  rotateMoveAndScalePoints();
+  rotateMoveAndScalePoints(points_, position_, angle_, scale_);
   checkPointsAtEdges(0, static_cast<int>(grid_width_), 0,
                      static_cast<int>(grid_height_));
 }
@@ -102,19 +102,22 @@ void GameObject::updatePosition() {
   wrapCoordinates(position_);
 }
 
-void GameObject::rotateMoveAndScalePoints() {
-  float cosRot = cos(angle_ * PI / 180.0);
-  float sinRot = sin(angle_ * PI / 180.0);
-  for (int i = 0; i < atOrigin_.size(); i++) {
+void GameObject::rotateMoveAndScalePoints(std::vector<SDL_Point> &points,
+                                          sVector2f const &position,
+                                          float const &angle,
+                                          float const &scale) {
+  float cosRot = cos(angle * PI / 180.0);
+  float sinRot = sin(angle * PI / 180.0);
+  for (int i = 0; i < points.size(); i++) {
     // apply rotatation to points atOrigin_ and save result in points_
-    points_[i].x =
-        scale_ * (atOrigin_[i].x * cosRot - atOrigin_[i].y * sinRot) + 0.5;
-    points_[i].y =
-        scale_ * (atOrigin_[i].x * sinRot + atOrigin_[i].y * cosRot) + 0.5;
+    points[i].x =
+        scale * (atOrigin_[i].x * cosRot - atOrigin_[i].y * sinRot) + 0.5;
+    points[i].y =
+        scale * (atOrigin_[i].x * sinRot + atOrigin_[i].y * cosRot) + 0.5;
 
     // move points to objects position
-    points_[i].x += position_.x;
-    points_[i].y += position_.y;
+    points[i].x += position.x;
+    points[i].y += position.y;
   }
 }
 

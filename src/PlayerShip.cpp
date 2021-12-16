@@ -4,14 +4,18 @@
 PlayerShip::PlayerShip(const std::size_t grid_width,
                        const std::size_t grid_height, float game_scale)
     : GameObject(grid_width, grid_height, game_scale) {
-  setColorRGBA(0x00, 0x00, 0xFF, 0xFF);
+  setColorRGBA(0xFF, 0xFF, 0xFF, 0xFF);
   init();
 }
 
 void PlayerShip::init() {
+  setPosition({gridWidth() / 2.0f, gridHeight() / 2.0f});
   setVelocity({0.0f, 0.0f});
   setAcceleration({0.0f, 0.0f});
   setMaxVelocity(15.0f);
+  setAngle(-90.0f); // ship faces top of window
+  setScale(1.5f * gameScale());
+  setRadius(28.8f * scale());
   setDestroyed(true);
 
   // points used from Ed Logg's Asteroids design document
@@ -24,6 +28,9 @@ void PlayerShip::init() {
   atOrigin.emplace_back(SDL_Point{-40, -32}); // 2
   atOrigin.emplace_back(SDL_Point{-24, -16}); // 3
   atOrigin.emplace_back(SDL_Point{-24, 16});  // 4
+
+  // copy atOrigin into lifePoints_
+  lifePoints_ = atOrigin;
 
   // add thruster at origin
   atOrigin.emplace_back(SDL_Point{-24, -16}); // 5
@@ -38,23 +45,12 @@ void PlayerShip::init() {
   // class.
   setAtOrigin(std::move(atOrigin));
 
-  // setup player "life" ship
-  // TODO: this is a HACK! rethink how we do this
-  setAngle(-90.0f); // ship faces top of window
-  setScale(1.5f * gameScale());
-  setPosition({0.00f, 0.0f});
-  rotateMoveAndScalePoints();
-  lifePoints_ = points_;
-  lifePoints_.pop_back();
-  lifePoints_.pop_back();
-  lifePoints_.pop_back();
+  // player "life" ship
+  rotateMoveAndScalePoints(lifePoints_, {0.0f, 0.0f}, -90.0f,
+                           1.4f * gameScale());
 
-  // setup actual player ship
-  setAngle(-90.0f); // ship faces top of window
-  setScale(1.5f * gameScale());
-  setRadius(28.8f * scale());
-  setPosition({gridWidth() / 2.0f, gridHeight() / 2.0f});
-  rotateMoveAndScalePoints();
+  // actual player ship
+  rotateMoveAndScalePoints(points_, position(), angle(), scale());
 }
 
 int PlayerShip::maxShots() const { return maxShots_; }
@@ -71,7 +67,7 @@ void PlayerShip::update() {
   }
 
   updatePosition();
-  rotateMoveAndScalePoints();
+  rotateMoveAndScalePoints(points_, position(), angle(), scale());
   checkPointsAtEdges(0, static_cast<int>(gridWidth()), 0,
                      static_cast<int>(gridHeight()));
 }
