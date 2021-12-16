@@ -16,7 +16,7 @@ HUD::HUD(Game *const game, Renderer *const renderer)
   centerX_ = renderer_->gridWidth() / 2;
   centerY_ = renderer_->gridHeight() / 2;
 
-  hudColor = FC_MakeColor(255, 255, 255, 150);
+  hudColor = FC_MakeColor(0xFF, 0xFF, 0xFF, 0xAA);
 
   // Load fonts
   small_ = FC_CreateFont();
@@ -75,7 +75,7 @@ void HUD::update() {
 void HUD::draw() const {
   switch (game_->state()) {
   case Game::kAttract_: {
-    // alternate between attract and high score table
+    // TODO: alternate between attract and high score table
     drawP1Score();
     drawHiScore();
     drawP2Score();
@@ -84,7 +84,7 @@ void HUD::draw() const {
     break;
   }
   case Game::kReadyToPlay_: {
-    // alternate between attract and high score table, flash push start
+    // TODO: alternate between attract and high score table
     drawP1Score();
     drawHiScore();
     drawP2Score();
