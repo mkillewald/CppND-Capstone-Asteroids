@@ -20,7 +20,7 @@ HUD::HUD(Game *const game, Renderer *const renderer)
 
   // Load fonts
   small_ = FC_CreateFont();
-  FC_LoadFont(small_, renderer_->sdlRenderer(), "../fonts/atari_vector.ttf", 14,
+  FC_LoadFont(small_, renderer_->sdlRenderer(), "../fonts/atari_vector.ttf", 15,
               hudColor, TTF_STYLE_NORMAL);
   if (nullptr == small_) {
     std::cerr << "True type font was not found." << std::endl;
@@ -28,13 +28,13 @@ HUD::HUD(Game *const game, Renderer *const renderer)
   }
   medium_ = FC_CreateFont();
   FC_LoadFont(medium_, renderer_->sdlRenderer(), "../fonts/atari_vector.ttf",
-              28, hudColor, TTF_STYLE_NORMAL);
+              30, hudColor, TTF_STYLE_NORMAL);
   if (nullptr == medium_) {
     std::cerr << "True type font was not found." << std::endl;
     std::cerr << "SDL_Error: " << SDL_GetError() << std::endl;
   }
   large_ = FC_CreateFont();
-  FC_LoadFont(large_, renderer_->sdlRenderer(), "../fonts/atari_vector.ttf", 56,
+  FC_LoadFont(large_, renderer_->sdlRenderer(), "../fonts/atari_vector.ttf", 60,
               hudColor, TTF_STYLE_NORMAL);
   if (nullptr == large_) {
     std::cerr << "True type font was not found." << std::endl;
@@ -68,6 +68,7 @@ void HUD::update() {
   case Game::kPlay_:
     break;
   case Game::kHighScoreEntry_:
+    // TOOD: time out and save entry if no input made within time frame
     break;
   }
 }
@@ -219,4 +220,58 @@ void HUD::draw1Coin1Start() const {
 
 void HUD::drawScoreEntryInstructions() const {
   FC_Draw(medium_, renderer_->sdlRenderer(), 100, 200, kHiScoreEntry.c_str());
+
+  FC_DrawAlign(large_, renderer_->sdlRenderer(), centerX_, 600, FC_ALIGN_CENTER,
+               entry().c_str());
+}
+
+void HUD::initEntry() {
+  initialIndex_ = 0;
+  initial0_ = "A";
+  initial1_ = "_";
+  initial2_ = "_";
+}
+
+std::string HUD::entry() const { return initial0_ + initial1_ + initial2_; }
+
+void HUD::setEntry() {
+  switch (initialIndex_) {
+  case 0:
+    initial0_ = chars_.substr(charIndex_, 1);
+    break;
+  case 1:
+    initial1_ = chars_.substr(charIndex_, 1);
+    break;
+  case 2:
+    initial2_ = chars_.substr(charIndex_, 1);
+    break;
+  }
+}
+
+void HUD::charUp() {
+  if (charIndex_ == chars_.size() - 1) {
+    charIndex_ = 0;
+  } else {
+    charIndex_++;
+  }
+  setEntry();
+}
+
+void HUD::charDown() {
+  if (charIndex_ == 0) {
+    charIndex_ = chars_.size() - 1;
+  } else {
+    charIndex_--;
+  }
+  setEntry();
+}
+
+void HUD::charSelect() {
+  if (initialIndex_ == 2) {
+    // TODO: save entry
+  } else {
+    charIndex_ = 0;
+    initialIndex_++;
+  }
+  setEntry();
 }

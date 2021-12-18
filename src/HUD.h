@@ -18,10 +18,16 @@ public:
   ~HUD();
 
   // getters / setters
+  std::string entry() const;
+  void setEntry();
 
   // behavior methods
   void draw() const;
   void update();
+  void initEntry();
+  void charUp();
+  void charDown();
+  void charSelect();
 
 private:
   const Uint32 kFastBlinkTickLimit_{250};
@@ -45,17 +51,23 @@ private:
   FC_Font *small_ = nullptr;
   FC_Font *medium_ = nullptr;
   FC_Font *large_ = nullptr;
-
   int centerX_;
   int centerY_;
   Uint32 blinkTicks_;
   bool blink_{false};
 
+  int charIndex_{0};
+  const std::string chars_{"ABCDEFGHIJKLMNOPQRSTUVWXYZ_"};
+
+  int initialIndex_{0};
+  std::string initial0_{"A"};
+  std::string initial1_{"_"};
+  std::string initial2_{"_"};
+
   void drawP1Score() const;
   void drawP2Score() const;
   void drawP1Lives() const;
   void drawP2Lives() const;
-
   void drawHiScore() const;
   void drawPushStart() const;
   void drawMessageCenterX(float y, const char *message) const;

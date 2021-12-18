@@ -141,7 +141,7 @@ void Game::input(InputController *const inputController) {
     inputController->play(this, currentPlayer_);
     break;
   case kHighScoreEntry_:
-    inputController->highScore(this, currentPlayer_);
+    inputController->highScore(this, hud_.get(), currentPlayer_);
     break;
   default:
     inputController->attract(this);
@@ -203,6 +203,7 @@ void Game::update() {
     }
     break;
   case kHighScoreEntry_:
+
     break;
   }
 

@@ -1,5 +1,6 @@
 #include "InputController.h"
 #include "Game.h"
+#include "HUD.h"
 #include "PlayerController.h"
 
 #include <SDL.h>
@@ -105,7 +106,8 @@ void InputController::play(Game *game, PlayerController *player) const {
 }
 
 // TODO: finish this with correct keys/functions
-void InputController::highScore(Game *game, PlayerController *player) const {
+void InputController::highScore(Game *game, HUD *hud,
+                                PlayerController *player) const {
   SDL_Event e;
 
   // single hit keys, and other SDL events
@@ -116,11 +118,14 @@ void InputController::highScore(Game *game, PlayerController *player) const {
       break;
     case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
-      case SDLK_SEMICOLON:
-        player->thrustOn();
+      case SDLK_a:
+        hud->charUp();
+        break;
+      case SDLK_s:
+        hud->charDown();
         break;
       case SDLK_SPACE:
-        player->hyperspace();
+        hud->charSelect();
         break;
       case SDLK_i:
         // insert coin
@@ -131,29 +136,13 @@ void InputController::highScore(Game *game, PlayerController *player) const {
     case SDL_KEYUP:
       switch (e.key.keysym.sym) {
       case SDLK_a:
-        player->rotateOff();
+        // hud->rotateOff();
         break;
       case SDLK_s:
-        player->rotateOff();
-        break;
-      case SDLK_SEMICOLON:
-        player->thrustOff();
+        // hud->rotateOff();
         break;
       }
       break;
     }
-  }
-
-  const Uint8 *keystates = SDL_GetKeyboardState(NULL);
-
-  // contiuously held keys (this avoids keyboard repeat delay)
-  if (keystates[SDL_SCANCODE_A]) {
-    player->rotateLeft();
-  }
-  if (keystates[SDL_SCANCODE_S]) {
-    player->rotateRight();
-  }
-  if (keystates[SDL_SCANCODE_APOSTROPHE]) {
-    player->fire();
   }
 }
