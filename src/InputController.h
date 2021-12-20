@@ -3,7 +3,7 @@
 
 // forward declaration to avoid include cycle
 class Game;
-class HUD;
+class HighScore;
 class PlayerController;
 
 class InputController {
@@ -11,7 +11,8 @@ public:
   void attract(Game *game) const;
   void ready(Game *game) const;
   void play(Game *game, PlayerController *player) const;
-  void highScore(Game *game, HUD *hud, PlayerController *player) const;
+  void highScore(Game *game, HighScore *highScore,
+                 PlayerController *player) const;
 
 private:
 };

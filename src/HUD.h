@@ -5,9 +5,11 @@
 
 #include <SDL.h>
 
+#include <cstdint>
 #include <string>
 
 // forward declaration to avoid include cycle
+class HighScore;
 class Game;
 class Renderer;
 class PlayerController;
@@ -18,20 +20,14 @@ public:
   ~HUD();
 
   // getters / setters
-  std::string entry() const;
-  void setEntry();
 
   // behavior methods
   void draw() const;
   void update();
-  void initEntry();
-  void charUp();
-  void charDown();
-  void charSelect();
 
 private:
-  const Uint32 kFastBlinkTickLimit_{250};
-  const Uint32 kSlowBlinkTickLimit_{500};
+  const uint32_t kFastBlinkTickLimit_{250};
+  const uint32_t kSlowBlinkTickLimit_{500};
   const std::string kHighScores{"HIGH SCORES"};
   const std::string kPushStart{"PUSH START"};
   const std::string k1Coin1Start{"1 COIN 1 START"};
@@ -47,22 +43,15 @@ private:
   Renderer *const renderer_ = nullptr;
   PlayerController *const player1_ = nullptr;
   PlayerController *const player2_ = nullptr;
+  HighScore *const highScore_ = nullptr;
   SDL_Color hudColor;
   FC_Font *small_ = nullptr;
   FC_Font *medium_ = nullptr;
   FC_Font *large_ = nullptr;
   int centerX_;
   int centerY_;
-  Uint32 blinkTicks_;
+  uint32_t blinkTicks_;
   bool blink_{false};
-
-  int charIndex_{0};
-  const std::string chars_{"ABCDEFGHIJKLMNOPQRSTUVWXYZ_"};
-
-  int initialIndex_{0};
-  std::string initial0_{"A"};
-  std::string initial1_{"_"};
-  std::string initial2_{"_"};
 
   void drawP1Score() const;
   void drawP2Score() const;
@@ -73,7 +62,7 @@ private:
   void drawMessageCenterX(float y, const char *message) const;
   void drawHiScoreTable() const;
   void draw1Coin1Start() const;
-  void drawScoreEntryInstructions() const;
+  void drawScoreEntry() const;
 };
 
 #endif

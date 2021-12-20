@@ -1,6 +1,6 @@
 #include "InputController.h"
 #include "Game.h"
-#include "HUD.h"
+#include "HighScore.h"
 #include "PlayerController.h"
 
 #include <SDL.h>
@@ -105,8 +105,8 @@ void InputController::play(Game *game, PlayerController *player) const {
   }
 }
 
-// TODO: finish this with correct keys/functions
-void InputController::highScore(Game *game, HUD *hud,
+// TODO: PlayerController is not yet used
+void InputController::highScore(Game *game, HighScore *highScore,
                                 PlayerController *player) const {
   SDL_Event e;
 
@@ -119,27 +119,17 @@ void InputController::highScore(Game *game, HUD *hud,
     case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
       case SDLK_a:
-        hud->charUp();
+        highScore->charUp();
         break;
       case SDLK_s:
-        hud->charDown();
+        highScore->charDown();
         break;
       case SDLK_SPACE:
-        hud->charSelect();
+        highScore->charSelect();
         break;
       case SDLK_i:
         // insert coin
         game->insertCoin();
-        break;
-      }
-      break;
-    case SDL_KEYUP:
-      switch (e.key.keysym.sym) {
-      case SDLK_a:
-        // hud->rotateOff();
-        break;
-      case SDLK_s:
-        // hud->rotateOff();
         break;
       }
       break;

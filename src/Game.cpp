@@ -1,11 +1,13 @@
 #include "Game.h"
-#include "Asteroid.h"
+#include "HUD.h"
+#include "HighScore.h"
 #include "InputController.h"
+#include "PlayerController.h"
 #include "Renderer.h"
-#include "UFO.h"
 
 #include <SDL.h>
 
+#include <cstdint>
 #include <memory>
 
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
@@ -16,6 +18,7 @@ Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
   player2_ =
       std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
   currentPlayer_ = player1_.get();
+  highScore_ = std::make_unique<HighScore>();
   hud_ = std::make_unique<HUD>(this, renderer);
   numPlayers_ = 0;
 
@@ -35,18 +38,19 @@ void Game::setState(eGameState state) { state_ = state; }
 
 PlayerController *const Game::player1() const { return player1_.get(); }
 PlayerController *const Game::player2() const { return player2_.get(); }
+HighScore *const Game::highScore() const { return highScore_.get(); }
 
 void Game::setRunning(bool running) { running_ = running; }
 
-unsigned int Game::numPlayers() const { return numPlayers_; }
-void Game::setPlayers(Uint32 players) { numPlayers_ = players; }
+uint32_t Game::numPlayers() const { return numPlayers_; }
+void Game::setPlayers(uint32_t players) { numPlayers_ = players; }
 
 void Game::run(InputController *const inputController,
                std::size_t target_frame_duration) {
-  Uint32 title_timestamp = SDL_GetTicks();
-  Uint32 frame_start;
-  Uint32 frame_end;
-  Uint32 frame_duration;
+  uint32_t title_timestamp = SDL_GetTicks();
+  uint32_t frame_start;
+  uint32_t frame_end;
+  uint32_t frame_duration;
   int frame_count = 0;
 
   while (running_) {
@@ -141,7 +145,7 @@ void Game::input(InputController *const inputController) {
     inputController->play(this, currentPlayer_);
     break;
   case kHighScoreEntry_:
-    inputController->highScore(this, hud_.get(), currentPlayer_);
+    inputController->highScore(this, highScore_.get(), currentPlayer_);
     break;
   default:
     inputController->attract(this);

@@ -2,10 +2,12 @@
 #define GAME_H
 
 #include "HUD.h"
+#include "HighScore.h"
 #include "PlayerController.h"
 
 #include <SDL.h>
 
+#include <cstdint>
 #include <memory>
 #include <random>
 #include <vector>
@@ -36,8 +38,9 @@ public:
   eGameState state() const;
   PlayerController *const player1() const;
   PlayerController *const player2() const;
+  HighScore *const highScore() const;
   void setRunning(bool running);
-  Uint32 numPlayers() const;
+  uint32_t numPlayers() const;
 
   // behavior methods
   void run(InputController *const inputController,
@@ -48,18 +51,19 @@ public:
   bool switchPlayer();
 
 private:
-  const Uint32 kDisplayTickLimit_{2000};
+  const uint32_t kDisplayTickLimit_{2000};
 
   std::unique_ptr<HUD> hud_;
+  std::unique_ptr<HighScore> highScore_;
   std::unique_ptr<PlayerController> player1_;
   std::unique_ptr<PlayerController> player2_;
   PlayerController *currentPlayer_ = nullptr;
   Renderer *renderer_ = nullptr;
   bool running_ = true;
-  eGameState state_ = kAttract_;
-  Uint32 numPlayers_{0};
-  Uint32 credits_{0};
-  Uint32 displayTicks_;
+  eGameState state_ = kHighScoreEntry_;
+  uint32_t numPlayers_{0};
+  uint32_t credits_{0};
+  uint32_t displayTicks_;
 
   std::random_device dev_;
   std::mt19937 engine_;
@@ -67,7 +71,7 @@ private:
   std::uniform_int_distribution<int> random_h_;
   std::uniform_int_distribution<int> random_type_;
 
-  void setPlayers(Uint32 players);
+  void setPlayers(unsigned int players);
   void setState(eGameState state);
 
   void input(InputController *const inputController);

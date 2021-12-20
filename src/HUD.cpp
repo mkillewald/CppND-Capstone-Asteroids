@@ -11,7 +11,7 @@
 
 HUD::HUD(Game *const game, Renderer *const renderer)
     : game_(game), player1_(game->player1()), player2_(game->player2()),
-      renderer_(renderer) {
+      highScore_(game->highScore()), renderer_(renderer) {
 
   centerX_ = renderer_->gridWidth() / 2;
   centerY_ = renderer_->gridHeight() / 2;
@@ -141,7 +141,7 @@ void HUD::draw() const {
     drawHiScore();
     drawP2Score();
 
-    drawScoreEntryInstructions();
+    drawScoreEntry();
     // TODO: finish this
     break;
   }
@@ -196,7 +196,7 @@ void HUD::drawMessageCenterX(float y, const char *message) const {
 }
 
 void HUD::drawHiScoreTable() const {
-  // TODO: finish this, dont create int inside loop, get real data.
+  // TODO: finish this, dont create int inside loop.
   int tableX = centerX_ - 70;
   int tableY = 205;
   int maxWidth = 110;
@@ -204,13 +204,12 @@ void HUD::drawHiScoreTable() const {
   FC_DrawAlign(medium_, renderer_->sdlRenderer(), centerX_, 150,
                FC_ALIGN_CENTER, kHighScores.c_str());
   FC_DrawAlign(medium_, renderer_->sdlRenderer(), tableX, tableY,
-               FC_ALIGN_RIGHT, "1.\n2.\n3.\n4.\n5.\n6.\n7.\n8.\n9.\n10.");
+               FC_ALIGN_RIGHT, highScore_->tableSlots().c_str());
   FC_DrawAlign(medium_, renderer_->sdlRenderer(), tableX + maxWidth, tableY,
-               FC_ALIGN_RIGHT,
-               "39020\n15110\n3480\n2810\n1460\n1060\n680\n360\n240\n90");
+               FC_ALIGN_RIGHT, highScore_->tableScores().c_str());
   FC_DrawAlign(medium_, renderer_->sdlRenderer(),
                tableX + maxWidth + spaceWidth, tableY, FC_ALIGN_LEFT,
-               "KEX\nA\nAAA\nAAA\nAAA\nA\nA\nA\nDAA\nA");
+               highScore_->tableInitials().c_str());
 }
 
 void HUD::draw1Coin1Start() const {
@@ -218,60 +217,9 @@ void HUD::draw1Coin1Start() const {
                FC_ALIGN_CENTER, k1Coin1Start.c_str());
 }
 
-void HUD::drawScoreEntryInstructions() const {
+void HUD::drawScoreEntry() const {
   FC_Draw(medium_, renderer_->sdlRenderer(), 100, 200, kHiScoreEntry.c_str());
 
   FC_DrawAlign(large_, renderer_->sdlRenderer(), centerX_, 600, FC_ALIGN_CENTER,
-               entry().c_str());
-}
-
-void HUD::initEntry() {
-  initialIndex_ = 0;
-  initial0_ = "A";
-  initial1_ = "_";
-  initial2_ = "_";
-}
-
-std::string HUD::entry() const { return initial0_ + initial1_ + initial2_; }
-
-void HUD::setEntry() {
-  switch (initialIndex_) {
-  case 0:
-    initial0_ = chars_.substr(charIndex_, 1);
-    break;
-  case 1:
-    initial1_ = chars_.substr(charIndex_, 1);
-    break;
-  case 2:
-    initial2_ = chars_.substr(charIndex_, 1);
-    break;
-  }
-}
-
-void HUD::charUp() {
-  if (charIndex_ == chars_.size() - 1) {
-    charIndex_ = 0;
-  } else {
-    charIndex_++;
-  }
-  setEntry();
-}
-
-void HUD::charDown() {
-  if (charIndex_ == 0) {
-    charIndex_ = chars_.size() - 1;
-  } else {
-    charIndex_--;
-  }
-  setEntry();
-}
-
-void HUD::charSelect() {
-  if (initialIndex_ == 2) {
-    // TODO: save entry
-  } else {
-    charIndex_ = 0;
-    initialIndex_++;
-  }
-  setEntry();
+               highScore_->initials().c_str());
 }
