@@ -3,6 +3,9 @@
 
 #include "GameObject.h"
 
+#include <cstddef>
+#include <cstdint>
+
 class PlayerShot : public GameObject {
 public:
   PlayerShot(const std::size_t grid_width, const std::size_t grid_height,
@@ -19,8 +22,8 @@ public:
 
 private:
   bool isFired_{false};
-  int startTicks_;
-  int tickLimit_{600};
+  uint32_t startTicks_;
+  uint32_t tickLimit_{600};
 
   void updatePosition();
   void drawObject(Renderer *const renderer) const;

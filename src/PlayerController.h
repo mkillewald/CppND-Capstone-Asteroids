@@ -8,6 +8,7 @@
 
 #include <SDL.h>
 
+#include <cstdint>
 #include <memory>
 
 // forward declaration to avoid include cycle
@@ -24,8 +25,8 @@ public:
   void setAlive(bool alive);
   bool switchPlayer() const;
   void setSwitchPlayer(bool b);
-  Uint32 lives() const;
-  Uint32 score() const;
+  uint32_t lives() const;
+  uint32_t score() const;
 
   // behavior methods
   void update();
@@ -50,16 +51,16 @@ private:
   std::vector<PlayerShot> playerShots_;
   std::vector<Asteroid> asteroids_;
   UFO ufo_;
-  Uint32 score_{0};
+  uint32_t score_{0};
   bool alive_{false};
   bool switchPlayer_{false};
-  Uint32 lives_{0};
-  Uint32 reloadTicks_{0};
-  Uint32 reloadTickLimit_{100};
+  uint32_t lives_{0};
+  uint32_t reloadTicks_{0};
+  uint32_t reloadTickLimit_{100};
 
-  void setLives(Uint32 lives);
-  void setScore(Uint32 score);
-  void addScore(Uint32 score);
+  void setLives(uint32_t lives);
+  void setScore(uint32_t score);
+  void addScore(uint32_t score);
 };
 
 #endif

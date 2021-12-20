@@ -6,6 +6,8 @@
 
 #include <SDL.h>
 
+#include <cstdint>
+
 PlayerController::PlayerController(size_t grid_width, size_t grid_height,
                                    float game_scale)
     : ship_(grid_width, grid_height, game_scale),
@@ -34,11 +36,11 @@ bool PlayerController::switchPlayer() const { return switchPlayer_; }
 void PlayerController::setSwitchPlayer(bool switchPlayer) {
   switchPlayer_ = switchPlayer;
 }
-Uint32 PlayerController::lives() const { return lives_; }
-void PlayerController::setLives(Uint32 lives) { lives_ = lives; }
-Uint32 PlayerController::score() const { return score_; }
-void PlayerController::setScore(Uint32 score) { score_ = score; }
-void PlayerController::addScore(Uint32 score) { score_ += score; }
+uint32_t PlayerController::lives() const { return lives_; }
+void PlayerController::setLives(uint32_t lives) { lives_ = lives; }
+uint32_t PlayerController::score() const { return score_; }
+void PlayerController::setScore(uint32_t score) { score_ = score; }
+void PlayerController::addScore(uint32_t score) { score_ += score; }
 
 void PlayerController::update() {
   // update opbjects

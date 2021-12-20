@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 #include <cstddef>
+#include <cstdint>
 
 // forward declaration to avoid include cycle
 class Renderer;
@@ -30,8 +31,8 @@ private:
   bool thrust_{false};
   bool drawThrust_{false};
   int maxShots_{4};
-  int thrustTicks_;
-  int thrustTickLimit_{90};
+  uint32_t thrustTicks_;
+  uint32_t thrustTickLimit_{90};
 
   void init();
   void updatePosition();

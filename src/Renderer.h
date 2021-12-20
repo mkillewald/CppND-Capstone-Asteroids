@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 
+#include <cstddef>
 #include <vector>
 
 // forward declaration to avoid include cycle

@@ -3,6 +3,8 @@
 
 #include "GameObject.h"
 
+#include <cstddef>
+
 // forward declaration to avoid include cycle
 class Renderer;
 

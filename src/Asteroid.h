@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 
+#include <cstddef>
 #include <random>
 
 class Asteroid : public GameObject {

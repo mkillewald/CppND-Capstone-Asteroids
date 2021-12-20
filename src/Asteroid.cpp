@@ -1,6 +1,8 @@
 #include "Asteroid.h"
 #include "Game.h"
 
+#include <cstddef>
+
 Asteroid::Asteroid(const std::size_t grid_width, const std::size_t grid_height,
                    float game_scale, int type)
     : GameObject(grid_width, grid_height, game_scale), type_(type) {

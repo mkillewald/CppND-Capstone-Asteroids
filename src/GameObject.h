@@ -4,6 +4,7 @@
 #include <SDL.h>
 
 #include <bitset>
+#include <cstddef>
 #include <vector>
 
 #define PI 3.14159265

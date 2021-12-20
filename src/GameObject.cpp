@@ -5,6 +5,7 @@
 #include <SDL.h>
 
 #include <bitset>
+#include <cstddef>
 
 sVector2f sVector2f::operator+(sVector2f const &a) {
   x += a.x;
