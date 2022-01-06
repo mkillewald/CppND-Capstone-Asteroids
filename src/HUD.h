@@ -24,6 +24,7 @@ public:
   // behavior methods
   void draw() const;
   void update();
+  void updateTableWidth();
 
 private:
   const uint32_t kFastBlinkTickLimit_{250};
@@ -50,6 +51,14 @@ private:
   FC_Font *large_ = nullptr;
   int centerX_;
   int centerY_;
+  int tableX_;
+  int tableY_;
+  int spaceWidth_;
+  int slotWidth_;
+  int scoreWidth_;
+  int tagWidth_;
+  int maxWidth_;
+
   uint32_t blinkTicks_;
   bool blink_{false};
 

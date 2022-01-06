@@ -60,7 +60,7 @@ private:
   PlayerController *currentPlayer_ = nullptr;
   Renderer *renderer_ = nullptr;
   bool running_ = true;
-  eGameState state_ = kHighScoreEntry_;
+  eGameState state_ = kAttract_;
   uint32_t numPlayers_{0};
   uint32_t credits_{0};
   uint32_t displayTicks_;

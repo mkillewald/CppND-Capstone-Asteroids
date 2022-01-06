@@ -1,38 +1,91 @@
 #include "HighScore.h"
 
+#include <fstream>
+#include <sstream>
 #include <string>
 
-// TODO: read table and high score from file
 // TODO: update talbe and high score
-// TODO: write table and high score to file
 
-HighScore::HighScore() { initInitials(); }
-
-std::string HighScore::initials() const { return initials_; }
-
-void HighScore::setInitials() {
-  initials_.replace(initialIndex_, 1, chars_.substr(charIndex_, 1));
+HighScore::HighScore() {
+  readScores();
+  initTag();
 }
 
-// TODO: finish this
-std::string HighScore::tableSlots() {
-  return "1.\n2.\n3.\n4.\n5.\n6.\n7.\n8.\n9.\n10.";
+std::string HighScore::tag() const { return tag_; }
+
+void HighScore::setTag() {
+  tag_.replace(tagIndex_, 1, chars_.substr(charIndex_, 1));
 }
 
-// TODO: finish this
-std::string HighScore::tableScores() {
-  return "39020\n15110\n3480\n2810\n1460\n1060\n680\n360\n240\n90";
+std::string HighScore::highScore() const { return table_[0].score_; }
+
+std::string HighScore::tableSlots() const {
+  if (table_[0].score_ == "00") {
+    return "";
+  } else {
+    std::string line;
+    for (int i = 1; i <= table_.size(); i++) {
+      line += std::to_string(i) + ".\n";
+    }
+    return line;
+  }
 }
 
-// TODO: finish this
-std::string HighScore::tableInitials() {
-  return "KEX\nA\nAAA\nAAA\nAAA\nA\nA\nA\nDAA\nA";
+std::string HighScore::tableScores() const {
+  if (table_[0].score_ == "00") {
+    return "";
+  } else {
+    std::string line;
+    for (auto &entry : table_) {
+      line += entry.score_ + "\n";
+    }
+    return line;
+  }
 }
 
-void HighScore::initInitials() {
+std::string HighScore::tableTags() const {
+  if (table_[0].score_ == "00") {
+    return "";
+  } else {
+    std::string line;
+    for (auto &entry : table_) {
+      line += entry.tag_ + "\n";
+    }
+    return line;
+  }
+}
+
+void HighScore::initTag() {
   charIndex_ = 0;
-  initialIndex_ = 0;
-  initials_ = "A__";
+  tagIndex_ = 0;
+  tag_ = "A__";
+}
+
+void HighScore::readScores() {
+  std::ifstream filestream(kHSPath_);
+  if (filestream.is_open()) {
+    int slot = 0;
+    std::string line, score, tag;
+    while (std::getline(filestream, line) && slot < maxSlots_) {
+      std::istringstream linestream(line);
+      linestream >> score >> tag;
+      table_.emplace_back(sEntry{score, tag});
+    }
+    filestream.close();
+  } else {
+    // file could not be opened or does not exist
+    table_.emplace_back(sEntry{"00", ""});
+  }
+}
+
+void HighScore::saveScores() {
+  std::ofstream filestream(kHSPath_, std::ofstream::trunc);
+  if (filestream.is_open()) {
+    for (auto &entry : table_) {
+      filestream << entry.score_ << " " << entry.tag_ << "\n";
+    }
+    filestream.close();
+  }
 }
 
 void HighScore::charUp() {
@@ -41,7 +94,7 @@ void HighScore::charUp() {
   } else {
     charIndex_++;
   }
-  setInitials();
+  setTag();
 }
 
 void HighScore::charDown() {
@@ -50,15 +103,15 @@ void HighScore::charDown() {
   } else {
     charIndex_--;
   }
-  setInitials();
+  setTag();
 }
 
 void HighScore::charSelect() {
-  if (initialIndex_ == 2) {
+  if (tagIndex_ == 2) {
     // TODO: save entry
   } else {
     charIndex_ = 0;
-    initialIndex_++;
+    tagIndex_++;
   }
-  setInitials();
+  setTag();
 }
