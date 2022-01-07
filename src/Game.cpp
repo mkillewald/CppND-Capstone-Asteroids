@@ -15,7 +15,7 @@
 // TODO: ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions
 // TODO: add game sounds
-// TODO: satisfy 5 needed items from ruberic (multithreadding...)
+// TODO: satisfy 5 needed items from rubric (multithreadding...)
 
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
   size_t grid_width = renderer->gridWidth();
