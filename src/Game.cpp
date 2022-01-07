@@ -38,6 +38,10 @@ void Game::setState(eGameState state) { state_ = state; }
 
 PlayerController *const Game::player1() const { return player1_.get(); }
 PlayerController *const Game::player2() const { return player2_.get(); }
+PlayerController *const Game::currentPlayer() const { return currentPlayer_; }
+void Game::setCurrentPlayer(PlayerController *const player) {
+  currentPlayer_ = player;
+}
 HighScore *const Game::highScore() const { return highScore_.get(); }
 HUD *const Game::hud() const { return hud_.get(); }
 
@@ -198,12 +202,26 @@ void Game::update() {
         if (!switchPlayer()) {
           // player could not be switched
           currentPlayer_->setSwitchPlayer(false);
-          // TODO: if high score for player1 or player2, jump to kHighScoreEntry
-          setState(kAttract_);
+          bool p1High = highScore_->scoreIsHigh(player1_->score());
+          bool p2High = highScore_->scoreIsHigh(player2_->score());
+          if (p1High || p2High) {
+            if (p1High) {
+              currentPlayer_ = player1_.get();
+            } else {
+              currentPlayer_ = player2_.get();
+            }
+            highScore_->setP1High(p1High);
+            highScore_->setP2High(p2High);
+            setState(kHighScoreEntry_);
+          } else {
+            setState(kAttract_);
+          }
         }
       } else {
         // 1 player game
-        if (highScore_->scoreIsHigh(currentPlayer_->score())) {
+        if (highScore_->scoreIsHigh(player1_->score())) {
+          highScore_->setP1High(true);
+          highScore_->setP2High(false);
           setState(kHighScoreEntry_);
         } else {
           setState(kAttract_);
@@ -212,7 +230,6 @@ void Game::update() {
     }
     break;
   case kHighScoreEntry_:
-
     break;
   }
 

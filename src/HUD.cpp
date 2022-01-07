@@ -71,7 +71,11 @@ void HUD::update() {
   case Game::kPlay_:
     break;
   case Game::kHighScoreEntry_:
-    // TOOD: time out and save entry if no input made within time frame
+    if (SDL_GetTicks() - blinkTicks_ >= kSlowBlinkTickLimit_) {
+      blink_ = !blink_;
+      blinkTicks_ = SDL_GetTicks();
+    }
+    // TODO: time out and save entry if no input made within time frame
     break;
   }
 }
@@ -136,21 +140,38 @@ void HUD::draw() const {
     }
     break;
   case Game::kGameOver_:
+    drawP1Score();
+    drawP1Lives();
+    drawHiScore();
+    if (game_->numPlayers() == 2) {
+      drawP2Score();
+      drawP2Lives();
+      if (game_->currentPlayer() == game_->player1()) {
+        drawMessageCenterX(150, kPlayer1.c_str());
+      } else {
+        drawMessageCenterX(150, kPlayer2.c_str());
+      }
+    }
     drawMessageCenterX(250, kGameOver.c_str());
     break;
   case Game::kHighScoreEntry_:
-    // get players initials
+    if (game_->numPlayers() == 2) {
+      if (game_->currentPlayer() == game_->player1() && blink_) {
+        drawMessageCenterX(150, kPlayer1.c_str());
+      } else if (game_->currentPlayer() == game_->player2() && blink_) {
+        drawMessageCenterX(150, kPlayer2.c_str());
+      }
+    }
+
     drawP1Score();
     drawHiScore();
     drawP2Score();
-
     drawScoreEntry();
-    // TODO: finish this
     break;
   }
 }
 
-// TODO: fix positioning of score and lives
+// TODO: adjust positioning of score and lives
 
 void HUD::drawP1Score() const {
   std::string score;

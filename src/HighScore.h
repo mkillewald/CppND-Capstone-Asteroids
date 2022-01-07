@@ -20,6 +20,8 @@ public:
   //   ~HighScore();
 
   // getters / setters
+  void setP1High(bool high);
+  void setP2High(bool high);
   std::string tag() const;
   void setTag();
   std::string topScore() const;
@@ -30,9 +32,10 @@ public:
   // behavior methods
   void initTag();
   void readScores();
+  void writeScores();
   bool scoreIsHigh(uint32_t score);
-  void addEntry(sEntry newEntry);
-  void saveScores();
+  void addEntryToTable(sEntry newEntry);
+  void saveEntry();
   void charUp();
   void charDown();
   void charSelect();
@@ -44,13 +47,12 @@ private:
 
   Game *const game_ = nullptr;
 
+  bool p1High_{false};
+  bool p2High_{false};
   int charIndex_{0};
   int tagIndex_{0};
-  uint32_t scoreIn_;
   std::string tag_{"A__"};
   std::vector<sEntry> table_;
-
-  void setScoreIn(uint32_t score);
 };
 
 #endif

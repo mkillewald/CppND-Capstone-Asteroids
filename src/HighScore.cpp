@@ -7,12 +7,15 @@
 #include <sstream>
 #include <string>
 
+// TODO: save most recent p1 and p2 score
+
 HighScore::HighScore(Game *const game) : game_(game) {
   readScores();
   initTag();
 }
 
-void HighScore::setScoreIn(uint32_t score) { scoreIn_ = score; }
+void HighScore::setP1High(bool isHigh) { p1High_ = isHigh; }
+void HighScore::setP2High(bool isHigh) { p2High_ = isHigh; }
 
 std::string HighScore::tag() const { return tag_; }
 
@@ -81,23 +84,29 @@ void HighScore::readScores() {
   }
 }
 
+void HighScore::writeScores() {
+  std::ofstream filestream(kHSPath_, std::ofstream::trunc);
+  if (filestream.is_open()) {
+    for (auto &entry : table_) {
+      filestream << entry.score_ << " " << entry.tag_ << "\n";
+    }
+    filestream.close();
+  }
+}
+
 bool HighScore::scoreIsHigh(uint32_t score) {
   if (score <= 0) {
-    setScoreIn(0);
     return false;
   } else if (table_.size() < kMaxSlots_) {
-    setScoreIn(score);
     return true;
   } else if (score > stoul(table_.back().score_)) {
-    setScoreIn(score);
     return true;
   } else {
-    setScoreIn(0);
     return false;
   }
 }
 
-void HighScore::addEntry(sEntry newEntry) {
+void HighScore::addEntryToTable(sEntry newEntry) {
   if (table_.size() > 0 &&
       (table_[0].score_ == "00" || table_.size() == kMaxSlots_)) {
     table_.pop_back();
@@ -110,17 +119,18 @@ void HighScore::addEntry(sEntry newEntry) {
       return stoul(a.score_) > stoul(b.score_);
     });
   }
-
-  saveScores();
 }
 
-void HighScore::saveScores() {
-  std::ofstream filestream(kHSPath_, std::ofstream::trunc);
-  if (filestream.is_open()) {
-    for (auto &entry : table_) {
-      filestream << entry.score_ << " " << entry.tag_ << "\n";
-    }
-    filestream.close();
+void HighScore::saveEntry() {
+  addEntryToTable(
+      sEntry{std::to_string(game_->currentPlayer()->score()), tag()});
+  writeScores();
+  game_->hud()->updateTableWidth();
+  if (game_->numPlayers() == 2 && game_->currentPlayer() == game_->player1() &&
+      p2High_) {
+    game_->setCurrentPlayer(game_->player2());
+  } else {
+    game_->setState(Game::kAttract_);
   }
 }
 
@@ -145,9 +155,8 @@ void HighScore::charDown() {
 void HighScore::charSelect() {
   if (tagIndex_ == 2) {
     setTag();
-    addEntry(sEntry{std::to_string(scoreIn_), tag_});
-    game_->hud()->updateTableWidth();
-    game_->setState(Game::kAttract_);
+    saveEntry();
+    initTag();
   } else {
     charIndex_ = 0;
     tagIndex_++;

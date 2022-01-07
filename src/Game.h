@@ -36,13 +36,15 @@ public:
   int random_h();
   int random_type();
   eGameState state() const;
+  void setState(eGameState state);
   PlayerController *const player1() const;
   PlayerController *const player2() const;
+  PlayerController *const currentPlayer() const;
+  void setCurrentPlayer(PlayerController *const player);
   HighScore *const highScore() const;
   HUD *const hud() const;
   void setRunning(bool running);
   uint32_t numPlayers() const;
-  void setState(eGameState state);
 
   // behavior methods
   void run(InputController *const inputController,
