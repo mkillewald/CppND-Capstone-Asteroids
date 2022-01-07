@@ -122,7 +122,6 @@ void PlayerShip::updatePosition() {
 
 void PlayerShip::drawLife(Renderer *const renderer, int const &x, int const &y,
                           SDL_Color const &color) const {
-  // TODO:
   int next;
   for (int i = 0; i < lifePoints_.size(); i++) {
     if (i == lifePoints_.size() - 1) {
