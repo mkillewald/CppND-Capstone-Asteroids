@@ -6,10 +6,11 @@
 
 #include <SDL.h>
 
+#include <cstddef>
 #include <cstdint>
 
-PlayerController::PlayerController(size_t grid_width, size_t grid_height,
-                                   float game_scale)
+PlayerController::PlayerController(std::size_t grid_width,
+                                   std::size_t grid_height, float game_scale)
     : ship_(grid_width, grid_height, game_scale),
       ufo_(grid_width, grid_height, game_scale, static_cast<UFO::eUFOSize>(0)) {
 

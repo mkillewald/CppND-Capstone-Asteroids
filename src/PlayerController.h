@@ -8,6 +8,7 @@
 
 #include <SDL.h>
 
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 
@@ -18,7 +19,8 @@ class GameObject;
 class PlayerController {
 public:
   // constructor / destructor
-  PlayerController(size_t grid_width, size_t grid_height, float game_scale);
+  PlayerController(std::size_t grid_width, std::size_t grid_height,
+                   float game_scale);
 
   // getters / setters
   bool alive() const;

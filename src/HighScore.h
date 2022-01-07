@@ -1,7 +1,7 @@
 #ifndef HIGHSCORE_H
 #define HIGHSCORE_H
 
-#include <cstddef>
+#include <cstdint>
 #include <string>
 #include <vector>
 

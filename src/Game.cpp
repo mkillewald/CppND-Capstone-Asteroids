@@ -7,6 +7,7 @@
 
 #include <SDL.h>
 
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 
@@ -18,8 +19,8 @@
 // TODO: satisfy 5 needed items from rubric (multithreadding...)
 
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
-  size_t grid_width = renderer->gridWidth();
-  size_t grid_height = renderer->gridHeight();
+  std::size_t grid_width = renderer->gridWidth();
+  std::size_t grid_height = renderer->gridHeight();
   player1_ =
       std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
   player2_ =

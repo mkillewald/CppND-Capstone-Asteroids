@@ -2,7 +2,7 @@
 #include "Game.h"
 
 #include <algorithm>
-#include <cstddef>
+#include <cstdint>
 #include <fstream>
 #include <sstream>
 #include <string>
