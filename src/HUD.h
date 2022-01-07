@@ -27,8 +27,8 @@ public:
   void updateTableWidth();
 
 private:
-  const uint32_t kFastBlinkTickLimit_{250};
-  const uint32_t kSlowBlinkTickLimit_{500};
+  const std::uint32_t kFastBlinkTickLimit_{250};
+  const std::uint32_t kSlowBlinkTickLimit_{500};
   const std::string kHighScores{"HIGH SCORES"};
   const std::string kPushStart{"PUSH START"};
   const std::string k1Coin1Start{"1 COIN 1 START"};
@@ -58,7 +58,7 @@ private:
   int tagWidth_;
   int maxWidth_;
 
-  uint32_t blinkTicks_;
+  std::uint32_t blinkTicks_;
   bool blink_{false};
 
   void drawP1Score() const;

@@ -33,7 +33,7 @@ public:
   void initTag();
   void readScores();
   void writeScores();
-  bool scoreIsHigh(uint32_t score);
+  bool scoreIsHigh(std::uint32_t score);
   void addEntryToTable(sEntry newEntry);
   void saveEntry();
   void charUp();

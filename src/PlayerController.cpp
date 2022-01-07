@@ -37,11 +37,11 @@ bool PlayerController::switchPlayer() const { return switchPlayer_; }
 void PlayerController::setSwitchPlayer(bool switchPlayer) {
   switchPlayer_ = switchPlayer;
 }
-uint32_t PlayerController::lives() const { return lives_; }
-void PlayerController::setLives(uint32_t lives) { lives_ = lives; }
-uint32_t PlayerController::score() const { return score_; }
-void PlayerController::setScore(uint32_t score) { score_ = score; }
-void PlayerController::addScore(uint32_t score) { score_ += score; }
+std::uint32_t PlayerController::lives() const { return lives_; }
+void PlayerController::setLives(std::uint32_t lives) { lives_ = lives; }
+std::uint32_t PlayerController::score() const { return score_; }
+void PlayerController::setScore(std::uint32_t score) { score_ = score; }
+void PlayerController::addScore(std::uint32_t score) { score_ += score; }
 
 void PlayerController::update() {
   // update opbjects

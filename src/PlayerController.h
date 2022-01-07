@@ -27,8 +27,8 @@ public:
   void setAlive(bool alive);
   bool switchPlayer() const;
   void setSwitchPlayer(bool b);
-  uint32_t lives() const;
-  uint32_t score() const;
+  std::uint32_t lives() const;
+  std::uint32_t score() const;
 
   // behavior methods
   void update();
@@ -53,16 +53,16 @@ private:
   std::vector<PlayerShot> playerShots_;
   std::vector<Asteroid> asteroids_;
   UFO ufo_;
-  uint32_t score_{0};
+  std::uint32_t score_{0};
   bool alive_{false};
   bool switchPlayer_{false};
-  uint32_t lives_{0};
-  uint32_t reloadTicks_{0};
-  uint32_t reloadTickLimit_{100};
+  std::uint32_t lives_{0};
+  std::uint32_t reloadTicks_{0};
+  std::uint32_t reloadTickLimit_{100};
 
-  void setLives(uint32_t lives);
-  void setScore(uint32_t score);
-  void addScore(uint32_t score);
+  void setLives(std::uint32_t lives);
+  void setScore(std::uint32_t score);
+  void addScore(std::uint32_t score);
 };
 
 #endif

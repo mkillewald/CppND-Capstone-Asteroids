@@ -44,7 +44,7 @@ public:
   HighScore *const highScore() const;
   HUD *const hud() const;
   void setRunning(bool running);
-  uint32_t numPlayers() const;
+  std::uint32_t numPlayers() const;
 
   // behavior methods
   void run(InputController *const inputController,
@@ -55,7 +55,7 @@ public:
   bool switchPlayer();
 
 private:
-  const uint32_t kDisplayTickLimit_{2000};
+  const std::uint32_t kDisplayTickLimit_{2000};
 
   std::unique_ptr<HUD> hud_;
   std::unique_ptr<HighScore> highScore_;
@@ -65,9 +65,9 @@ private:
   Renderer *renderer_ = nullptr;
   bool running_ = true;
   eGameState state_ = kAttract_;
-  uint32_t numPlayers_{0};
-  uint32_t credits_{0};
-  uint32_t displayTicks_;
+  std::uint32_t numPlayers_{0};
+  std::uint32_t credits_{0};
+  std::uint32_t displayTicks_;
 
   std::random_device dev_;
   std::mt19937 engine_;

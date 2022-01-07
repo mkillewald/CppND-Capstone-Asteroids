@@ -94,7 +94,7 @@ void HighScore::writeScores() {
   }
 }
 
-bool HighScore::scoreIsHigh(uint32_t score) {
+bool HighScore::scoreIsHigh(std::uint32_t score) {
   if (score <= 0) {
     return false;
   } else if (table_.size() < kMaxSlots_) {

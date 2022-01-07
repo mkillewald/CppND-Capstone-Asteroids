@@ -55,15 +55,15 @@ HUD *const Game::hud() const { return hud_.get(); }
 
 void Game::setRunning(bool running) { running_ = running; }
 
-uint32_t Game::numPlayers() const { return numPlayers_; }
-void Game::setPlayers(uint32_t players) { numPlayers_ = players; }
+std::uint32_t Game::numPlayers() const { return numPlayers_; }
+void Game::setPlayers(std::uint32_t players) { numPlayers_ = players; }
 
 void Game::run(InputController *const inputController,
                std::size_t target_frame_duration) {
-  uint32_t title_timestamp = SDL_GetTicks();
-  uint32_t frame_start;
-  uint32_t frame_end;
-  uint32_t frame_duration;
+  std::uint32_t title_timestamp = SDL_GetTicks();
+  std::uint32_t frame_start;
+  std::uint32_t frame_end;
+  std::uint32_t frame_duration;
   int frame_count = 0;
 
   while (running_) {

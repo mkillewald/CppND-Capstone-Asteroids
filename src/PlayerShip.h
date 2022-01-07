@@ -31,8 +31,8 @@ private:
   bool thrust_{false};
   bool drawThrust_{false};
   int maxShots_{4};
-  uint32_t thrustTicks_;
-  uint32_t thrustTickLimit_{90};
+  std::uint32_t thrustTicks_;
+  std::uint32_t thrustTickLimit_{90};
 
   void init();
   void updatePosition();

@@ -22,8 +22,8 @@ public:
 
 private:
   bool isFired_{false};
-  uint32_t startTicks_;
-  uint32_t tickLimit_{600};
+  std::uint32_t startTicks_;
+  std::uint32_t tickLimit_{600};
 
   void updatePosition();
   void drawObject(Renderer *const renderer) const;
