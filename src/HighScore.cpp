@@ -122,6 +122,10 @@ void HighScore::addEntryToTable(sEntry newEntry) {
 }
 
 void HighScore::saveEntry() {
+  // TODO: if 2 player game and both players get high scores, add checks to see
+  // if either player's score would negate the other players high score entry.
+  // If so, do not give that player a chance to enter score, since it would
+  // immediately be wiped out anyway.
   addEntryToTable(
       sEntry{std::to_string(game_->currentPlayer()->score()), tag()});
   writeScores();

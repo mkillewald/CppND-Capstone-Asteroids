@@ -10,6 +10,12 @@
 #include <cstdint>
 #include <memory>
 
+// TODO: fix  player shot logic
+// TODO: asteroid splitting, scoring and wave logic
+// TODO: ufo logic (shooting, change direction) and scoring
+// TODO: add game sounds
+// TODO: satisfy 5 needed items from ruberic (multithreadding...)
+
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
   size_t grid_width = renderer->gridWidth();
   size_t grid_height = renderer->gridHeight();
