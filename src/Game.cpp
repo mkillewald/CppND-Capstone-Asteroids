@@ -13,6 +13,7 @@
 // TODO: fix  player shot logic
 // TODO: asteroid splitting, scoring and wave logic
 // TODO: ufo logic (shooting, change direction) and scoring
+// TODO: add object explosions
 // TODO: add game sounds
 // TODO: satisfy 5 needed items from ruberic (multithreadding...)
 
