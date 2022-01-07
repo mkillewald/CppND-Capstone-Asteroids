@@ -44,7 +44,6 @@ private:
   Renderer *const renderer_ = nullptr;
   PlayerController *const player1_ = nullptr;
   PlayerController *const player2_ = nullptr;
-  HighScore *const highScore_ = nullptr;
   SDL_Color hudColor;
   FC_Font *small_ = nullptr;
   FC_Font *medium_ = nullptr;

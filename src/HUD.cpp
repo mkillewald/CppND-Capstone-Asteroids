@@ -12,7 +12,7 @@
 
 HUD::HUD(Game *const game, Renderer *const renderer)
     : game_(game), player1_(game->player1()), player2_(game->player2()),
-      highScore_(game->highScore()), renderer_(renderer) {
+      renderer_(renderer) {
 
   centerX_ = renderer_->gridWidth() / 2;
   centerY_ = renderer_->gridHeight() / 2;
@@ -183,7 +183,7 @@ void HUD::drawP2Lives() const {
 
 void HUD::drawHiScore() const {
   FC_DrawAlign(small_, renderer_->sdlRenderer(), centerX_, 15, FC_ALIGN_CENTER,
-               highScore_->highScore().c_str());
+               game_->highScore()->topScore().c_str());
 }
 
 void HUD::drawPushStart() const {
@@ -198,32 +198,32 @@ void HUD::drawMessageCenterX(float y, const char *message) const {
                message);
 }
 
-// TODO: need to call this anytime the high score table updates
+// need to call this anytime the high score table updates
 void HUD::updateTableWidth() {
   spaceWidth_ = FC_GetWidth(medium_, " ");
-  slotWidth_ = FC_GetWidth(medium_, highScore_->tableSlots().c_str());
-  scoreWidth_ = FC_GetWidth(medium_, highScore_->tableScores().c_str());
-  tagWidth_ = FC_GetWidth(medium_, highScore_->tableTags().c_str());
+  slotWidth_ = FC_GetWidth(medium_, game_->highScore()->tableSlots().c_str());
+  scoreWidth_ = FC_GetWidth(medium_, game_->highScore()->tableScores().c_str());
+  tagWidth_ = FC_GetWidth(medium_, game_->highScore()->tableTags().c_str());
   maxWidth_ = slotWidth_ + scoreWidth_ + tagWidth_ + spaceWidth_ * 2;
   tableX_ = centerX_ - maxWidth_ / 2 + slotWidth_;
   tableY_ = 205;
 }
 
 void HUD::drawHiScoreTable() const {
-  if (highScore_->highScore() == "00") {
+  if (game_->highScore()->topScore() == "00") {
     return;
   }
 
   FC_DrawAlign(medium_, renderer_->sdlRenderer(), centerX_, 150,
                FC_ALIGN_CENTER, kHighScores.c_str());
   FC_DrawAlign(medium_, renderer_->sdlRenderer(), tableX_, tableY_,
-               FC_ALIGN_RIGHT, highScore_->tableSlots().c_str());
+               FC_ALIGN_RIGHT, game_->highScore()->tableSlots().c_str());
   FC_DrawAlign(medium_, renderer_->sdlRenderer(),
                tableX_ + spaceWidth_ + scoreWidth_, tableY_, FC_ALIGN_RIGHT,
-               highScore_->tableScores().c_str());
+               game_->highScore()->tableScores().c_str());
   FC_DrawAlign(medium_, renderer_->sdlRenderer(),
                tableX_ + scoreWidth_ + 2 * spaceWidth_, tableY_, FC_ALIGN_LEFT,
-               highScore_->tableTags().c_str());
+               game_->highScore()->tableTags().c_str());
 }
 
 void HUD::draw1Coin1Start() const {
@@ -235,5 +235,5 @@ void HUD::drawScoreEntry() const {
   FC_Draw(medium_, renderer_->sdlRenderer(), 100, 200, kHiScoreEntry.c_str());
 
   FC_DrawAlign(large_, renderer_->sdlRenderer(), centerX_, 600, FC_ALIGN_CENTER,
-               highScore_->tag().c_str());
+               game_->highScore()->tag().c_str());
 }

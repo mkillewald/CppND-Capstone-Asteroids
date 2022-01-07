@@ -39,8 +39,10 @@ public:
   PlayerController *const player1() const;
   PlayerController *const player2() const;
   HighScore *const highScore() const;
+  HUD *const hud() const;
   void setRunning(bool running);
   uint32_t numPlayers() const;
+  void setState(eGameState state);
 
   // behavior methods
   void run(InputController *const inputController,
@@ -72,7 +74,6 @@ private:
   std::uniform_int_distribution<int> random_type_;
 
   void setPlayers(unsigned int players);
-  void setState(eGameState state);
 
   void input(InputController *const inputController);
   void update();

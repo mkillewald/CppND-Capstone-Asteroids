@@ -1,23 +1,26 @@
 #include "HighScore.h"
+#include "Game.h"
 
+#include <algorithm>
+#include <cstddef>
 #include <fstream>
 #include <sstream>
 #include <string>
 
-// TODO: update talbe and high score
-
-HighScore::HighScore() {
+HighScore::HighScore(Game *const game) : game_(game) {
   readScores();
   initTag();
 }
 
+void HighScore::setScoreIn(uint32_t score) { scoreIn_ = score; }
+
 std::string HighScore::tag() const { return tag_; }
 
 void HighScore::setTag() {
-  tag_.replace(tagIndex_, 1, chars_.substr(charIndex_, 1));
+  tag_.replace(tagIndex_, 1, kChars_.substr(charIndex_, 1));
 }
 
-std::string HighScore::highScore() const { return table_[0].score_; }
+std::string HighScore::topScore() const { return table_[0].score_; }
 
 std::string HighScore::tableSlots() const {
   if (table_[0].score_ == "00") {
@@ -66,7 +69,7 @@ void HighScore::readScores() {
   if (filestream.is_open()) {
     int slot = 0;
     std::string line, score, tag;
-    while (std::getline(filestream, line) && slot < maxSlots_) {
+    while (std::getline(filestream, line) && slot < kMaxSlots_) {
       std::istringstream linestream(line);
       linestream >> score >> tag;
       table_.emplace_back(sEntry{score, tag});
@@ -76,6 +79,39 @@ void HighScore::readScores() {
     // file could not be opened or does not exist
     table_.emplace_back(sEntry{"00", ""});
   }
+}
+
+bool HighScore::scoreIsHigh(uint32_t score) {
+  if (score <= 0) {
+    setScoreIn(0);
+    return false;
+  } else if (table_.size() < kMaxSlots_) {
+    setScoreIn(score);
+    return true;
+  } else if (score > stoul(table_.back().score_)) {
+    setScoreIn(score);
+    return true;
+  } else {
+    setScoreIn(0);
+    return false;
+  }
+}
+
+void HighScore::addEntry(sEntry newEntry) {
+  if (table_.size() > 0 &&
+      (table_[0].score_ == "00" || table_.size() == kMaxSlots_)) {
+    table_.pop_back();
+  }
+
+  table_.emplace_back(newEntry);
+
+  if (table_.size() > 1) {
+    std::sort(table_.begin(), table_.end(), [](sEntry &a, sEntry &b) {
+      return stoul(a.score_) > stoul(b.score_);
+    });
+  }
+
+  saveScores();
 }
 
 void HighScore::saveScores() {
@@ -89,7 +125,7 @@ void HighScore::saveScores() {
 }
 
 void HighScore::charUp() {
-  if (charIndex_ == chars_.size() - 1) {
+  if (charIndex_ == kChars_.size() - 1) {
     charIndex_ = 0;
   } else {
     charIndex_++;
@@ -99,7 +135,7 @@ void HighScore::charUp() {
 
 void HighScore::charDown() {
   if (charIndex_ == 0) {
-    charIndex_ = chars_.size() - 1;
+    charIndex_ = kChars_.size() - 1;
   } else {
     charIndex_--;
   }
@@ -108,10 +144,13 @@ void HighScore::charDown() {
 
 void HighScore::charSelect() {
   if (tagIndex_ == 2) {
-    // TODO: save entry
+    setTag();
+    addEntry(sEntry{std::to_string(scoreIn_), tag_});
+    game_->hud()->updateTableWidth();
+    game_->setState(Game::kAttract_);
   } else {
     charIndex_ = 0;
     tagIndex_++;
+    setTag();
   }
-  setTag();
 }

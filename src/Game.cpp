@@ -18,7 +18,7 @@ Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
   player2_ =
       std::make_unique<PlayerController>(grid_width, grid_height, game_scale);
   currentPlayer_ = player1_.get();
-  highScore_ = std::make_unique<HighScore>();
+  highScore_ = std::make_unique<HighScore>(this);
   hud_ = std::make_unique<HUD>(this, renderer);
   numPlayers_ = 0;
 
@@ -39,6 +39,7 @@ void Game::setState(eGameState state) { state_ = state; }
 PlayerController *const Game::player1() const { return player1_.get(); }
 PlayerController *const Game::player2() const { return player2_.get(); }
 HighScore *const Game::highScore() const { return highScore_.get(); }
+HUD *const Game::hud() const { return hud_.get(); }
 
 void Game::setRunning(bool running) { running_ = running; }
 
@@ -191,18 +192,22 @@ void Game::update() {
     }
     break;
   case kGameOver_:
-    // TODO: if high score for player1 or player2, jump to kHighScoreEntry
     if (SDL_GetTicks() - displayTicks_ >= kDisplayTickLimit_) {
       if (numPlayers() > 1 && currentPlayer_->switchPlayer()) {
         // 2 player game, switch player
         if (!switchPlayer()) {
           // player could not be switched
           currentPlayer_->setSwitchPlayer(false);
+          // TODO: if high score for player1 or player2, jump to kHighScoreEntry
           setState(kAttract_);
         }
       } else {
         // 1 player game
-        setState(kAttract_);
+        if (highScore_->scoreIsHigh(currentPlayer_->score())) {
+          setState(kHighScoreEntry_);
+        } else {
+          setState(kAttract_);
+        }
       }
     }
     break;
