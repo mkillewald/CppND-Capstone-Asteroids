@@ -11,8 +11,7 @@ public:
   void attract(Game *game) const;
   void ready(Game *game) const;
   void play(Game *game, PlayerController *player) const;
-  void highScore(Game *game, HighScore *highScore,
-                 PlayerController *player) const;
+  void highScore(Game *game, HighScore *highScore) const;
 
 private:
 };

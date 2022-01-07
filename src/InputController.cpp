@@ -105,9 +105,7 @@ void InputController::play(Game *game, PlayerController *player) const {
   }
 }
 
-// TODO: PlayerController is not yet used
-void InputController::highScore(Game *game, HighScore *highScore,
-                                PlayerController *player) const {
+void InputController::highScore(Game *game, HighScore *highScore) const {
   SDL_Event e;
 
   // single hit keys, and other SDL events
