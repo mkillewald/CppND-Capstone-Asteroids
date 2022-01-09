@@ -11,7 +11,6 @@
 #include <cstdint>
 #include <memory>
 
-// TODO: fix  player shot logic
 // TODO: asteroid splitting, scoring and wave logic
 // TODO: ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions
