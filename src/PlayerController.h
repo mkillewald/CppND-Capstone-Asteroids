@@ -56,6 +56,7 @@ private:
   std::uint32_t score_{0};
   bool alive_{false};
   bool switchPlayer_{false};
+  bool gunCharging_{false};
   std::uint32_t lives_{0};
   std::uint32_t reloadTicks_{0};
   std::uint32_t reloadTickLimit_{100};
@@ -63,6 +64,9 @@ private:
   void setLives(std::uint32_t lives);
   void setScore(std::uint32_t score);
   void addScore(std::uint32_t score);
+  bool gunCharging() const;
+  void setGunCharging(bool gunCharging);
+  bool gunReloading() const;
 };
 
 #endif

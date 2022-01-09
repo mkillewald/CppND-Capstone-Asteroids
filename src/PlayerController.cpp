@@ -43,6 +43,15 @@ std::uint32_t PlayerController::score() const { return score_; }
 void PlayerController::setScore(std::uint32_t score) { score_ = score; }
 void PlayerController::addScore(std::uint32_t score) { score_ += score; }
 
+bool PlayerController::gunCharging() const { return gunCharging_; }
+void PlayerController::setGunCharging(bool gunCharging) {
+  gunCharging_ = gunCharging;
+}
+
+bool PlayerController::gunReloading() const {
+  return SDL_GetTicks() - reloadTicks_ < reloadTickLimit_;
+}
+
 void PlayerController::update() {
   // update opbjects
   if (!ship_.destroyed()) {
@@ -59,6 +68,11 @@ void PlayerController::update() {
     if (!asteroid.destroyed()) {
       asteroid.update();
     }
+  }
+
+  // recharge gun if needed
+  if (gunCharging() && !playerShots_[playerShots_.size() - 1].isFired()) {
+    setGunCharging(false);
   }
 
   if (!ufo_.destroyed()) {
@@ -206,13 +220,16 @@ void PlayerController::thrustOn() {
 void PlayerController::thrustOff() { ship_.setThrust(false); }
 
 void PlayerController::fire() {
-  if (!alive() || SDL_GetTicks() - reloadTicks_ < reloadTickLimit_) {
+  if (!alive() || gunCharging() || gunReloading()) {
     return;
   }
 
-  for (auto &shot : playerShots_) {
-    if (!shot.isFired()) {
-      shot.fire(ship_.nose(), ship_.getVelocity(), ship_.angle());
+  for (int i = 0; i < playerShots_.size(); i++) {
+    if (!playerShots_[i].isFired()) {
+      playerShots_[i].fire(ship_.nose(), ship_.getVelocity(), ship_.angle());
+      if (i == playerShots_.size() - 1) {
+        setGunCharging(true);
+      }
       reloadTicks_ = SDL_GetTicks();
       return;
     }
