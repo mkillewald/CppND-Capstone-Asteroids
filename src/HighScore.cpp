@@ -27,6 +27,8 @@ void HighScore::setTopScore(std::uint32_t score) { topScore_ = score; }
 void HighScore::initTopScore() {
   if (!table_[0].score_.empty()) {
     topScore_ = stoul(table_[0].score_);
+  } else {
+    topScore_ = 0;
   }
 }
 
