@@ -24,7 +24,7 @@ void HighScore::setTag() {
 std::uint32_t HighScore::topScore() const { return topScore_; }
 void HighScore::setTopScore(std::uint32_t score) { topScore_ = score; }
 
-void HighScore::updateTopScore() {
+void HighScore::initTopScore() {
   if (!table_[0].score_.empty()) {
     topScore_ = stoul(table_[0].score_);
   }
@@ -88,7 +88,7 @@ void HighScore::readScores() {
     table_.emplace_back(sEntry{"0", ""});
   }
 
-  updateTopScore();
+  initTopScore();
 }
 
 void HighScore::writeScores() {
@@ -127,7 +127,7 @@ void HighScore::addEntryToTable(sEntry newEntry) {
     });
   }
 
-  updateTopScore();
+  initTopScore();
 }
 
 void HighScore::saveEntry() {

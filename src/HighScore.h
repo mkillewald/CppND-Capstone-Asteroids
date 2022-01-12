@@ -56,7 +56,7 @@ private:
   std::vector<sEntry> table_;
   std::uint32_t topScore_;
 
-  void updateTopScore();
+  void initTopScore();
 };
 
 #endif
