@@ -8,6 +8,7 @@
 #include <string>
 
 // TODO: save most recent p1 and p2 score
+// TODO: update high score during game play
 
 HighScore::HighScore(Game *const game) : game_(game) {
   readScores();

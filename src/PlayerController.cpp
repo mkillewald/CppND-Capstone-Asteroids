@@ -52,6 +52,18 @@ bool PlayerController::gunReloading() const {
   return SDL_GetTicks() - reloadTicks_ < reloadTickLimit_;
 }
 
+// TODO: create AsteroidController for this?
+void PlayerController::splitAsteroid(Asteroid &asteroid) {
+  // This is a very basic implementation and not based on original game at this
+  // point.
+  // TODO: I need to study what the original game actually does when
+  // splitting asteroids.
+  asteroids_.emplace_back(asteroid);           // add a copy into list
+  asteroid.incVelocity(sVector2f{1.25, 1.75}); // change original
+  asteroids_.back().incVelocity(
+      sVector2f{1.75, 1.25}); // change copy at back of list
+}
+
 void PlayerController::update() {
   // update opbjects
   if (!ship_.destroyed()) {
@@ -84,45 +96,50 @@ void PlayerController::update() {
     if (!asteroid.destroyed()) {
       if (!ship_.destroyed() && asteroid.collide(ship_)) {
         // 1. check ship vs asteroid collisons
-        asteroid.setDestroyed(true);
-        // TODO: split asteroid
-        // TODO: add score for asteroid
+        addScore(asteroid.getScore());
+        // TODO: explode asteroid and ship
+        asteroid.hit();
+        splitAsteroid(asteroid);
         die();
       } else if (!ufo_.destroyed() && asteroid.collide(ufo_)) {
         // 2. check ufo vs asteroid collision
-        asteroid.setDestroyed(true);
-        // TODO:  split asteroid
+        // TODO: explode asteroid and UFO
+        asteroid.hit();
+        splitAsteroid(asteroid);
         ufo_.setDestroyed(true);
       } else {
         for (auto &shot : playerShots_) {
           // 3. check player shot vs asteroid collisions
           if (shot.isFired() && asteroid.collide(shot)) {
             shot.setIsFired(false);
-            asteroid.setDestroyed(true);
-            // TODO: split asteroid
-            // TODO: do actual scoring
-            addScore(10);
+            addScore(asteroid.getScore());
+            // TODO: explode asteroid
+            asteroid.hit();
+            splitAsteroid(asteroid);
           }
+          // 4. TODO: check ufo shot vs asteroid collisions
         }
       }
     }
   }
 
-  // TODO: 4. check ship vs ufo shot collisions
+  // 5. TODO: check ship vs ufo shot collisions
 
   if (!ufo_.destroyed()) {
-    // 5. check ship vs ufo collisions
+    // 6. check ship vs ufo collisions
     if (!ship_.destroyed() && !ufo_.destroyed() && ufo_.collide(ship_)) {
+      addScore(ufo_.getScore());
+      // TODO: explode ship and ufo
       ufo_.setDestroyed(true);
-      // TODO: add score for UFO
       die();
     } else {
       for (auto &shot : playerShots_) {
-        // 6. check player shot vs ufo collisions
+        // 7. check player shot vs ufo collisions
         if (shot.isFired() && !ufo_.destroyed() && ufo_.collide(shot)) {
           shot.setIsFired(false);
+          addScore(ufo_.getScore());
+          // TODO: explode UFO
           ufo_.setDestroyed(true);
-          // TODO: add score for UFO
         }
       }
     }

@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 #include <cstddef>
+#include <cstdint>
 
 // forward declaration to avoid include cycle
 class Renderer;
@@ -26,6 +27,7 @@ public:
   // getters / setters
 
   // typical behaviour methods
+  std::uint32_t getScore() const;
 
 private:
   eUFOSize size_ = kSluggo_;

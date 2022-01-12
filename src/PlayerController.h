@@ -67,6 +67,7 @@ private:
   bool gunCharging() const;
   void setGunCharging(bool gunCharging);
   bool gunReloading() const;
+  void splitAsteroid(Asteroid &asteroid);
 };
 
 #endif

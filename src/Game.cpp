@@ -11,11 +11,12 @@
 #include <cstdint>
 #include <memory>
 
-// TODO: asteroid splitting, scoring and wave logic
+// TODO: asteroid splitting and wave logic
 // TODO: ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions
 // TODO: add game sounds
-// TODO: satisfy 5 needed items from rubric (multithreadding...)
+// TODO: satisfy 5 needed items from rubric (multithreadding...)\
+// TODO: redudce use of "magic" numbers
 
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
   std::size_t grid_width = renderer->gridWidth();

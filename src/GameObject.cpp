@@ -53,6 +53,11 @@ sVector2f &GameObject::velocity() { return velocity_; }
 sVector2f GameObject::getVelocity() const { return velocity_; }
 void GameObject::setVelocity(sVector2f velocity) { velocity_ = velocity; }
 
+void GameObject::incVelocity(sVector2f velocity) {
+  velocity_.x *= velocity.x;
+  velocity_.y *= velocity.y;
+}
+
 sVector2f &GameObject::acceleration() { return acceleration_; }
 void GameObject::setAcceleration(sVector2f acceleration) {
   acceleration_ = acceleration;

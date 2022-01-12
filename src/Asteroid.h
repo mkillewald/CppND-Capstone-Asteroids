@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 #include <cstddef>
+#include <cstdint>
 #include <random>
 
 class Asteroid : public GameObject {
@@ -16,8 +17,10 @@ public:
            int type);
 
   // getters / setters
+  std::uint32_t getScore() const;
 
-  // typical behaviour methods
+  // behaviour methods
+  void hit();
 
 private:
   const int type_;

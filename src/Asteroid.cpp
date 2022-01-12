@@ -162,3 +162,40 @@ void Asteroid::initType4() {
   // class.
   setAtOrigin(std::move(atOrigin));
 }
+
+std::uint32_t Asteroid::getScore() const {
+  switch (size_) {
+  case kLarge_:
+    return 20;
+    break;
+  case kMedium_:
+    return 50;
+    break;
+  case kSmall_:
+    return 100;
+    break;
+  default:
+    return 0;
+    break;
+  }
+}
+
+void Asteroid::hit() {
+  // TODO: explode asteroid
+  switch (size_) {
+  case (kLarge_):
+    size_ = kMedium_;
+    setScale(scale() * 0.65);
+    setRadius(80.0f * scale());
+    break;
+  case (kMedium_):
+    size_ = kSmall_;
+    setScale(scale() * 0.55);
+    setRadius(80.0f * scale());
+    break;
+  case (kSmall_):
+    setDestroyed(true);
+    return;
+    break;
+  }
+}

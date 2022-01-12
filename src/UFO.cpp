@@ -48,6 +48,20 @@ void UFO::init() {
   setAtOrigin(std::move(atOrigin));
 }
 
+std::uint32_t UFO::getScore() const {
+  switch (size_) {
+  case kSluggo_:
+    return 200;
+    break;
+  case kMrBill_:
+    return 1000;
+    break;
+  default:
+    return 0;
+    break;
+  }
+}
+
 void UFO::drawObject(Renderer *const renderer) const {
   // draw outline of ufo using base class drawObject() method
   GameObject::drawObject(renderer);

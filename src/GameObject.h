@@ -50,6 +50,7 @@ public:
   void update();
   bool collide(GameObject const &b) const;
   void draw(Renderer *const renderer) const;
+  void incVelocity(sVector2f velocity);
 
   // TODO: should move this to private with public getters/setters ??
 protected:
