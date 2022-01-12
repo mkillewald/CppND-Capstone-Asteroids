@@ -24,7 +24,8 @@ public:
   void setP2High(bool high);
   std::string tag() const;
   void setTag();
-  std::string topScore() const;
+  std::uint32_t topScore() const;
+  void setTopScore(std::uint32_t score);
   std::string tableSlots() const;
   std::string tableScores() const;
   std::string tableTags() const;
@@ -53,6 +54,9 @@ private:
   int tagIndex_{0};
   std::string tag_{"A__"};
   std::vector<sEntry> table_;
+  std::uint32_t topScore_;
+
+  void updateTopScore();
 };
 
 #endif

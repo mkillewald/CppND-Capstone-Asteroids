@@ -171,8 +171,6 @@ void HUD::draw() const {
   }
 }
 
-// TODO: adjust positioning of score and lives
-
 void HUD::drawP1Score() const {
   std::string score;
   if (player1_->score() == 0) {
@@ -203,8 +201,14 @@ void HUD::drawP2Lives() const {
 }
 
 void HUD::drawHiScore() const {
+  std::string hiScore;
+  if (game_->highScore()->topScore() == 0) {
+    hiScore == "00";
+  } else {
+    hiScore = std::to_string(game_->highScore()->topScore());
+  }
   FC_DrawAlign(small_, renderer_->sdlRenderer(), centerX_, 15, FC_ALIGN_CENTER,
-               game_->highScore()->topScore().c_str());
+               hiScore.c_str());
 }
 
 void HUD::drawPushStart() const {
@@ -231,7 +235,7 @@ void HUD::updateTableWidth() {
 }
 
 void HUD::drawHiScoreTable() const {
-  if (game_->highScore()->topScore() == "00") {
+  if (game_->highScore()->topScore() == 0) {
     return;
   }
 

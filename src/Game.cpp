@@ -11,11 +11,12 @@
 #include <cstdint>
 #include <memory>
 
-// TODO: asteroid splitting and wave logic
+// TODO: do hyperspace!
+// TODO: asteroid wave logic
 // TODO: ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions
 // TODO: add game sounds
-// TODO: satisfy 5 needed items from rubric (multithreadding...)\
+// TODO: satisfy 5 needed items from rubric (multithreadding...)
 // TODO: redudce use of "magic" numbers
 
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
@@ -180,6 +181,10 @@ void Game::update() {
     }
     break;
   case kPlay_:
+    if (currentPlayer_->score() > highScore_->topScore()) {
+      highScore_->setTopScore(currentPlayer_->score());
+    }
+
     if (numPlayers() > 1 && currentPlayer_->switchPlayer()) {
       // 2 player game, switch player
       if (currentPlayer_->lives() > 0) {

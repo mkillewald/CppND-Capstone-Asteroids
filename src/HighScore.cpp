@@ -7,9 +7,6 @@
 #include <sstream>
 #include <string>
 
-// TODO: save most recent p1 and p2 score
-// TODO: update high score during game play
-
 HighScore::HighScore(Game *const game) : game_(game) {
   readScores();
   initTag();
@@ -24,7 +21,14 @@ void HighScore::setTag() {
   tag_.replace(tagIndex_, 1, kChars_.substr(charIndex_, 1));
 }
 
-std::string HighScore::topScore() const { return table_[0].score_; }
+std::uint32_t HighScore::topScore() const { return topScore_; }
+void HighScore::setTopScore(std::uint32_t score) { topScore_ = score; }
+
+void HighScore::updateTopScore() {
+  if (!table_[0].score_.empty()) {
+    topScore_ = stoul(table_[0].score_);
+  }
+}
 
 std::string HighScore::tableSlots() const {
   if (table_[0].score_ == "00") {
@@ -81,8 +85,10 @@ void HighScore::readScores() {
     filestream.close();
   } else {
     // file could not be opened or does not exist
-    table_.emplace_back(sEntry{"00", ""});
+    table_.emplace_back(sEntry{"0", ""});
   }
+
+  updateTopScore();
 }
 
 void HighScore::writeScores() {
@@ -120,6 +126,8 @@ void HighScore::addEntryToTable(sEntry newEntry) {
       return stoul(a.score_) > stoul(b.score_);
     });
   }
+
+  updateTopScore();
 }
 
 void HighScore::saveEntry() {

@@ -52,12 +52,11 @@ bool PlayerController::gunReloading() const {
   return SDL_GetTicks() - reloadTicks_ < reloadTickLimit_;
 }
 
-// TODO: create AsteroidController for this?
 void PlayerController::splitAsteroid(Asteroid &asteroid) {
   // This is a very basic implementation and not based on original game at this
   // point.
   // TODO: I need to study what the original game actually does when
-  // splitting asteroids.
+  // splitting asteroids (how velocities and trajectories are affected).
   asteroids_.emplace_back(asteroid);           // add a copy into list
   asteroid.incVelocity(sVector2f{1.25, 1.75}); // change original
   asteroids_.back().incVelocity(
