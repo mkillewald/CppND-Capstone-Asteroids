@@ -114,8 +114,6 @@ void HUD::draw() const {
     drawP1Lives();
     drawHiScore();
     drawMessageCenterX(150, kPlayer1.c_str());
-
-    // TODO: if not start of game, show asteroid field
     break;
   case Game::kReadyPlayer2_:
     drawP1Score();
@@ -126,8 +124,6 @@ void HUD::draw() const {
     }
     drawP2Lives();
     drawMessageCenterX(150, kPlayer2.c_str());
-
-    // TODO: if not start of game, show asteroid field
     break;
   case Game::kPlay_:
     // run game

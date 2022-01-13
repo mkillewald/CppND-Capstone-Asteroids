@@ -15,6 +15,7 @@
 // forward declaration to avoid include cycle
 class Renderer;
 class GameObject;
+class Game;
 
 class PlayerController {
 public:
@@ -49,10 +50,19 @@ public:
   void hyperspace();
 
 private:
+  const std::size_t grid_width_;
+  const std::size_t grid_height_;
+  const float game_scale_;
+
+  const int kMinAsteroids_{4};
+  const int kMaxAsteroids_{12};
+
+  // Game *const game_;
   PlayerShip ship_;
   std::vector<PlayerShot> playerShots_;
-  std::vector<Asteroid> asteroids_;
+  std::vector<Asteroid> asteroids_{};
   UFO ufo_;
+  std::uint32_t wave_{0};
   std::uint32_t score_{0};
   bool alive_{false};
   bool switchPlayer_{false};
@@ -62,12 +72,14 @@ private:
   std::uint32_t reloadTickLimit_{100};
 
   void setLives(std::uint32_t lives);
+  void setWave(std::uint32_t wave);
   void setScore(std::uint32_t score);
   void addScore(std::uint32_t score);
   bool gunCharging() const;
   void setGunCharging(bool gunCharging);
   bool gunReloading() const;
   void splitAsteroid(Asteroid &asteroid);
+  void initAsteroidWave();
 };
 
 #endif

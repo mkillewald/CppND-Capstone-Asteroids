@@ -9,10 +9,11 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <iostream>
 #include <memory>
+#include <random>
 
 // TODO: do hyperspace!
-// TODO: asteroid wave logic
 // TODO: ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions
 // TODO: add game sounds
@@ -30,17 +31,7 @@ Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {
   highScore_ = std::make_unique<HighScore>(this);
   hud_ = std::make_unique<HUD>(this, renderer);
   numPlayers_ = 0;
-
-  std::mt19937 engine_(dev_());
-  std::uniform_int_distribution<int> random_w_(0, static_cast<int>(grid_width));
-  std::uniform_int_distribution<int> random_h_(0,
-                                               static_cast<int>(grid_height));
-  std::uniform_int_distribution<int> random_type_(0, 3);
 }
-
-int Game::random_w() { return random_w_(engine_); }
-int Game::random_h() { return random_w_(engine_); }
-int Game::random_type() { return random_type_(engine_); }
 
 Game::eGameState Game::state() const { return state_; }
 void Game::setState(eGameState state) { state_ = state; }

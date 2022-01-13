@@ -13,8 +13,7 @@ public:
   enum eAsteroidSize { kLarge_, kMedium_, kSmall_ };
 
   // constructor / destructor
-  Asteroid(std::size_t grid_width, std::size_t grid_height, float game_scale,
-           int type);
+  Asteroid(std::size_t grid_width, std::size_t grid_height, float game_scale);
 
   // getters / setters
   std::uint32_t getScore() const;
@@ -23,11 +22,15 @@ public:
   void hit();
 
 private:
+  const float kRadius_{80.0f};
+  const float kLargeScale_{2.0f};
+  const float kMediumScale_{1.3f};
+  const float kSmallScale_{0.7f};
   const int type_;
-  eAsteroidSize size_ = kLarge_;
-  std::uniform_int_distribution<int> random_type_;
 
-  void init();
+  eAsteroidSize size_ = kLarge_;
+
+  void initPoints();
   void initType1();
   void initType2();
   void initType3();

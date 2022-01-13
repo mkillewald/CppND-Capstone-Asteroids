@@ -1,40 +1,40 @@
 #include "Asteroid.h"
-#include "Game.h"
+#include "Random.h"
 
 #include <cstddef>
 
 Asteroid::Asteroid(const std::size_t grid_width, const std::size_t grid_height,
-                   float game_scale, int type)
-    : GameObject(grid_width, grid_height, game_scale), type_(type) {
+                   float game_scale)
+    : GameObject(grid_width, grid_height, game_scale),
+      type_(Random::randomInt(0, 3)) {
   setColorRGBA(0xFF, 0xFF, 0xFF, 0x99);
-  init();
-}
-
-void Asteroid::init() {
   setAcceleration({0.0f, 0.0f});
   setMaxVelocity(15.0f);
   setAngle(0.0f);
-  setScale(2.0f * gameScale());
+  setScale(kLargeScale_ * gameScale());
+  setRadius(kRadius_ * scale());
 
+  // TODO: make sure to spawn outside "circle of safety"
+  setPosition({Random::randomFloat(0.0f, grid_width),
+               Random::randomFloat(0.0f, grid_height)});
+
+  setVelocity({Random::randomSign() * Random::randomFloat(0.3, 1.0),
+               Random::randomSign() * Random::randomFloat(0.3, 1.0)});
+  initPoints();
+}
+
+void Asteroid::initPoints() {
   switch (type_) {
   case kType1_:
-    setPosition({100.0f, 100.0f});
-    setVelocity({0.4f, 0.7f});
     initType1();
     break;
   case kType2_:
-    setPosition({gridWidth() - 100.0f, 100.0f});
-    setVelocity({-0.8f, 0.6f});
     initType2();
     break;
   case kType3_:
-    setPosition({gridWidth() - 100.0f, gridHeight() - 100.0f});
-    setVelocity({-0.2f, -0.9f});
     initType3();
     break;
   case kType4_:
-    setPosition({100.0f, gridHeight() - 100.0f});
-    setVelocity({0.9, -0.4});
     initType4();
     break;
   }
@@ -43,14 +43,12 @@ void Asteroid::init() {
 }
 
 void Asteroid::initType1() {
-  setRadius(80.0f * scale());
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches
   // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids
 
-  // asteroid type 1 at origin 160 X 160 (medium)
-  // use scale 0.5 for small and 2.0 for large
+  // asteroid type 1 at origin 160 X 160
   atOrigin.emplace_back(SDL_Point{-40, -80}); // 0
   atOrigin.emplace_back(SDL_Point{0, -40});   // 1
   atOrigin.emplace_back(SDL_Point{40, -80});  // 2
@@ -72,14 +70,12 @@ void Asteroid::initType1() {
 }
 
 void Asteroid::initType2() {
-  setRadius(80.0f * scale());
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches
   // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids
 
-  // asteroid type 2 at origin 160 X 160 (medium)
-  // use scale 0.5 for small and 2.0 for large
+  // asteroid type 2 at origin 160 X 160
   atOrigin.emplace_back(SDL_Point{-40, -80}); // 0
   atOrigin.emplace_back(SDL_Point{0, -60});   // 1
   atOrigin.emplace_back(SDL_Point{40, -80});  // 2
@@ -103,14 +99,12 @@ void Asteroid::initType2() {
 }
 
 void Asteroid::initType3() {
-  setRadius(80.0f * scale());
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches
   // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids
 
-  // asteroid type 3 at origin 160 X 160 (medium)
-  // use scale 0.5 for small and 2.0 for large
+  // asteroid type 3 at origin 160 X 160
   atOrigin.emplace_back(SDL_Point{-20, -80}); // 0
   atOrigin.emplace_back(SDL_Point{40, -80});  // 1
   atOrigin.emplace_back(SDL_Point{80, -20});  // 2
@@ -133,14 +127,12 @@ void Asteroid::initType3() {
 }
 
 void Asteroid::initType4() {
-  setRadius(80.0f * scale());
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches
   // https://sudonull.com/post/8376-How-to-create-a-vector-arcade-machine-Atari-Asteroids
 
-  // asteroid type 4 at origin 160 X 160 (medium)
-  // use scale 0.5 for small and 2.0 for large
+  // asteroid type 4 at origin 160 X 160
   atOrigin.emplace_back(SDL_Point{-40, -80}); // 0
   atOrigin.emplace_back(SDL_Point{20, -80});  // 1
   atOrigin.emplace_back(SDL_Point{80, -40});  // 2
@@ -185,13 +177,13 @@ void Asteroid::hit() {
   switch (size_) {
   case (kLarge_):
     size_ = kMedium_;
-    setScale(scale() * 0.65);
-    setRadius(80.0f * scale());
+    setScale(kMediumScale_ * gameScale());
+    setRadius(kRadius_ * scale());
     break;
   case (kMedium_):
     size_ = kSmall_;
-    setScale(scale() * 0.55);
-    setRadius(80.0f * scale());
+    setScale(kSmallScale_ * gameScale());
+    setRadius(kRadius_ * scale());
     break;
   case (kSmall_):
     setDestroyed(true);

@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "Asteroid.h"
+#include "Game.h"
 #include "GameObject.h"
 #include "PlayerShip.h"
 #include "UFO.h"
@@ -11,24 +12,14 @@
 
 PlayerController::PlayerController(std::size_t grid_width,
                                    std::size_t grid_height, float game_scale)
-    : ship_(grid_width, grid_height, game_scale),
+    : grid_width_(grid_width), grid_height_(grid_height),
+      game_scale_(game_scale), ship_(grid_width, grid_height, game_scale),
       ufo_(grid_width, grid_height, game_scale, static_cast<UFO::eUFOSize>(0)) {
 
   // load maximum shots allowed into ships main cannon
   for (int i = 0; i < ship_.maxShots(); i++) {
     playerShots_.emplace_back(PlayerShot(grid_width, grid_height, game_scale));
   }
-
-  // init first wave of asteroids
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 0));
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 1));
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 2));
-  asteroids_.emplace_back(Asteroid(grid_width, grid_height, game_scale, 3));
-  // for (int i = 0; i < 4; i++) {
-  //   asteroids_->emplace_back(
-  //       Asteroid(grid_width, grid_height, game_scale,
-  //       random_type_(engine_)));
-  // }
 }
 
 bool PlayerController::alive() const { return alive_; }
@@ -39,6 +30,7 @@ void PlayerController::setSwitchPlayer(bool switchPlayer) {
 }
 std::uint32_t PlayerController::lives() const { return lives_; }
 void PlayerController::setLives(std::uint32_t lives) { lives_ = lives; }
+void PlayerController::setWave(std::uint32_t wave) { wave_ = wave; }
 std::uint32_t PlayerController::score() const { return score_; }
 void PlayerController::setScore(std::uint32_t score) { score_ = score; }
 void PlayerController::addScore(std::uint32_t score) { score_ += score; }
@@ -52,9 +44,19 @@ bool PlayerController::gunReloading() const {
   return SDL_GetTicks() - reloadTicks_ < reloadTickLimit_;
 }
 
+void PlayerController::initAsteroidWave() {
+  std::uint32_t numberOfAsteroids = kMinAsteroids_ + 2 * wave_;
+  if (numberOfAsteroids > kMaxAsteroids_) {
+    numberOfAsteroids = kMaxAsteroids_;
+  }
+
+  asteroids_.clear();
+  for (int i = 0; i < numberOfAsteroids; i++) {
+    asteroids_.emplace_back(Asteroid(grid_width_, grid_height_, game_scale_));
+  }
+}
+
 void PlayerController::splitAsteroid(Asteroid &asteroid) {
-  // This is a very basic implementation and not based on original game at this
-  // point.
   // TODO: I need to study what the original game actually does when
   // splitting asteroids (how velocities and trajectories are affected).
   asteroids_.emplace_back(asteroid);           // add a copy into list
@@ -75,10 +77,18 @@ void PlayerController::update() {
     }
   }
 
+  bool waveComplete = true;
   for (auto &asteroid : asteroids_) {
     if (!asteroid.destroyed()) {
+      waveComplete = false;
       asteroid.update();
     }
+  }
+
+  if (alive() && waveComplete) {
+    // TODO: add a delay
+    wave_++;
+    initAsteroidWave();
   }
 
   // recharge gun if needed
@@ -182,7 +192,8 @@ void PlayerController::initPlayer() {
   setLives(4);
   setScore(0);
   setSwitchPlayer(false);
-  // TODO: init asteroids (wave 1)
+  setWave(0);
+  initAsteroidWave();
   // TODO: init ufo
 }
 

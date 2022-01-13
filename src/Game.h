@@ -32,9 +32,6 @@ public:
   Game(Renderer *const renderer, float game_scale);
 
   // getters / setters
-  int random_w();
-  int random_h();
-  int random_type();
   eGameState state() const;
   void setState(eGameState state);
   PlayerController *const player1() const;
@@ -68,12 +65,6 @@ private:
   std::uint32_t numPlayers_{0};
   std::uint32_t credits_{0};
   std::uint32_t displayTicks_;
-
-  std::random_device dev_;
-  std::mt19937 engine_;
-  std::uniform_int_distribution<int> random_w_;
-  std::uniform_int_distribution<int> random_h_;
-  std::uniform_int_distribution<int> random_type_;
 
   void setPlayers(unsigned int players);
 
