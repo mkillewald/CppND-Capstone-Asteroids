@@ -5,9 +5,9 @@
 
 class Random {
 public:
+  static int randomSign();
   static int randomInt(int min, int max);
   static float randomFloat(float min, float max);
-  static int randomSign();
 
 private:
   static std::random_device rd_;

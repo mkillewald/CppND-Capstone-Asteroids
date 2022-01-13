@@ -23,6 +23,7 @@ public:
   void update();
   SDL_Point nose();
   void reset();
+  void hyperspace();
   void drawLife(Renderer *const renderer, int const &x, int const &y,
                 SDL_Color const &color) const;
 

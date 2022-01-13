@@ -1,4 +1,5 @@
 #include "PlayerShip.h"
+#include "Random.h"
 #include "Renderer.h"
 
 #include <cstddef>
@@ -81,6 +82,13 @@ void PlayerShip::reset() {
   setAcceleration({0.0f, 0.0f});
   setPosition({gridWidth() / 2.0f, gridHeight() / 2.0f});
   setDestroyed(false);
+}
+
+void PlayerShip::hyperspace() {
+  setVelocity({0.0f, 0.0f});
+  setAcceleration({0.0f, 0.0f});
+  setPosition({Random::randomFloat(0.0f, gridWidth()),
+               Random::randomFloat(0.0f, gridHeight())});
 }
 
 void PlayerShip::updatePosition() {

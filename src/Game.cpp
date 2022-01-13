@@ -13,7 +13,6 @@
 #include <memory>
 #include <random>
 
-// TODO: do hyperspace!
 // TODO: ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions
 // TODO: add game sounds

@@ -1,8 +1,8 @@
 #include "PlayerController.h"
 #include "Asteroid.h"
-#include "Game.h"
 #include "GameObject.h"
 #include "PlayerShip.h"
+#include "Random.h"
 #include "UFO.h"
 
 #include <SDL.h>
@@ -263,4 +263,12 @@ void PlayerController::fire() {
   }
 }
 
-void PlayerController::hyperspace() {}
+void PlayerController::hyperspace() {
+  rotateOff();
+  thrustOff();
+  ship_.hyperspace();
+
+  if (Random::randomInt(1, 6) == 6) {
+    die();
+  }
+}
