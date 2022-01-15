@@ -64,7 +64,7 @@ void InputController::play(Game *game, PlayerController *player) const {
       break;
     case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
-      case SDLK_SEMICOLON:
+      case SDLK_k:
         player->thrustOn();
         break;
       case SDLK_SPACE:
@@ -83,7 +83,7 @@ void InputController::play(Game *game, PlayerController *player) const {
       case SDLK_s:
         player->rotateOff();
         break;
-      case SDLK_SEMICOLON:
+      case SDLK_k:
         player->thrustOff();
         break;
       }
@@ -100,7 +100,7 @@ void InputController::play(Game *game, PlayerController *player) const {
   if (keystates[SDL_SCANCODE_S]) {
     player->rotateRight();
   }
-  if (keystates[SDL_SCANCODE_APOSTROPHE]) {
+  if (keystates[SDL_SCANCODE_L]) {
     player->fire();
   }
 }
