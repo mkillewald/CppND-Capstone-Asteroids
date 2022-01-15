@@ -52,7 +52,6 @@ public:
   void draw(Renderer *const renderer) const;
   void incVelocity(sVector2f velocity);
 
-  // TODO: should move this to private with public getters/setters ??
 protected:
   std::vector<SDL_Point> points_;
   std::bitset<4> edgeFlags_{0x0000};
