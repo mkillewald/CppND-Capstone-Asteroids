@@ -25,10 +25,29 @@ This is my work in progress repo for the Capstone project in the [Udacity C++ Na
 ## Third Party Libraries (included in this repository)
 * [SDL_FontCache](https://github.com/grimfang4/SDL_FontCache)
 
-## Basic Build Instructions
+## Build Instructions
 
 1. Install dependencies, if not already installed. 
 2. Clone this repo.
 3. Make a build directory in the top level directory: `mkdir build && cd build`
 4. Compile: `cmake .. && make`
 5. Run it: `./Asteroids`.
+
+## Controls
+
+#### Start Game
+I - Insert Coin   
+1 - 1 Player Start   
+2 - 2 Player Start
+ 
+#### In Game
+A - Rotate Left   
+S - Rotate Right   
+K - Thrust   
+L - Fire   
+SPACE - Hyperspace   
+  
+#### High Score Entry
+A - Next Letter   
+S - Previous Letter   
+SPACE - Select Current Letter   
