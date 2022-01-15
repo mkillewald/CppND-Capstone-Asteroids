@@ -13,7 +13,8 @@
 #include <memory>
 #include <random>
 
-// TODO: ufo logic (shooting, change direction) and scoring
+// TODO: wait for a "safe region" before spawning player ship
+// TODO: add ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions
 // TODO: add game sounds
 // TODO: satisfy 5 needed items from rubric (multithreadding...)
