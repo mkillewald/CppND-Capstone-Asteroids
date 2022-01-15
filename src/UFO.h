@@ -26,13 +26,14 @@ public:
 
   // getters / setters
 
-  // typical behaviour methods
+  // behaviour methods
+  void init();
   std::uint32_t getScore() const;
 
 private:
   eUFOSize size_ = kSluggo_;
 
-  void init();
+  void initPoints();
   void drawObject(Renderer *const renderer) const;
   void drawGhostLines(Renderer *const renderer, sGFlags const &gFlags) const;
 };

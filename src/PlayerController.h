@@ -54,6 +54,7 @@ private:
   const std::size_t grid_height_;
   const float game_scale_;
 
+  const int kAwardFreeLife_{10000};
   const int kMinAsteroids_{4};
   const int kMaxAsteroids_{12};
 

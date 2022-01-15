@@ -7,7 +7,8 @@ UFO::UFO(const std::size_t grid_width, const std::size_t grid_height,
          float game_scale, eUFOSize size)
     : GameObject(grid_width, grid_height, game_scale), size_(size) {
   setColorRGBA(0xFF, 0xFF, 0xFF, 0x99);
-  init();
+  initPoints();
+  setDestroyed(true);
 }
 
 void UFO::init() {
@@ -23,6 +24,10 @@ void UFO::init() {
   }
   setRadius(80.0f * scale());
 
+  setDestroyed(false);
+}
+
+void UFO::initPoints() {
   std::vector<SDL_Point> atOrigin;
 
   // points inferred from Ed Logg's Asteroids design sketches

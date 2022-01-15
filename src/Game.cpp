@@ -13,6 +13,7 @@
 #include <memory>
 #include <random>
 
+// TODO: award free life if players score reaches multiple of 10,000
 // TODO: wait for a "safe region" before spawning player ship
 // TODO: add ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions

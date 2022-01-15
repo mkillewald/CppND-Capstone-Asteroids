@@ -44,6 +44,92 @@ bool PlayerController::gunReloading() const {
   return SDL_GetTicks() - reloadTicks_ < reloadTickLimit_;
 }
 
+void PlayerController::initPlayer() {
+  setLives(4);
+  setScore(0);
+  setSwitchPlayer(false);
+  setWave(0);
+  initAsteroidWave();
+  ufo_.init();
+  // TODO: init ufo
+}
+
+void PlayerController::start() {
+  setAlive(true);
+  // TODO: wait for clear asteroid field
+  ship_.reset();
+}
+
+void PlayerController::die() {
+  rotateOff();
+  thrustOff();
+  ship_.setDestroyed(true);
+  setAlive(false);
+  minusLife();
+  // TODO: explode ship
+  setSwitchPlayer(true);
+}
+
+void PlayerController::addLife() { lives_++; }
+void PlayerController::minusLife() {
+  if (lives() == 0) {
+    return;
+  }
+  lives_--;
+}
+
+void PlayerController::rotateLeft() {
+  if (!alive()) {
+    return;
+  }
+  ship_.setRotDir(GameObject::kRotLeft_);
+}
+
+void PlayerController::rotateRight() {
+  if (!alive()) {
+    return;
+  }
+  ship_.setRotDir(GameObject::kRotRight_);
+}
+
+void PlayerController::rotateOff() { ship_.setRotDir(GameObject::kRotNone_); }
+
+void PlayerController::thrustOn() {
+  if (!alive()) {
+    return;
+  }
+  ship_.setThrust(true);
+}
+
+void PlayerController::thrustOff() { ship_.setThrust(false); }
+
+void PlayerController::fire() {
+  if (!alive() || gunCharging() || gunReloading()) {
+    return;
+  }
+
+  for (int i = 0; i < playerShots_.size(); i++) {
+    if (!playerShots_[i].isFired()) {
+      playerShots_[i].fire(ship_.nose(), ship_.getVelocity(), ship_.angle());
+      if (i == playerShots_.size() - 1) {
+        setGunCharging(true);
+      }
+      reloadTicks_ = SDL_GetTicks();
+      return;
+    }
+  }
+}
+
+void PlayerController::hyperspace() {
+  rotateOff();
+  thrustOff();
+  ship_.hyperspace();
+
+  if (Random::randomInt(1, 6) == 6) {
+    die();
+  }
+}
+
 void PlayerController::initAsteroidWave() {
   std::uint32_t numberOfAsteroids = kMinAsteroids_ + 2 * wave_;
   if (numberOfAsteroids > kMaxAsteroids_) {
@@ -66,7 +152,6 @@ void PlayerController::splitAsteroid(Asteroid &asteroid) {
 }
 
 void PlayerController::update() {
-  // update opbjects
   if (!ship_.destroyed()) {
     ship_.update();
   }
@@ -89,6 +174,7 @@ void PlayerController::update() {
     // TODO: add a delay
     wave_++;
     initAsteroidWave();
+    ufo_.init();
   }
 
   // recharge gun if needed
@@ -185,90 +271,5 @@ void PlayerController::drawLives(Renderer *const renderer, int const &x,
 
   for (int i = 0; i < lives() - 1; i++) {
     ship_.drawLife(renderer, x + 24 * i, y, color);
-  }
-}
-
-void PlayerController::initPlayer() {
-  setLives(4);
-  setScore(0);
-  setSwitchPlayer(false);
-  setWave(0);
-  initAsteroidWave();
-  // TODO: init ufo
-}
-
-void PlayerController::start() {
-  setAlive(true);
-  // TODO: wait for clear asteroid field
-  ship_.reset();
-}
-
-void PlayerController::die() {
-  rotateOff();
-  thrustOff();
-  ship_.setDestroyed(true);
-  setAlive(false);
-  minusLife();
-  // TODO: explode ship
-  setSwitchPlayer(true);
-}
-
-void PlayerController::addLife() { lives_++; }
-void PlayerController::minusLife() {
-  if (lives() == 0) {
-    return;
-  }
-  lives_--;
-}
-
-void PlayerController::rotateLeft() {
-  if (!alive()) {
-    return;
-  }
-  ship_.setRotDir(GameObject::kRotLeft_);
-}
-
-void PlayerController::rotateRight() {
-  if (!alive()) {
-    return;
-  }
-  ship_.setRotDir(GameObject::kRotRight_);
-}
-
-void PlayerController::rotateOff() { ship_.setRotDir(GameObject::kRotNone_); }
-
-void PlayerController::thrustOn() {
-  if (!alive()) {
-    return;
-  }
-  ship_.setThrust(true);
-}
-
-void PlayerController::thrustOff() { ship_.setThrust(false); }
-
-void PlayerController::fire() {
-  if (!alive() || gunCharging() || gunReloading()) {
-    return;
-  }
-
-  for (int i = 0; i < playerShots_.size(); i++) {
-    if (!playerShots_[i].isFired()) {
-      playerShots_[i].fire(ship_.nose(), ship_.getVelocity(), ship_.angle());
-      if (i == playerShots_.size() - 1) {
-        setGunCharging(true);
-      }
-      reloadTicks_ = SDL_GetTicks();
-      return;
-    }
-  }
-}
-
-void PlayerController::hyperspace() {
-  rotateOff();
-  thrustOff();
-  ship_.hyperspace();
-
-  if (Random::randomInt(1, 6) == 6) {
-    die();
   }
 }
