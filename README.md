@@ -103,3 +103,20 @@ SPACE - Select Current Letter
 * UFO.h/UFO.cpp
   * derived from GameObject.class
   * deifines UFO 
+
+## Rubric Items
+
+For this capstone project, I chose to do Option 2 using the Snake game code base as a starting point to make a clone of the classic 1979 arcade game Asteroids. 
+
+* The project demonstrates an understanding of C++ functions and control structures.
+* The project reads data from a file and process the data, or the program writes data to a file.
+* The project accepts user input and processes the input.
+* The project uses Object Oriented Programming techniques.
+* Classes use appropriate access specifiers for class members.
+* Class constructors utilize member initialization lists.
+* TODO: Classes abstract implementation details from their interfaces.
+* Classes encapsulate behavior.
+* Derived class functions override virtual base class functions.
+* The project makes use of references in function declarations. (at least 2 functions)
+* The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.
+* The project uses smart pointers instead of raw pointers.
