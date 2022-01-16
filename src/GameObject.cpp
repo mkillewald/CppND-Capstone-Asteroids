@@ -7,18 +7,6 @@
 #include <bitset>
 #include <cstddef>
 
-sVector2f sVector2f::operator+(sVector2f const &a) {
-  x += a.x;
-  y += a.y;
-  return {x, y};
-}
-
-sVector2f sVector2f::operator+(float const &a) {
-  x += a;
-  y += a;
-  return {x, y};
-}
-
 // constructor / destructor
 GameObject::GameObject(const std::size_t grid_width,
                        const std::size_t grid_height, float game_scale)
