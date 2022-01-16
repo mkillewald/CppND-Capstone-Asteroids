@@ -114,7 +114,7 @@ For this capstone project, I chose to do Option 2 using the Snake game code base
   * example: PlayerController.h/PlayerController.cpp
 * The project reads data from a file and process the data, or the program writes data to a file.
   * The project reads data from an external file or writes data to a file as part of the necessary operation of the program.
-  * example: HighScore.cpp line 77 readScores() and line 96 writeScores()
+  * example: HighScore.cpp line 77 readScores() and line 93 writeScores()
 * The project accepts user input and processes the input.
   * The project accepts input from a user as part of the necessary operation of the program.
   * example: InputController.cpp line 56 play()
