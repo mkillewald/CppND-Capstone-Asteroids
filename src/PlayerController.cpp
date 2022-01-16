@@ -145,10 +145,13 @@ void PlayerController::initAsteroidWave() {
 void PlayerController::splitAsteroid(Asteroid &asteroid) {
   // TODO: I need to study what the original game actually does when
   // splitting asteroids (how velocities and trajectories are affected).
-  asteroids_.emplace_back(asteroid);           // add a copy into list
-  asteroid.incVelocity(sVector2f{1.25, 1.75}); // change original
-  asteroids_.back().incVelocity(
-      sVector2f{1.75, 1.25}); // change copy at back of list
+  asteroids_.emplace_back(asteroid); // add a copy into list
+  asteroid.incVelocity(
+      sVector2f{Random::randomFloat(1.0f, 1.5f),
+                Random::randomFloat(1.5f, 2.0f)}); // change original asteroid
+  asteroids_.back().incVelocity(sVector2f{
+      Random::randomFloat(1.5f, 2.0f),
+      Random::randomFloat(1.0f, 1.5f)}); // change asteroid copy at back of list
 }
 
 void PlayerController::update() {
