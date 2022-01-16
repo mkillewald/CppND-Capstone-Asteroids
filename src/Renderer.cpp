@@ -8,9 +8,6 @@
 #include <iostream>
 #include <string>
 
-// atari_vector.ttf font used from
-// http://vectorlib2.free.fr/Fonts/http://vectorlib2.free.fr/Fonts/
-
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
                    const std::size_t grid_width, std::size_t grid_height)

@@ -17,7 +17,6 @@ class HighScore {
 public:
   // constructor / destructor
   HighScore(Game *const game);
-  //   ~HighScore();
 
   // getters / setters
   void setP1High(bool high);

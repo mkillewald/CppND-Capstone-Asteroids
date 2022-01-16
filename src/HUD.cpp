@@ -19,6 +19,9 @@ HUD::HUD(Game *const game, Renderer *const renderer)
 
   hudColor = FC_MakeColor(0xFF, 0xFF, 0xFF, 0xAA);
 
+  // atari_vector.ttf font used from
+  // http://vectorlib2.free.fr/Fonts/http://vectorlib2.free.fr/Fonts/
+
   // Load fonts
   small_ = FC_CreateFont();
   FC_LoadFont(small_, renderer_->sdlRenderer(), "../fonts/atari_vector.ttf", 15,

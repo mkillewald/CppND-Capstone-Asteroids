@@ -23,8 +23,8 @@ struct sVector2f {
   float x;
   float y;
 
-  sVector2f operator+(sVector2f const &a); // not used
-  sVector2f operator+(float const &a);     // not used
+  sVector2f operator+(sVector2f const &a);
+  sVector2f operator+(float const &a);
 };
 
 class GameObject {
@@ -111,7 +111,6 @@ private:
   float angle_;
   float radius_;
   bool destroyed_{false};
-  // cosnt unsigned int score_;
 };
 
 #endif

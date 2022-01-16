@@ -10,12 +10,7 @@ PlayerShot::PlayerShot(const std::size_t grid_width,
                        const std::size_t grid_height, float game_scale)
     : GameObject(grid_width, grid_height, game_scale) {
   setColorRGBA(0xFF, 0xFF, 0xFF, 0xFF);
-  // setPosition({0.0f, 0.0f});
-  // setVelocity({0.0f, 0.0f});
-  // setAcceleration({0.0f, 0.0f});
   setMaxVelocity(15.0f);
-  // setAngle(0.0f);
-  // setScale(gameScale());
   setRadius(1.0f);
 
   std::vector<SDL_Point> atOrigin;

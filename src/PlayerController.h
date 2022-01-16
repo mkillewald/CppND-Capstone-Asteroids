@@ -15,7 +15,6 @@
 // forward declaration to avoid include cycle
 class Renderer;
 class GameObject;
-class Game;
 
 class PlayerController {
 public:
@@ -58,7 +57,6 @@ private:
   const int kMinAsteroids_{4};
   const int kMaxAsteroids_{12};
 
-  // Game *const game_;
   PlayerShip ship_;
   std::vector<PlayerShot> playerShots_;
   std::vector<Asteroid> asteroids_{};
