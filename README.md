@@ -1,6 +1,6 @@
 # CPPND: Capstone Asteroids
 
-This is my work in progress repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).
+A clone of the classic 1979 Arcade game Asteroids written in C++. This is my Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
@@ -51,3 +51,54 @@ SPACE - Hyperspace
 A - Next Letter   
 S - Previous Letter   
 SPACE - Select Current Letter   
+
+## Class Structure
+
+* main.cpp
+  * contains main function entry point
+  * holds unique_ptr to Renderer, InputController and Game classes
+  * starts game loop
+   
+* Renderer.h/Rederer.cpp
+  * reponsible for creating window and rendering objects to screen using SDL2
+
+* InputController.h/InputController.cpp
+  * handles input from user depending on game state
+
+ * Game.h/Game.cpp
+   * maintains game state
+   * holds unique_ptr to PlayerController, HighScore and HUD classes
+
+* Random.h/Random.cpp
+  * utility class which contains static random number generator functions 
+   
+* HUD.h/HUD.cpp
+  * responsible for displaying all text and displaying each player's remaining lives  
+
+* HighScore.h/HighScore.cpp
+  * maintains top score and high score table
+  * reads/writes high score table to file
+  * handles high score entry
+ 
+* PlayerController.h/PlayerController.cpp
+  * one instance per player 
+  * handles players's ship, player shots, asteroid waves, and ufo
+
+* GameObject.h/GameObject.cpp
+  * base class for all game objects (players's ship, player shots, asteroids, and ufo)
+
+* PlayerShip.h/PlayerShip.cpp
+  * derived from GameObject class
+  * defines player's ship
+
+* PlayerShot.h/PlayerShot.cpp
+  * derived from GameObject class
+  * defines player shots
+
+* Asteroid.h/Asteroid.cpp
+  * derived from GameObject.class
+  * defines asteroids 
+
+* UFO.h/UFO.cpp
+  * derived from GameObject.class
+  * deifines UFO 
