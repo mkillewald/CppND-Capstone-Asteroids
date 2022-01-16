@@ -22,9 +22,6 @@ struct sGFlags {
 struct sVector2f {
   float x;
   float y;
-
-  sVector2f operator+(sVector2f const &a);
-  sVector2f operator+(float const &a);
 };
 
 class GameObject {
