@@ -20,6 +20,9 @@ PlayerController::PlayerController(std::size_t grid_width,
   for (int i = 0; i < ship_.maxShots(); i++) {
     playerShots_.emplace_back(PlayerShot(grid_width, grid_height, game_scale));
   }
+
+  initAsteroidWave();
+  ufo_.init();
 }
 
 bool PlayerController::alive() const { return alive_; }
