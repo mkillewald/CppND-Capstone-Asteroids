@@ -1,6 +1,7 @@
-# CPPND: Capstone Asteroids
+# CPPND: Capstone Asteroids(
+A clone of the classic 1979 Arcade game Asteroids written in C++. This is my Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).   
 
-A clone of the classic 1979 Arcade game Asteroids written in C++. This is my Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).
+![Asteroids](https://github.com/mkillewald/CppND-Capstone-Asteroids/blob/master/images/Asteroids.png)
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
