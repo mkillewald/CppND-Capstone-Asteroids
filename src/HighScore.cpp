@@ -25,15 +25,15 @@ std::uint32_t HighScore::topScore() const { return topScore_; }
 void HighScore::setTopScore(std::uint32_t score) { topScore_ = score; }
 
 void HighScore::initTopScore() {
-  if (!table_[0].score_.empty()) {
-    topScore_ = stoul(table_[0].score_);
-  } else {
+  if (table_.empty()) {
     topScore_ = 0;
+  } else {
+    topScore_ = stoul(table_[0].score_);
   }
 }
 
 std::string HighScore::tableSlots() const {
-  if (table_[0].score_ == "00") {
+  if (table_.empty()) {
     return "";
   } else {
     std::string line;
@@ -45,7 +45,7 @@ std::string HighScore::tableSlots() const {
 }
 
 std::string HighScore::tableScores() const {
-  if (table_[0].score_ == "00") {
+  if (table_.empty()) {
     return "";
   } else {
     std::string line;
@@ -57,7 +57,7 @@ std::string HighScore::tableScores() const {
 }
 
 std::string HighScore::tableTags() const {
-  if (table_[0].score_ == "00") {
+  if (table_.empty()) {
     return "";
   } else {
     std::string line;
@@ -85,9 +85,6 @@ void HighScore::readScores() {
       table_.emplace_back(sEntry{score, tag});
     }
     filestream.close();
-  } else {
-    // file could not be opened or does not exist
-    table_.emplace_back(sEntry{"0", ""});
   }
 
   initTopScore();
@@ -116,8 +113,8 @@ bool HighScore::scoreIsHigh(std::uint32_t score) {
 }
 
 void HighScore::addEntryToTable(sEntry newEntry) {
-  if (table_.size() > 0 &&
-      (table_[0].score_ == "00" || table_.size() == kMaxSlots_)) {
+  if (!table_.empty() && table_.size() == kMaxSlots_) {
+    // table is full, remove last entry
     table_.pop_back();
   }
 
