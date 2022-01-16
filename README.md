@@ -126,7 +126,7 @@ For this capstone project, I chose to do Option 2 using the Snake game code base
   * example: GameObject.h
 * Class constructors utilize member initialization lists.
   * All class members that are set to argument values are initialized through member initialization lists.
-  * example GameObject.cpp line 23
+  * example GameObject.cpp line 11 GameObject()
 * Classes abstract implementation details from their interfaces.
   * All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.
   * example: PlayerController.h/PlayerController.cpp
@@ -138,10 +138,10 @@ For this capstone project, I chose to do Option 2 using the Snake game code base
   * exmaple: PlayerShip.cpp line 145 drawObject() overrides base class GameObject.cpp line 164 drawObject()
 * The project makes use of references in function declarations. (at least 2 functions)
   * At least two variables are defined as references, or two functions use pass-by-reference in the project code.
-  * example: GameObject.cpp line 111 rotateMoveAndScalePoints() and line 145 checkPointsAtEdges()
+  * example: GameObject.cpp line 99 rotateMoveAndScalePoints() and line 133 checkPointsAtEdges()
 * The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.
   * The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction.
   * example: Game.cpp line 24 the Game() constructor uses smart pointers to allocate instances of PlayerController, HighScore and HUD classes which are autotomatically destroyed when tbe Game instance goes out of scope (ie. the user quits the game). 
 * The project uses smart pointers instead of raw pointers.
   * The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. The project does not use raw pointers.
-  * example: Game.cpp line 27 use of unique_ptr. My project, however, does use raw pointers as parameters to classes/methods that need a reference back to the unique pointers. 
+  * example: Game.cpp line 27 use of unique_ptr. My project, however, does use raw pointers as parameters to classes/methods that need a reference back to the objects pointed to by the unique pointers. 
