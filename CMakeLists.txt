@@ -1,14 +1,12 @@
 cmake_minimum_required(VERSION 3.7)
 
-#add_definitions(-std=c++17)
-
 set(CXX_FLAGS "-Wall -std=c++17")
 set(CMAKE_CXX_FLAGS, "${CXX_FLAGS} -pthread")
 
 project(Asteroids C CXX)
 
 # Find all executables
-file(GLOB project_SRCS src/*.cpp lib/*.c) #src/*.h
+file(GLOB project_SRCS src/*.cpp lib/*.c)
 
 # Add project executable
 add_executable(Asteroids ${project_SRCS})
@@ -30,11 +28,10 @@ add_library(FontCache
     lib/SDL_FontCache.h
     lib/SDL_FontCache.c
 )
+
 target_include_directories(FontCache PUBLIC ${SDL2_INCLUDE_DIRS})
 target_include_directories(FontCache PUBLIC .)
 target_link_libraries(FontCache ${SDL2_LIBRARIES})
-#target_link_libraries(FontCache ${sdl2main_LIBRARY})
 target_include_directories(FontCache PUBLIC ${SDL2TTF_INCLUDE_DIRS})
 target_link_libraries(FontCache ${SDL2TTF_LIBRARIES})
-
 target_link_libraries(Asteroids FontCache)
