@@ -18,7 +18,7 @@
 // TODO: add ufo logic (shooting, change direction) and scoring
 // TODO: add object explosions
 // TODO: add game sounds
-// TODO: satisfy 5 needed items from rubric (multithreadding...)
+// TODO: multithreadding...
 // TODO: redudce use of "magic" numbers
 
 Game::Game(Renderer *const renderer, float game_scale) : renderer_(renderer) {

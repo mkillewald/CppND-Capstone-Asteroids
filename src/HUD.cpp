@@ -10,6 +10,8 @@
 #include <iostream>
 #include <string>
 
+// TODO: add concept of game scale, eliminate magic numbers
+
 HUD::HUD(Game *const game, Renderer *const renderer)
     : game_(game), player1_(game->player1()), player2_(game->player2()),
       renderer_(renderer) {
